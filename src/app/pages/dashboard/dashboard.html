@@ -1,0 +1,255 @@
+<div class="bc-dash">
+
+  <header class="bc-dash__header">
+    <div>
+      <p class="bc-dash__eyebrow">Bonjour</p>
+      <h1 class="bc-dash__title">Freddy Hinkamma</h1>
+    </div>
+
+    <div class="bc-dash__header-actions">
+      <label class="bc-dash__search">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <input type="text" placeholder="Rechercher une transaction" />
+      </label>
+
+      <button type="button" class="bc-dash__icon-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="bc-dash__icon-dot"></span>
+      </button>
+
+      <div class="bc-dash__avatar">FH</div>
+    </div>
+  </header>
+
+  <section class="bc-dash__summary">
+    <article class="bc-summary-card bc-summary-card--dark">
+      <div class="bc-summary-card__top">
+        <span class="bc-summary-card__label">Solde total</span>
+        <span class="bc-summary-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </span>
+      </div>
+      <p class="bc-summary-card__value">452 300 FCFA</p>
+      <span class="bc-summary-card__trend bc-summary-card__trend--up">+4,2 % ce mois</span>
+    </article>
+
+    <article class="bc-summary-card">
+      <div class="bc-summary-card__top">
+        <span class="bc-summary-card__label">Revenus du mois</span>
+        <span class="bc-summary-card__icon bc-summary-card__icon--teal">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+      <p class="bc-summary-card__value">180 000 FCFA</p>
+      <span class="bc-summary-card__trend bc-summary-card__trend--up">+12 % vs juin</span>
+    </article>
+
+    <article class="bc-summary-card">
+      <div class="bc-summary-card__top">
+        <span class="bc-summary-card__label">Dépenses du mois</span>
+        <span class="bc-summary-card__icon bc-summary-card__icon--red">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+      <p class="bc-summary-card__value">43 500 FCFA</p>
+      <span class="bc-summary-card__trend bc-summary-card__trend--down">-6 % vs juin</span>
+    </article>
+  </section>
+
+  <section class="bc-dash__accounts">
+    <div class="bc-account-card bc-account-card--navy">
+      <div class="bc-account-card__row">
+        <span class="bc-account-card__type">Compte courant</span>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bc-account-card__chip">
+          <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M2 10h20" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <p class="bc-account-card__balance">312 300 FCFA</p>
+      <p class="bc-account-card__number">CM •••• •••• 4471</p>
+    </div>
+
+    <div class="bc-account-card">
+      <div class="bc-account-card__row">
+        <span class="bc-account-card__type">Compte épargne</span>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bc-account-card__chip">
+          <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M2 10h20" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <p class="bc-account-card__balance">140 000 FCFA</p>
+      <p class="bc-account-card__number">CM •••• •••• 2098</p>
+    </div>
+
+    <div class="bc-account-card bc-account-card--ghost">
+      <div class="bc-account-card__add">
+        <span class="bc-account-card__add-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>Ajouter un compte</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="bc-dash__actions">
+    <button type="button" class="bc-quick-action">
+      <span class="bc-quick-action__icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 7h13m0 0l-4-4m4 4l-4 4M17 17H4m0 0l4 4m-4-4l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>Virement</span>
+    </button>
+    <button type="button" class="bc-quick-action">
+      <span class="bc-quick-action__icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>Dépôt</span>
+    </button>
+    <button type="button" class="bc-quick-action">
+      <span class="bc-quick-action__icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>Retrait</span>
+    </button>
+    <button type="button" class="bc-quick-action">
+      <span class="bc-quick-action__icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M8 9h8M8 13h8M8 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span>Factures</span>
+    </button>
+  </section>
+
+  <section class="bc-dash__lower">
+
+    <div class="bc-panel bc-panel--transactions">
+      <div class="bc-panel__header">
+        <h2 class="bc-panel__title">Transactions récentes</h2>
+        <button type="button" class="bc-panel__link">Tout voir</button>
+      </div>
+
+      <div class="bc-tx">
+        <div class="bc-tx__icon bc-tx__icon--red">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="bc-tx__info">
+          <span class="bc-tx__name">Virement — Chanceline K.</span>
+          <span class="bc-tx__meta">Aujourd'hui, 09:12 · Compte courant</span>
+        </div>
+        <span class="bc-tx__amount bc-tx__amount--out">- 25 000 FCFA</span>
+      </div>
+
+      <div class="bc-tx">
+        <div class="bc-tx__icon bc-tx__icon--teal">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 7L7 17M7 17h8M7 17V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="bc-tx__info">
+          <span class="bc-tx__name">Dépôt — Salaire Collège St-Gérôme</span>
+          <span class="bc-tx__meta">Hier, 18:30 · Compte courant</span>
+        </div>
+        <span class="bc-tx__amount bc-tx__amount--in">+ 180 000 FCFA</span>
+      </div>
+
+      <div class="bc-tx">
+        <div class="bc-tx__icon bc-tx__icon--red">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="bc-tx__info">
+          <span class="bc-tx__name">Facture ENEO</span>
+          <span class="bc-tx__meta">12 juil., 08:05 · Compte courant</span>
+        </div>
+        <span class="bc-tx__amount bc-tx__amount--out">- 14 500 FCFA</span>
+      </div>
+
+      <div class="bc-tx">
+        <div class="bc-tx__icon bc-tx__icon--gold">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="7" width="18" height="4" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M5 11v9h14v-9M10 11v9M14 11v9" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <div class="bc-tx__info">
+          <span class="bc-tx__name">Épargne programmée</span>
+          <span class="bc-tx__meta">10 juil., 07:00 · Compte épargne</span>
+        </div>
+        <span class="bc-tx__amount bc-tx__amount--out">- 20 000 FCFA</span>
+      </div>
+    </div>
+
+    <div class="bc-panel bc-panel--side">
+      <div class="bc-panel__header">
+        <h2 class="bc-panel__title">Répartition des dépenses</h2>
+      </div>
+
+      <ul class="bc-breakdown">
+        <li class="bc-breakdown__item">
+          <div class="bc-breakdown__labels">
+            <span>Factures</span>
+            <span>33 %</span>
+          </div>
+          <div class="bc-breakdown__bar"><span style="width: 33%;"></span></div>
+        </li>
+        <li class="bc-breakdown__item">
+          <div class="bc-breakdown__labels">
+            <span>Virements</span>
+            <span>29 %</span>
+          </div>
+          <div class="bc-breakdown__bar"><span style="width: 29%;"></span></div>
+        </li>
+        <li class="bc-breakdown__item">
+          <div class="bc-breakdown__labels">
+            <span>Épargne</span>
+            <span>23 %</span>
+          </div>
+          <div class="bc-breakdown__bar"><span style="width: 23%;"></span></div>
+        </li>
+        <li class="bc-breakdown__item">
+          <div class="bc-breakdown__labels">
+            <span>Divers</span>
+            <span>15 %</span>
+          </div>
+          <div class="bc-breakdown__bar"><span style="width: 15%;"></span></div>
+        </li>
+      </ul>
+
+      <div class="bc-goal">
+        <div class="bc-goal__header">
+          <span class="bc-goal__title">Objectif d'épargne</span>
+          <span class="bc-goal__pct">70 %</span>
+        </div>
+        <div class="bc-goal__bar"><span style="width: 70%;"></span></div>
+        <p class="bc-goal__note">140 000 / 200 000 FCFA</p>
+      </div>
+    </div>
+
+  </section>
+
+</div>

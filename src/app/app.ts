@@ -1,11 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Navigation } from "./navigation/navigation/navigation";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Navigation],
+  standalone: true,
   templateUrl: './app.html',
-  styleUrl: './app.less'
+  styleUrls: ['./app.less']
 })
 export class App {
   protected readonly title = signal('bankconnect-front');
