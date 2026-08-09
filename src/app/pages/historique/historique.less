@@ -18,7 +18,73 @@
 }
 
 
+/* ===================================================
+   CORRECTION ESPACEMENT PAGINATION (MOBILE ET DESKTOP)
+   =================================================== */
 
+/* 1. Conteneur principal de la pagination */
+.bc-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;             /* Permet aux éléments de passer à la ligne si l'écran est très étroit */
+  gap: 12px;                  /* Crée un espace entre [Précédent], [Pages] et [Suivant] */
+  width: 100%;
+  padding: 16px 12px;         /* Empêche le bloc de coller aux bordures de son conteneur parent */
+  margin-top: 20px;           /* Espace au-dessus du bloc pagination */
+  box-sizing: border-box;
+}
+
+/* 2. Bloc contenant les numéros de pages (1, 2, 3...) */
+.bc-pagination__pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;                   /* Crée de l'espace entre le 1, le 2 et le 3 */
+  flex-wrap: nowrap;
+}
+
+/* 3. Style des numéros de page */
+.bc-pagination__page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;            /* Taille fixe confortable pour le clic tactile sur mobile */
+  height: 36px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+/* 4. Style des boutons Précédent / Suivant */
+.bc-pagination__btn {
+  padding: 8px 14px;
+  white-space: nowrap;        /* Empêche le texte du bouton de se couper */
+  font-size: 0.875rem;
+}
+
+/* ===================================================
+   AJUSTEMENTS SPÉCIFIQUES POUR PETITS ÉCRANS (< 480px)
+   =================================================== */
+
+@media (max-width: 480px) {
+  .bc-pagination {
+    gap: 8px;                 /* Légère réduction des écarts pour optimiser l'espace */
+    padding: 12px 8px;        /* Padding interne adapté aux très petits écrans */
+  }
+
+  .bc-pagination__page {
+    min-width: 32px;          /* Légère réduction de la taille des boutons numérotés */
+    height: 32px;
+    font-size: 0.85rem;
+  }
+
+  .bc-pagination__btn {
+    padding: 6px 10px;        /* Réduction de la taille des boutons Précédent/Suivant */
+    font-size: 0.8rem;
+  }
+}
 
 .bc-historique {
   --bc-gold: #c9a66b;
