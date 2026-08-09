@@ -14,7 +14,7 @@ import { SendToken } from './pages/send-token/send-token';
 
 export const routes: Routes = [
 
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   {path: 'login', component:Login},
   {path: 'register', component:Register},
   {path: 'sendToken', component:SendToken},
@@ -26,5 +26,5 @@ export const routes: Routes = [
   {path: 'parametre', component: Parametre},
 
   {path: 'profil', component: Profil},
-  { path: '**', redirectTo: '/dashboard' }
+  { path: '**', redirectTo: '/login' }
 ];
