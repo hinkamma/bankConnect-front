@@ -1,0 +1,469 @@
+// ==========================================
+// 🎨 1. VARIABLES & SYSTEME DESIGN
+// ==========================================
+@bg-dark:          #080C14;
+@card-bg:          rgba(17, 23, 38, 0.75);
+@card-border:      rgba(255, 255, 255, 0.08);
+@input-bg:         #0A0E1A;
+@input-border:     #1E293D;
+
+@text-white:       #FFFFFF;
+@text-muted:       #8A99AD;
+@text-dim:         #4B586E;
+
+@blue-primary:     #2563EB;
+@blue-light:       #60A5FA;
+@indigo-accent:    #4F46E5;
+@cyan-glow:        #06B6D4;
+
+@danger-red:       #F43F5E;
+@danger-bg:        rgba(244, 63, 94, 0.1);
+
+@radius-card:      24px;
+@radius-input:     12px;
+@radius-btn:       12px;
+
+@ease-smooth:      cubic-bezier(0.16, 1, 0.3, 1);
+
+// ==========================================
+// 🛠️ 2. MIXINS
+// ==========================================
+.flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ==========================================
+// 🚀 3. KEYFRAMES ANIMATIONS
+// ==========================================
+@keyframes pulseGlow {
+  0%, 100% { 
+    opacity: 0.4; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.7; 
+    transform: scale(1.08); 
+  }
+}
+
+@keyframes slideUpFade {
+  from { 
+    opacity: 0; 
+    transform: translate3d(0, 30px, 0); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translate3d(0, 0, 0); 
+  }
+}
+
+// ==========================================
+// 📐 4. COMPOSANT ET LAYOUT (SPLIT SCREEN)
+// ==========================================
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.auth-page {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: @bg-dark;
+  font-family: 'Inter', -apple-system, sans-serif;
+  overflow: hidden;
+
+  // ----------------------------------------
+  // 🎥 COLONNE GAUCHE : PROMO INSCRIPTION
+  // ----------------------------------------
+  .auth-promo-section {
+    position: relative;
+    flex: 1.1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+    overflow: hidden;
+
+    @media (max-width: 992px) {
+      display: none;
+    }
+
+    .promo-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .promo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg, 
+        rgba(8, 12, 20, 0.3) 0%, 
+        rgba(8, 12, 20, 0.85) 70%, 
+        @bg-dark 100%
+      );
+      z-index: 1;
+    }
+
+    .promo-ambient-glow {
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, fade(@cyan-glow, 35%) 0%, transparent 70%);
+      filter: blur(80px);
+      z-index: 1;
+      animation: pulseGlow 8s infinite ease-in-out;
+    }
+
+    .promo-content {
+      position: relative;
+      z-index: 2;
+      max-width: 540px;
+      animation: slideUpFade 0.8s @ease-smooth forwards;
+
+      .promo-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 30px;
+        color: @cyan-glow;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 20px;
+      }
+
+      .promo-title {
+        color: @text-white;
+        font-size: 38px;
+        font-weight: 800;
+        line-height: 1.25;
+        letter-spacing: -1px;
+        margin-bottom: 16px;
+
+        .highlight {
+          background: linear-gradient(135deg, @cyan-glow 0%, @blue-light 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      }
+
+      .promo-description {
+        color: @text-muted;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 32px;
+      }
+
+      .promo-features {
+        display: flex;
+        gap: 16px;
+
+        .feature-card {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 14px 18px;
+          background: rgba(17, 23, 38, 0.6);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
+
+          .feature-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: fade(@cyan-glow, 20%);
+            color: @cyan-glow;
+            .flex-center();
+            font-size: 16px;
+          }
+
+          .feature-info {
+            display: flex;
+            flex-direction: column;
+
+            strong {
+              color: @text-white;
+              font-size: 13px;
+            }
+
+            small {
+              color: @text-muted;
+              font-size: 11px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // ----------------------------------------
+  // 📝 COLONNE DROITE : FORMULAIRE REGISTER
+  // ----------------------------------------
+  .auth-form-section {
+    flex: 0.9;
+    .flex-center();
+    padding: 40px 24px;
+    position: relative;
+    z-index: 2;
+    background: @bg-dark;
+
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      background: @card-bg;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid @card-border;
+      border-radius: @radius-card;
+      padding: 36px 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      animation: slideUpFade 0.6s @ease-smooth forwards;
+
+      .card-glass-line {
+        position: absolute;
+        top: 0;
+        left: 10%;
+        right: 10%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      }
+
+      .auth-header {
+        text-align: center;
+        margin-bottom: 24px;
+
+        .brand-logo-wrapper {
+          position: relative;
+          display: inline-block;
+          margin-bottom: 12px;
+
+          .brand-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, @indigo-accent 0%, @blue-primary 100%);
+            border-radius: 14px;
+            .flex-center();
+            font-size: 22px;
+            color: @text-white;
+            position: relative;
+            z-index: 2;
+          }
+
+          .logo-glow-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, @cyan-glow, @blue-primary);
+            opacity: 0.3;
+            z-index: 1;
+          }
+        }
+
+        .auth-title {
+          color: @text-white;
+          font-size: 22px;
+          font-weight: 700;
+          margin-bottom: 4px;
+        }
+
+        .auth-subtitle {
+          color: @text-muted;
+          font-size: 13px;
+        }
+      }
+
+      .auth-form {
+        .form-group {
+          margin-bottom: 16px;
+
+          .form-label {
+            display: block;
+            color: @text-white;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 6px;
+          }
+
+          .input-wrapper {
+            position: relative;
+            .flex-center();
+
+            .input-icon {
+              position: absolute;
+              left: 14px;
+              color: @text-dim;
+              font-size: 14px;
+              pointer-events: none;
+            }
+
+            .form-control {
+              width: 100%;
+              background: @input-bg;
+              border: 1px solid @input-border;
+              border-radius: @radius-input;
+              padding: 11px 40px 11px 42px;
+              color: @text-white;
+              font-size: 13px;
+              outline: none;
+              transition: all 0.2s ease;
+
+              &::placeholder {
+                color: @text-dim;
+              }
+
+              &:focus {
+                border-color: @blue-primary;
+                box-shadow: 0 0 0 3px fade(@blue-primary, 15%);
+
+                & ~ .input-icon {
+                  color: @blue-light;
+                }
+              }
+            }
+
+            .btn-toggle-pw {
+              position: absolute;
+              right: 12px;
+              background: none;
+              border: none;
+              color: @text-dim;
+              cursor: pointer;
+              font-size: 14px;
+
+              &:hover {
+                color: @text-white;
+              }
+            }
+          }
+
+          .error-msg {
+            color: @danger-red;
+            font-size: 11px;
+            margin-top: 4px;
+          }
+        }
+
+        .form-options {
+          margin-bottom: 20px;
+
+          .custom-checkbox {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+
+            input[type="checkbox"] {
+              display: none;
+
+              &:checked + .checkbox-box {
+                background: @blue-primary;
+                border-color: @blue-primary;
+
+                .check-icon {
+                  opacity: 1;
+                  transform: scale(1);
+                }
+              }
+            }
+
+            .checkbox-box {
+              width: 16px;
+              height: 16px;
+              margin-top: 2px;
+              background: @input-bg;
+              border: 1px solid @input-border;
+              border-radius: 4px;
+              .flex-center();
+              flex-shrink: 0;
+
+              .check-icon {
+                color: @text-white;
+                font-size: 9px;
+                opacity: 0;
+                transform: scale(0.5);
+                transition: all 0.2s ease;
+              }
+            }
+
+            .checkbox-label {
+              color: @text-muted;
+              font-size: 12px;
+              line-height: 1.4;
+
+              a {
+                color: @blue-light;
+                text-decoration: none;
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
+        }
+
+        .btn-submit {
+          width: 100%;
+          height: 46px;
+          background: linear-gradient(135deg, @blue-primary 0%, @indigo-accent 100%);
+          border: none;
+          border-radius: @radius-btn;
+          color: @text-white;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          .flex-center();
+          gap: 10px;
+          transition: all 0.25s ease;
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px fade(@blue-primary, 35%);
+
+            .btn-icon {
+              transform: translateX(4px);
+            }
+          }
+        }
+
+        .auth-footer {
+          text-align: center;
+          margin-top: 20px;
+
+          p {
+            color: @text-muted;
+            font-size: 12px;
+
+            .login-link {
+              color: @blue-light;
+              font-weight: 600;
+              text-decoration: none;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

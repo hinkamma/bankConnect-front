@@ -1,0 +1,70 @@
+<div class="auth-page">
+  <div class="auth-form-section">
+    <div class="auth-card">
+      <div class="card-glass-line"></div>
+
+      <div class="auth-header">
+        <div class="brand-logo-wrapper">
+          <div class="brand-logo">
+            <i class="fas fa-key-skeleton"></i>
+          </div>
+          <div class="logo-glow-ring"></div>
+        </div>
+        <h2 class="auth-title">Envoi du Token</h2>
+        <p class="auth-subtitle">Un code de sécurité a été envoyé à votre adresse e-mail.</p>
+      </div>
+
+      <form class="auth-form">
+        <div class="form-group">
+          <label class="form-label">Code de confirmation</label>
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              class="form-control otp-input" 
+              placeholder="123456" 
+              maxlength="6"
+              required 
+            />
+            <i class="fas fa-shield-security input-icon"></i>
+          </div>
+        </div>
+
+        <div class="timer-container">
+          <div class="timer-box" [class.expired]="timeRemaining === 0">
+            <i class="fas fa-clock timer-icon"></i>
+            <span class="timer-text">
+              Code valide encore : <strong>{{ formatTime(timeRemaining) }}</strong>
+            </span>
+          </div>
+
+          <p class="expired-msg" *ngIf="timeRemaining === 0">
+            <i class="fas fa-exclamation-circle"></i> Le token a expiré !
+          </p>
+        </div>
+
+        <button 
+          type="submit" 
+          class="btn-submit" 
+          [disabled]="timeRemaining === 0"
+        >
+          <span>Valider le code</span>
+          <i class="fas fa-check-circle btn-icon"></i>
+        </button>
+
+        <div class="auth-footer">
+          <p>
+            Vous n'avez pas reçu le code ? 
+            <button 
+              type="button" 
+              class="resend-btn" 
+              [disabled]="timeRemaining > 0"
+              (click)="resendToken()"
+            >
+              Renvoyer un nouveau code
+            </button>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
