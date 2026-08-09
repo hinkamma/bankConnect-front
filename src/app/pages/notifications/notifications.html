@@ -1,96 +1,106 @@
-<div class="bc-notifs">
+<div class="app-wrapper">
 
-  <header class="bc-notifs__header">
-    <div>
-      <h1 class="bc-notifs__title">Notifications</h1>
-      <p class="bc-notifs__subtitle">3 notifications non lues</p>
-    </div>
-    <button type="button" class="bc-notifs__mark-all">Tout marquer comme lu</button>
-  </header>
-
-  <div class="bc-notifs__tabs">
-    <button type="button" class="bc-notifs__tab is-active">Toutes</button>
-    <button type="button" class="bc-notifs__tab">Non lues</button>
-    <button type="button" class="bc-notifs__tab">Sécurité</button>
-    <button type="button" class="bc-notifs__tab">Transactions</button>
+  <div class="sideBar">
+    <app-navigation></app-navigation>
   </div>
 
-  <div class="bc-panel">
+  <main class="app-main">
 
-    <p class="bc-notifs__group-label">Aujourd'hui</p>
+    <div class="bc-notifs">
 
-    <div class="bc-notif is-unread">
-      <div class="bc-notif__icon bc-notif__icon--red">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+      <header class="bc-notifs__header">
+        <div>
+          <h1 class="bc-notifs__title">Notifications</h1>
+          <p class="bc-notifs__subtitle">3 notifications non lues</p>
+        </div>
+        <button type="button" class="bc-notifs__mark-all">Tout marquer comme lu</button>
+      </header>
+
+      <div class="bc-notifs__tabs">
+        <button type="button" class="bc-notifs__tab is-active">Toutes</button>
+        <button type="button" class="bc-notifs__tab">Non lues</button>
+        <button type="button" class="bc-notifs__tab">Sécurité</button>
+        <button type="button" class="bc-notifs__tab">Transactions</button>
       </div>
-      <div class="bc-notif__body">
-        <p class="bc-notif__title">Virement effectué</p>
-        <p class="bc-notif__desc">Votre virement de 25 000 FCFA vers Chanceline K. a été validé avec succès.</p>
-        <span class="bc-notif__time">Il y a 32 minutes</span>
+
+      <div class="bc-panel">
+
+        <p class="bc-notifs__group-label">Aujourd'hui</p>
+
+        <div class="bc-notif is-unread">
+          <div class="bc-notif__icon bc-notif__icon--red">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="bc-notif__body">
+            <p class="bc-notif__title">Virement effectué</p>
+            <p class="bc-notif__desc">Votre virement de 25 000 FCFA vers Chanceline K. a été validé avec succès.</p>
+            <span class="bc-notif__time">Il y a 32 minutes</span>
+          </div>
+          <span class="bc-notif__dot"></span>
+        </div>
+
+        <div class="bc-notif is-unread">
+          <div class="bc-notif__icon bc-notif__icon--gold">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="bc-notif__body">
+            <p class="bc-notif__title">Nouvelle connexion détectée</p>
+            <p class="bc-notif__desc">Une connexion a été effectuée depuis un nouvel appareil à Douala.</p>
+            <span class="bc-notif__time">Il y a 2 heures</span>
+          </div>
+          <span class="bc-notif__dot"></span>
+        </div>
+
+        <p class="bc-notifs__group-label">Cette semaine</p>
+
+        <div class="bc-notif is-unread">
+          <div class="bc-notif__icon bc-notif__icon--teal">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 7L7 17M7 17h8M7 17V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="bc-notif__body">
+            <p class="bc-notif__title">Dépôt reçu</p>
+            <p class="bc-notif__desc">Vous avez reçu 180 000 FCFA sur votre compte courant.</p>
+            <span class="bc-notif__time">Hier, 18:30</span>
+          </div>
+          <span class="bc-notif__dot"></span>
+        </div>
+
+        <div class="bc-notif">
+          <div class="bc-notif__icon bc-notif__icon--red">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="bc-notif__body">
+            <p class="bc-notif__title">Facture ENEO prélevée</p>
+            <p class="bc-notif__desc">Un prélèvement de 14 500 FCFA a été effectué sur votre compte courant.</p>
+            <span class="bc-notif__time">12 juillet, 08:05</span>
+          </div>
+        </div>
+
+        <div class="bc-notif">
+          <div class="bc-notif__icon bc-notif__icon--gold">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="7" width="18" height="4" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M5 11v9h14v-9M10 11v9M14 11v9" stroke="currentColor" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="bc-notif__body">
+            <p class="bc-notif__title">Épargne programmée exécutée</p>
+            <p class="bc-notif__desc">20 000 FCFA ont été transférés vers votre compte épargne.</p>
+            <span class="bc-notif__time">10 juillet, 07:00</span>
+          </div>
+        </div>
+
       </div>
-      <span class="bc-notif__dot"></span>
+
     </div>
-
-    <div class="bc-notif is-unread">
-      <div class="bc-notif__icon bc-notif__icon--gold">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/>
-        </svg>
-      </div>
-      <div class="bc-notif__body">
-        <p class="bc-notif__title">Nouvelle connexion détectée</p>
-        <p class="bc-notif__desc">Une connexion a été effectuée depuis un nouvel appareil à Douala.</p>
-        <span class="bc-notif__time">Il y a 2 heures</span>
-      </div>
-      <span class="bc-notif__dot"></span>
-    </div>
-
-    <p class="bc-notifs__group-label">Cette semaine</p>
-
-    <div class="bc-notif is-unread">
-      <div class="bc-notif__icon bc-notif__icon--teal">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17 7L7 17M7 17h8M7 17V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="bc-notif__body">
-        <p class="bc-notif__title">Dépôt reçu</p>
-        <p class="bc-notif__desc">Vous avez reçu 180 000 FCFA sur votre compte courant.</p>
-        <span class="bc-notif__time">Hier, 18:30</span>
-      </div>
-      <span class="bc-notif__dot"></span>
-    </div>
-
-    <div class="bc-notif">
-      <div class="bc-notif__icon bc-notif__icon--red">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="bc-notif__body">
-        <p class="bc-notif__title">Facture ENEO prélevée</p>
-        <p class="bc-notif__desc">Un prélèvement de 14 500 FCFA a été effectué sur votre compte courant.</p>
-        <span class="bc-notif__time">12 juillet, 08:05</span>
-      </div>
-    </div>
-
-    <div class="bc-notif">
-      <div class="bc-notif__icon bc-notif__icon--gold">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="3" y="7" width="18" height="4" stroke="currentColor" stroke-width="1.6"/>
-          <path d="M5 11v9h14v-9M10 11v9M14 11v9" stroke="currentColor" stroke-width="1.6"/>
-        </svg>
-      </div>
-      <div class="bc-notif__body">
-        <p class="bc-notif__title">Épargne programmée exécutée</p>
-        <p class="bc-notif__desc">20 000 FCFA ont été transférés vers votre compte épargne.</p>
-        <span class="bc-notif__time">10 juillet, 07:00</span>
-      </div>
-    </div>
-
-  </div>
-
+  </main>
 </div>

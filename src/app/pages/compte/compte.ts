@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Navigation } from './../../navigation/navigation/navigation';
 
 @Component({
   selector: 'app-compte',
-  imports: [],
+  imports: [Navigation],
   templateUrl: './compte.html',
   styleUrl: './compte.less',
 })

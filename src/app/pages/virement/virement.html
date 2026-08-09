@@ -1,111 +1,121 @@
-<div class="bc-virement">
+<div class="app-wrapper">
 
-  <header class="bc-virement__header">
-    <h1 class="bc-virement__title">Nouveau virement</h1>
-    <p class="bc-virement__subtitle">Transférez de l'argent entre vos comptes ou vers un bénéficiaire</p>
-  </header>
-
-  <div class="bc-virement__layout">
-
-    <form class="bc-form">
-
-      <div class="bc-form__tabs">
-        <button type="button" class="bc-form__tab is-active">Vers un bénéficiaire</button>
-        <button type="button" class="bc-form__tab">Entre mes comptes</button>
-      </div>
-
-      <label class="bc-field">
-        <span class="bc-field__label">Compte source</span>
-        <select class="bc-field__control">
-          <option>Compte courant — 312 300 FCFA</option>
-          <option>Compte épargne — 140 000 FCFA</option>
-        </select>
-      </label>
-
-      <label class="bc-field">
-        <span class="bc-field__label">Bénéficiaire</span>
-        <select class="bc-field__control">
-          <option>Chanceline Kaneza Hinkamma — CM •••• 7723</option>
-          <option>Paul Essomba — CM •••• 5510</option>
-          <option>+ Ajouter un nouveau bénéficiaire</option>
-        </select>
-      </label>
-
-      <label class="bc-field">
-        <span class="bc-field__label">Montant</span>
-        <div class="bc-field__amount">
-          <input type="text" class="bc-field__amount-input" placeholder="0" value="25 000" />
-          <span class="bc-field__amount-suffix">FCFA</span>
-        </div>
-      </label>
-
-      <label class="bc-field">
-        <span class="bc-field__label">Motif (facultatif)</span>
-        <input type="text" class="bc-field__control" placeholder="Ex. Frais de scolarité" />
-      </label>
-
-      <label class="bc-field">
-        <span class="bc-field__label">Date d'exécution</span>
-        <div class="bc-field__date-options">
-          <button type="button" class="bc-chip is-active">Immédiat</button>
-          <button type="button" class="bc-chip">Programmé</button>
-        </div>
-      </label>
-
-      <div class="bc-form__actions">
-        <button type="button" class="bc-btn-secondary">Annuler</button>
-        <button type="button" class="bc-btn-primary">Valider le virement</button>
-      </div>
-
-    </form>
-
-    <aside class="bc-virement__side">
-
-      <div class="bc-panel">
-        <h2 class="bc-panel__title">Récapitulatif</h2>
-        <div class="bc-recap__row">
-          <span>Compte source</span>
-          <span>Compte courant</span>
-        </div>
-        <div class="bc-recap__row">
-          <span>Bénéficiaire</span>
-          <span>Chanceline K.</span>
-        </div>
-        <div class="bc-recap__row">
-          <span>Frais</span>
-          <span>0 FCFA</span>
-        </div>
-        <div class="bc-recap__row bc-recap__row--total">
-          <span>Total débité</span>
-          <span>25 000 FCFA</span>
-        </div>
-      </div>
-
-      <div class="bc-panel">
-        <div class="bc-panel__header">
-          <h2 class="bc-panel__title">Bénéficiaires enregistrés</h2>
-          <button type="button" class="bc-panel__link">Gérer</button>
-        </div>
-
-        <div class="bc-beneficiaire">
-          <div class="bc-beneficiaire__avatar">CK</div>
-          <div class="bc-beneficiaire__info">
-            <span class="bc-beneficiaire__name">Chanceline Kaneza Hinkamma</span>
-            <span class="bc-beneficiaire__number">CM •••• •••• 7723</span>
-          </div>
-        </div>
-
-        <div class="bc-beneficiaire">
-          <div class="bc-beneficiaire__avatar">PE</div>
-          <div class="bc-beneficiaire__info">
-            <span class="bc-beneficiaire__name">Paul Essomba</span>
-            <span class="bc-beneficiaire__number">CM •••• •••• 5510</span>
-          </div>
-        </div>
-      </div>
-
-    </aside>
-
+  <div class="sideBar">
+    <app-navigation></app-navigation>
   </div>
 
-</div>
+  <main class="app-main">
+    <div class="bc-virement">
+
+      <header class="bc-virement__header">
+        <h1 class="bc-virement__title">Nouveau virement</h1>
+        <p class="bc-virement__subtitle">Transférez de l'argent entre vos comptes ou vers un bénéficiaire</p>
+      </header>
+
+      <div class="bc-virement__layout">
+
+        <form class="bc-form">
+
+          <div class="bc-form__tabs">
+            <button type="button" class="bc-form__tab is-active">Vers un bénéficiaire</button>
+            <button type="button" class="bc-form__tab">Entre mes comptes</button>
+          </div>
+
+          <label class="bc-field">
+            <span class="bc-field__label">Compte source</span>
+            <select class="bc-field__control">
+              <option>Compte courant — 312 300 FCFA</option>
+              <option>Compte épargne — 140 000 FCFA</option>
+            </select>
+          </label>
+
+          <label class="bc-field">
+            <span class="bc-field__label">Bénéficiaire</span>
+            <select class="bc-field__control">
+              <option>Chanceline Kaneza Hinkamma — CM •••• 7723</option>
+              <option>Paul Essomba — CM •••• 5510</option>
+              <option>+ Ajouter un nouveau bénéficiaire</option>
+            </select>
+          </label>
+
+          <label class="bc-field">
+            <span class="bc-field__label">Montant</span>
+            <div class="bc-field__amount">
+              <input type="text" class="bc-field__amount-input" placeholder="0" value="25 000" />
+              <span class="bc-field__amount-suffix">FCFA</span>
+            </div>
+          </label>
+
+          <label class="bc-field">
+            <span class="bc-field__label">Motif (facultatif)</span>
+            <input type="text" class="bc-field__control" placeholder="Ex. Frais de scolarité" />
+          </label>
+
+          <label class="bc-field">
+            <span class="bc-field__label">Date d'exécution</span>
+            <div class="bc-field__date-options">
+              <button type="button" class="bc-chip is-active">Immédiat</button>
+              <button type="button" class="bc-chip">Programmé</button>
+            </div>
+          </label>
+
+          <div class="bc-form__actions">
+            <button type="button" class="bc-btn-secondary">Annuler</button>
+            <button type="button" class="bc-btn-primary">Valider le virement</button>
+          </div>
+
+        </form>
+
+        <aside class="bc-virement__side">
+
+          <div class="bc-panel">
+            <h2 class="bc-panel__title">Récapitulatif</h2>
+            <div class="bc-recap__row">
+              <span>Compte source</span>
+              <span>Compte courant</span>
+            </div>
+            <div class="bc-recap__row">
+              <span>Bénéficiaire</span>
+              <span>Chanceline K.</span>
+            </div>
+            <div class="bc-recap__row">
+              <span>Frais</span>
+              <span>0 FCFA</span>
+            </div>
+            <div class="bc-recap__row bc-recap__row--total">
+              <span>Total débité</span>
+              <span>25 000 FCFA</span>
+            </div>
+          </div>
+
+          <div class="bc-panel">
+            <div class="bc-panel__header">
+              <h2 class="bc-panel__title">Bénéficiaires enregistrés</h2>
+              <button type="button" class="bc-panel__link">Gérer</button>
+            </div>
+
+            <div class="bc-beneficiaire">
+              <div class="bc-beneficiaire__avatar">CK</div>
+              <div class="bc-beneficiaire__info">
+                <span class="bc-beneficiaire__name">Chanceline Kaneza Hinkamma</span>
+                <span class="bc-beneficiaire__number">CM •••• •••• 7723</span>
+              </div>
+            </div>
+
+            <div class="bc-beneficiaire">
+              <div class="bc-beneficiaire__avatar">PE</div>
+              <div class="bc-beneficiaire__info">
+                <span class="bc-beneficiaire__name">Paul Essomba</span>
+                <span class="bc-beneficiaire__number">CM •••• •••• 5510</span>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </div>
+  </main>
+
+

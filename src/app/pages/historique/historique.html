@@ -1,119 +1,128 @@
-<div class="bc-historique">
+<div class="app-wrapper">
 
-  <header class="bc-historique__header">
-    <div>
-      <h1 class="bc-historique__title">Historique des transactions</h1>
-      <p class="bc-historique__subtitle">Retrouvez l'ensemble de vos opérations</p>
-    </div>
-    <button type="button" class="bc-btn-secondary">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Exporter
-    </button>
-  </header>
-
-  <div class="bc-filters">
-    <select class="bc-filters__control">
-      <option>Tous les comptes</option>
-      <option>Compte courant</option>
-      <option>Compte épargne</option>
-    </select>
-    <select class="bc-filters__control">
-      <option>Toutes les opérations</option>
-      <option>Entrées</option>
-      <option>Sorties</option>
-    </select>
-    <input type="text" class="bc-filters__control" placeholder="jj/mm/aaaa" value="01/07/2026" />
-    <span class="bc-filters__sep">—</span>
-    <input type="text" class="bc-filters__control" placeholder="jj/mm/aaaa" value="18/07/2026" />
-    <label class="bc-filters__search">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
-        <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </svg>
-      <input type="text" placeholder="Rechercher..." />
-    </label>
+  <div class="sideBar">
+    <app-navigation></app-navigation>
   </div>
 
-  <div class="bc-panel">
+  <main class="app-main">
+    <div class="bc-historique">
 
-    <p class="bc-historique__group-label">Aujourd'hui</p>
+      <header class="bc-historique__header">
+        <div>
+          <h1 class="bc-historique__title">Historique des transactions</h1>
+          <p class="bc-historique__subtitle">Retrouvez l'ensemble de vos opérations</p>
+        </div>
+        <button type="button" class="bc-btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Exporter
+        </button>
+      </header>
 
-    <div class="bc-row">
-      <div class="bc-row__icon bc-row__icon--red">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="bc-filters">
+        <select class="bc-filters__control">
+          <option>Tous les comptes</option>
+          <option>Compte courant</option>
+          <option>Compte épargne</option>
+        </select>
+        <select class="bc-filters__control">
+          <option>Toutes les opérations</option>
+          <option>Entrées</option>
+          <option>Sorties</option>
+        </select>
+        <input type="text" class="bc-filters__control" placeholder="jj/mm/aaaa" value="01/07/2026" />
+        <span class="bc-filters__sep">—</span>
+        <input type="text" class="bc-filters__control" placeholder="jj/mm/aaaa" value="18/07/2026" />
+        <label class="bc-filters__search">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <input type="text" placeholder="Rechercher..." />
+        </label>
       </div>
-      <div class="bc-row__info">
-        <span class="bc-row__name">Virement — Chanceline K.</span>
-        <span class="bc-row__meta">09:12 · Compte courant · Réf. TX48213</span>
+
+      <div class="bc-panel">
+
+        <p class="bc-historique__group-label">Aujourd'hui</p>
+
+        <div class="bc-row">
+          <div class="bc-row__icon bc-row__icon--red">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="bc-row__info">
+            <span class="bc-row__name">Virement — Chanceline K.</span>
+            <span class="bc-row__meta">09:12 · Compte courant · Réf. TX48213</span>
+          </div>
+          <span class="bc-row__tag">Virement</span>
+          <span class="bc-row__amount bc-row__amount--out">- 25 000 FCFA</span>
+        </div>
+
+        <p class="bc-historique__group-label">Hier</p>
+
+        <div class="bc-row">
+          <div class="bc-row__icon bc-row__icon--teal">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 7L7 17M7 17h8M7 17V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="bc-row__info">
+            <span class="bc-row__name">Dépôt — Salaire Collège St-Gérôme</span>
+            <span class="bc-row__meta">18:30 · Compte courant · Réf. TX48190</span>
+          </div>
+          <span class="bc-row__tag">Dépôt</span>
+          <span class="bc-row__amount bc-row__amount--in">+ 180 000 FCFA</span>
+        </div>
+
+        <div class="bc-row">
+          <div class="bc-row__icon bc-row__icon--red">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" stroke="currentColor" stroke-width="1.6"/><path d="M8 9h8M8 13h8M8 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <div class="bc-row__info">
+            <span class="bc-row__name">Abonnement Netflix</span>
+            <span class="bc-row__meta">07:00 · Compte courant · Réf. TX48177</span>
+          </div>
+          <span class="bc-row__tag">Facture</span>
+          <span class="bc-row__amount bc-row__amount--out">- 4 000 FCFA</span>
+        </div>
+
+        <p class="bc-historique__group-label">12 juillet 2026</p>
+
+        <div class="bc-row">
+          <div class="bc-row__icon bc-row__icon--red">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="bc-row__info">
+            <span class="bc-row__name">Facture ENEO</span>
+            <span class="bc-row__meta">08:05 · Compte courant · Réf. TX48102</span>
+          </div>
+          <span class="bc-row__tag">Facture</span>
+          <span class="bc-row__amount bc-row__amount--out">- 14 500 FCFA</span>
+        </div>
+
+        <div class="bc-row">
+          <div class="bc-row__icon bc-row__icon--gold">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="18" height="4" stroke="currentColor" stroke-width="1.6"/><path d="M5 11v9h14v-9M10 11v9M14 11v9" stroke="currentColor" stroke-width="1.6"/></svg>
+          </div>
+          <div class="bc-row__info">
+            <span class="bc-row__name">Épargne programmée</span>
+            <span class="bc-row__meta">07:00 · Compte épargne · Réf. TX48099</span>
+          </div>
+          <span class="bc-row__tag">Épargne</span>
+          <span class="bc-row__amount bc-row__amount--out">- 20 000 FCFA</span>
+        </div>
+
+        <div class="bc-pagination">
+          <button type="button" class="bc-pagination__btn" disabled>Précédent</button>
+          <div class="bc-pagination__pages">
+            <span class="bc-pagination__page is-active">1</span>
+            <span class="bc-pagination__page">2</span>
+            <span class="bc-pagination__page">3</span>
+          </div>
+          <button type="button" class="bc-pagination__btn">Suivant</button>
+        </div>
+
       </div>
-      <span class="bc-row__tag">Virement</span>
-      <span class="bc-row__amount bc-row__amount--out">- 25 000 FCFA</span>
+
     </div>
-
-    <p class="bc-historique__group-label">Hier</p>
-
-    <div class="bc-row">
-      <div class="bc-row__icon bc-row__icon--teal">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 7L7 17M7 17h8M7 17V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="bc-row__info">
-        <span class="bc-row__name">Dépôt — Salaire Collège St-Gérôme</span>
-        <span class="bc-row__meta">18:30 · Compte courant · Réf. TX48190</span>
-      </div>
-      <span class="bc-row__tag">Dépôt</span>
-      <span class="bc-row__amount bc-row__amount--in">+ 180 000 FCFA</span>
-    </div>
-
-    <div class="bc-row">
-      <div class="bc-row__icon bc-row__icon--red">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="16" height="16" stroke="currentColor" stroke-width="1.6"/><path d="M8 9h8M8 13h8M8 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      </div>
-      <div class="bc-row__info">
-        <span class="bc-row__name">Abonnement Netflix</span>
-        <span class="bc-row__meta">07:00 · Compte courant · Réf. TX48177</span>
-      </div>
-      <span class="bc-row__tag">Facture</span>
-      <span class="bc-row__amount bc-row__amount--out">- 4 000 FCFA</span>
-    </div>
-
-    <p class="bc-historique__group-label">12 juillet 2026</p>
-
-    <div class="bc-row">
-      <div class="bc-row__icon bc-row__icon--red">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="bc-row__info">
-        <span class="bc-row__name">Facture ENEO</span>
-        <span class="bc-row__meta">08:05 · Compte courant · Réf. TX48102</span>
-      </div>
-      <span class="bc-row__tag">Facture</span>
-      <span class="bc-row__amount bc-row__amount--out">- 14 500 FCFA</span>
-    </div>
-
-    <div class="bc-row">
-      <div class="bc-row__icon bc-row__icon--gold">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="18" height="4" stroke="currentColor" stroke-width="1.6"/><path d="M5 11v9h14v-9M10 11v9M14 11v9" stroke="currentColor" stroke-width="1.6"/></svg>
-      </div>
-      <div class="bc-row__info">
-        <span class="bc-row__name">Épargne programmée</span>
-        <span class="bc-row__meta">07:00 · Compte épargne · Réf. TX48099</span>
-      </div>
-      <span class="bc-row__tag">Épargne</span>
-      <span class="bc-row__amount bc-row__amount--out">- 20 000 FCFA</span>
-    </div>
-
-    <div class="bc-pagination">
-      <button type="button" class="bc-pagination__btn" disabled>Précédent</button>
-      <div class="bc-pagination__pages">
-        <span class="bc-pagination__page is-active">1</span>
-        <span class="bc-pagination__page">2</span>
-        <span class="bc-pagination__page">3</span>
-      </div>
-      <button type="button" class="bc-pagination__btn">Suivant</button>
-    </div>
-
-  </div>
-
+  </main>
 </div>

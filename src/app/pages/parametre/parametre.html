@@ -1,122 +1,131 @@
-<div class="bc-params">
+<div class="app-wrapper">
 
-  <header class="bc-params__header">
-    <h1 class="bc-params__title">Paramètres</h1>
-    <p class="bc-params__subtitle">Gérez la sécurité, les préférences et la confidentialité de votre compte</p>
-  </header>
-
-  <div class="bc-panel">
-    <h2 class="bc-panel__title">Sécurité</h2>
-
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Authentification à deux facteurs</p>
-        <p class="bc-setting-row__hint">Ajoutez une couche de sécurité supplémentaire à la connexion</p>
-      </div>
-      <label class="bc-switch">
-        <input type="checkbox" checked />
-        <span class="bc-switch__track"></span>
-      </label>
-    </div>
-
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Mot de passe</p>
-        <p class="bc-setting-row__hint">Dernière modification il y a 3 mois</p>
-      </div>
-      <button type="button" class="bc-btn-secondary">Modifier</button>
-    </div>
-
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Sessions actives</p>
-        <p class="bc-setting-row__hint">2 appareils connectés</p>
-      </div>
-      <button type="button" class="bc-btn-secondary">Gérer</button>
-    </div>
+  <div class="sideBar">
+    <app-navigation></app-navigation>
   </div>
 
-  <div class="bc-panel">
-    <h2 class="bc-panel__title">Préférences</h2>
+  <main class="app-main">    
+    <div class="bc-params">
 
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Langue</p>
-        <p class="bc-setting-row__hint">Langue utilisée dans l'application</p>
+      <header class="bc-params__header">
+        <h1 class="bc-params__title">Paramètres</h1>
+        <p class="bc-params__subtitle">Gérez la sécurité, les préférences et la confidentialité de votre compte</p>
+      </header>
+
+      <div class="bc-panel">
+        <h2 class="bc-panel__title">Sécurité</h2>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Authentification à deux facteurs</p>
+            <p class="bc-setting-row__hint">Ajoutez une couche de sécurité supplémentaire à la connexion</p>
+          </div>
+          <label class="bc-switch">
+            <input type="checkbox" checked />
+            <span class="bc-switch__track"></span>
+          </label>
+        </div>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Mot de passe</p>
+            <p class="bc-setting-row__hint">Dernière modification il y a 3 mois</p>
+          </div>
+          <button type="button" class="bc-btn-secondary">Modifier</button>
+        </div>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Sessions actives</p>
+            <p class="bc-setting-row__hint">2 appareils connectés</p>
+          </div>
+          <button type="button" class="bc-btn-secondary">Gérer</button>
+        </div>
       </div>
-      <select class="bc-select">
-        <option>Français</option>
-        <option>English</option>
-      </select>
-    </div>
 
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Devise</p>
-        <p class="bc-setting-row__hint">Devise d'affichage des montants</p>
+      <div class="bc-panel">
+        <h2 class="bc-panel__title">Préférences</h2>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Langue</p>
+            <p class="bc-setting-row__hint">Langue utilisée dans l'application</p>
+          </div>
+          <select class="bc-select">
+            <option>Français</option>
+            <option>English</option>
+          </select>
+        </div>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Devise</p>
+            <p class="bc-setting-row__hint">Devise d'affichage des montants</p>
+          </div>
+          <select class="bc-select">
+            <option>FCFA (XAF)</option>
+            <option>Euro (EUR)</option>
+            <option>Dollar (USD)</option>
+          </select>
+        </div>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Notifications par e-mail</p>
+            <p class="bc-setting-row__hint">Recevoir un e-mail pour chaque opération sensible</p>
+          </div>
+          <label class="bc-switch">
+            <input type="checkbox" checked />
+            <span class="bc-switch__track"></span>
+          </label>
+        </div>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Notifications push</p>
+            <p class="bc-setting-row__hint">Recevoir des alertes sur votre appareil</p>
+          </div>
+          <label class="bc-switch">
+            <input type="checkbox" />
+            <span class="bc-switch__track"></span>
+          </label>
+        </div>
       </div>
-      <select class="bc-select">
-        <option>FCFA (XAF)</option>
-        <option>Euro (EUR)</option>
-        <option>Dollar (USD)</option>
-      </select>
-    </div>
 
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Notifications par e-mail</p>
-        <p class="bc-setting-row__hint">Recevoir un e-mail pour chaque opération sensible</p>
+      <div class="bc-panel">
+        <h2 class="bc-panel__title">Confidentialité</h2>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Partage de données statistiques</p>
+            <p class="bc-setting-row__hint">Aide à améliorer l'application de façon anonyme</p>
+          </div>
+          <label class="bc-switch">
+            <input type="checkbox" checked />
+            <span class="bc-switch__track"></span>
+          </label>
+        </div>
+
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Télécharger mes données</p>
+            <p class="bc-setting-row__hint">Exportez une copie de vos informations</p>
+          </div>
+          <button type="button" class="bc-btn-secondary">Télécharger</button>
+        </div>
       </div>
-      <label class="bc-switch">
-        <input type="checkbox" checked />
-        <span class="bc-switch__track"></span>
-      </label>
-    </div>
 
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Notifications push</p>
-        <p class="bc-setting-row__hint">Recevoir des alertes sur votre appareil</p>
+      <div class="bc-panel bc-panel--danger">
+        <h2 class="bc-panel__title">Zone sensible</h2>
+        <div class="bc-setting-row">
+          <div>
+            <p class="bc-setting-row__label">Supprimer mon compte</p>
+            <p class="bc-setting-row__hint">Cette action est irréversible et clôture tous vos comptes</p>
+          </div>
+          <button type="button" class="bc-btn-danger">Supprimer le compte</button>
+        </div>
       </div>
-      <label class="bc-switch">
-        <input type="checkbox" />
-        <span class="bc-switch__track"></span>
-      </label>
+
     </div>
-  </div>
-
-  <div class="bc-panel">
-    <h2 class="bc-panel__title">Confidentialité</h2>
-
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Partage de données statistiques</p>
-        <p class="bc-setting-row__hint">Aide à améliorer l'application de façon anonyme</p>
-      </div>
-      <label class="bc-switch">
-        <input type="checkbox" checked />
-        <span class="bc-switch__track"></span>
-      </label>
-    </div>
-
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Télécharger mes données</p>
-        <p class="bc-setting-row__hint">Exportez une copie de vos informations</p>
-      </div>
-      <button type="button" class="bc-btn-secondary">Télécharger</button>
-    </div>
-  </div>
-
-  <div class="bc-panel bc-panel--danger">
-    <h2 class="bc-panel__title">Zone sensible</h2>
-    <div class="bc-setting-row">
-      <div>
-        <p class="bc-setting-row__label">Supprimer mon compte</p>
-        <p class="bc-setting-row__hint">Cette action est irréversible et clôture tous vos comptes</p>
-      </div>
-      <button type="button" class="bc-btn-danger">Supprimer le compte</button>
-    </div>
-  </div>
-
+  </main>
 </div>

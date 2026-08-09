@@ -1,97 +1,107 @@
-<div class="bc-profil">
+<div class="app-wrapper">
 
-  <header class="bc-profil__header">
-    <h1 class="bc-profil__title">Mon profil</h1>
-    <p class="bc-profil__subtitle">Gérez vos informations personnelles</p>
-  </header>
+  <div class="sideBar">
+    <app-navigation></app-navigation>
+  </div>
 
-  <div class="bc-profil__layout">
+  <main class="app-main">
+    
+    <div class="bc-profil">
 
-    <aside class="bc-profil__card">
-      <div class="bc-profil__avatar-wrap">
-        <div class="bc-profil__avatar">FH</div>
-        <button type="button" class="bc-profil__avatar-edit" aria-label="Modifier la photo">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 20h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-      <p class="bc-profil__name">Freddy Hinkamma</p>
-      <p class="bc-profil__role">Compte particulier</p>
-      <span class="bc-profil__badge">Client depuis mars 2024</span>
+      <header class="bc-profil__header">
+        <h1 class="bc-profil__title">Mon profil</h1>
+        <p class="bc-profil__subtitle">Gérez vos informations personnelles</p>
+      </header>
 
-      <div class="bc-profil__mini-stats">
-        <div>
-          <span class="bc-profil__mini-value">2</span>
-          <span class="bc-profil__mini-label">Comptes</span>
-        </div>
-        <div>
-          <span class="bc-profil__mini-value">2</span>
-          <span class="bc-profil__mini-label">Bénéficiaires</span>
-        </div>
-      </div>
-    </aside>
+      <div class="bc-profil__layout">
 
-    <div class="bc-profil__main">
-
-      <div class="bc-panel">
-        <div class="bc-panel__header">
-          <h2 class="bc-panel__title">Informations personnelles</h2>
-          <button type="button" class="bc-panel__link">Modifier</button>
-        </div>
-
-        <div class="bc-info-row">
-          <span class="bc-info-row__label">Nom complet</span>
-          <span class="bc-info-row__value">Freddy Roland Hinkamma Sakamsou</span>
-        </div>
-        <div class="bc-info-row">
-          <span class="bc-info-row__label">Adresse e-mail</span>
-          <span class="bc-info-row__value">freddy.hinkamma@bankconnect.cm</span>
-        </div>
-        <div class="bc-info-row">
-          <span class="bc-info-row__label">Téléphone</span>
-          <span class="bc-info-row__value">+237 6•• •• •• 42</span>
-        </div>
-        <div class="bc-info-row">
-          <span class="bc-info-row__label">Adresse</span>
-          <span class="bc-info-row__value">Douala, Littoral, Cameroun</span>
-        </div>
-        <div class="bc-info-row">
-          <span class="bc-info-row__label">Pièce d'identité</span>
-          <span class="bc-info-row__value">Vérifiée <span class="bc-check">✓</span></span>
-        </div>
-      </div>
-
-      <div class="bc-panel">
-        <h2 class="bc-panel__title">Sécurité</h2>
-
-        <div class="bc-security-row">
-          <div>
-            <p class="bc-security-row__label">Authentification à deux facteurs</p>
-            <p class="bc-security-row__hint">Activée via application d'authentification</p>
+        <aside class="bc-profil__card">
+          <div class="bc-profil__avatar-wrap">
+            <div class="bc-profil__avatar">FH</div>
+            <button type="button" class="bc-profil__avatar-edit" aria-label="Modifier la photo">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 20h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+            </button>
           </div>
-          <span class="bc-status-badge bc-status-badge--on">Activée</span>
+          <p class="bc-profil__name">Freddy Hinkamma</p>
+          <p class="bc-profil__role">Compte particulier</p>
+          <span class="bc-profil__badge">Client depuis mars 2024</span>
+
+          <div class="bc-profil__mini-stats">
+            <div>
+              <span class="bc-profil__mini-value">2</span>
+              <span class="bc-profil__mini-label">Comptes</span>
+            </div>
+            <div>
+              <span class="bc-profil__mini-value">2</span>
+              <span class="bc-profil__mini-label">Bénéficiaires</span>
+            </div>
+          </div>
+        </aside>
+
+        <div class="bc-profil__main">
+
+          <div class="bc-panel">
+            <div class="bc-panel__header">
+              <h2 class="bc-panel__title">Informations personnelles</h2>
+              <button type="button" class="bc-panel__link">Modifier</button>
+            </div>
+
+            <div class="bc-info-row">
+              <span class="bc-info-row__label">Nom complet</span>
+              <span class="bc-info-row__value">Freddy Roland Hinkamma Sakamsou</span>
+            </div>
+            <div class="bc-info-row">
+              <span class="bc-info-row__label">Adresse e-mail</span>
+              <span class="bc-info-row__value">freddy.hinkamma@bankconnect.cm</span>
+            </div>
+            <div class="bc-info-row">
+              <span class="bc-info-row__label">Téléphone</span>
+              <span class="bc-info-row__value">+237 6•• •• •• 42</span>
+            </div>
+            <div class="bc-info-row">
+              <span class="bc-info-row__label">Adresse</span>
+              <span class="bc-info-row__value">Douala, Littoral, Cameroun</span>
+            </div>
+            <div class="bc-info-row">
+              <span class="bc-info-row__label">Pièce d'identité</span>
+              <span class="bc-info-row__value">Vérifiée <span class="bc-check">✓</span></span>
+            </div>
+          </div>
+
+          <div class="bc-panel">
+            <h2 class="bc-panel__title">Sécurité</h2>
+
+            <div class="bc-security-row">
+              <div>
+                <p class="bc-security-row__label">Authentification à deux facteurs</p>
+                <p class="bc-security-row__hint">Activée via application d'authentification</p>
+              </div>
+              <span class="bc-status-badge bc-status-badge--on">Activée</span>
+            </div>
+
+            <div class="bc-security-row">
+              <div>
+                <p class="bc-security-row__label">Mot de passe</p>
+                <p class="bc-security-row__hint">Dernière modification il y a 3 mois</p>
+              </div>
+              <button type="button" class="bc-panel__link">Modifier</button>
+            </div>
+
+            <div class="bc-security-row">
+              <div>
+                <p class="bc-security-row__label">Dernière connexion</p>
+                <p class="bc-security-row__hint">Aujourd'hui, 08:47 · Douala, Cameroun</p>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="bc-security-row">
-          <div>
-            <p class="bc-security-row__label">Mot de passe</p>
-            <p class="bc-security-row__hint">Dernière modification il y a 3 mois</p>
-          </div>
-          <button type="button" class="bc-panel__link">Modifier</button>
-        </div>
-
-        <div class="bc-security-row">
-          <div>
-            <p class="bc-security-row__label">Dernière connexion</p>
-            <p class="bc-security-row__hint">Aujourd'hui, 08:47 · Douala, Cameroun</p>
-          </div>
-        </div>
       </div>
 
     </div>
-
-  </div>
-
+  </main>
 </div>
