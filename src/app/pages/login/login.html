@@ -16,19 +16,19 @@
                 <p class="bank-tagline">Portail d'accès bancaire sécurisé</p>
             </div>
 
-            <form method="POST" action="" class="bank-form">
-                @csrf
+            <form method="POST" action="" class="bank-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
 
                 <div class="role-selector-wrapper stagger-item">
                     <label class="role-label">Choisissez votre profil :</label>
                     <div class="role-tabs">
-                        <input type="radio" id="role_client" name="role" value="client" checked>
+                        <input  type="radio" id="role_client" name="role" formControlName="role" value="client" checked>
                         <label for="role_client" class="tab-btn">
                             <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                             Client
                         </label>
 
-                        <input type="radio" id="role_admin" name="role" value="admin">
+                        <input  type="radio" id="role_admin" name="role" formControlName="role" value="admin">
                         <label for="role_admin" class="tab-btn">
                             <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
                             Admin
@@ -41,10 +41,15 @@
                 <div class="form-group stagger-item">
                     <label for="email">Identifiant / Adresse e-mail</label>
                     <div class="input-wrapper">
-                        <input id="email" type="email" class="bank-input" name="email" placeholder="ex: client@gmail.com"  autofocus autocomplete="off">
+                        <input formControlName="email" id="email" type="email" class="bank-input" name="email" placeholder="ex: client@gmail.com"  autofocus autocomplete="off">
                         <span class="input-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </span>
+                    </div>
+
+                    <div class="field-error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                        <span *ngIf="loginForm.get('email')?.hasError('required')">L'email est requis.</span>
+                        <span *ngIf="loginForm.get('email')?.hasError('email')">Format d'email invalide.</span>
                     </div>
                 </div>
 
@@ -54,10 +59,15 @@
                         <a href="" class="forgot-link">Oublié ?</a>
                     </div>
                     <div class="input-wrapper">
-                        <input id="password" type="password" class="bank-input" name="password" placeholder="******" autocomplete="off">
+                        <input formControlName="password" id="password" type="password" class="bank-input" name="password" placeholder="******" autocomplete="off">
                         <span class="input-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                         </span>
+                    </div>
+
+                    <div class="field-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                        <span *ngIf="loginForm.get('password')?.hasError('required')">Le mot de passe est requis.</span>
+                        <span *ngIf="loginForm.get('password')?.hasError('minlength')">6 caractères minimum.</span>
                     </div>
                 </div>
 
