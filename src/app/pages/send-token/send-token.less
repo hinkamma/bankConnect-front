@@ -669,3 +669,111 @@ html, body {
 .cancel-link:hover svg {
   transform: translateX(-3px);
 }
+
+
+
+
+
+.toast-error,.toast-success {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 9999;
+  animation: toast-lifecycle 4s ease forwards;
+}
+
+.toast-error {
+  background: #1f1315;
+  border-left: 4px solid #ef4444;
+  color: #fecaca;
+}
+
+.toast-error::before {
+  background: #ef4444;
+}
+
+.toast-success {
+  background: #0f1f16;
+  border-left: 4px solid #22c55e;
+  color: #bbf7d0;
+}
+
+
+.toast-error::before,
+.toast-success::before {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.toast-success::before {
+  background: #22c55e;
+}
+
+@keyframes toast-lifecycle {
+  0% { opacity: 0; transform: translateY(-12px); }
+  8% { opacity: 1; transform: translateY(0); }
+  88% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-12px); }
+}
+
+@media (max-width: 480px) {
+  .toast-error, .toast-success {
+    left: 1rem;
+    right: 1rem;
+    top: 1rem;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(37, 99, 235, 0.25); // bleu clair transparent
+  border-top-color: #2563eb; // bleu plein, assorti à .resend-btn
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.resend-btn {
+  background: transparent;
+  border: 1px solid #2563eb;
+  color: #2563eb;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;      
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;           
+}
+
+.resend-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

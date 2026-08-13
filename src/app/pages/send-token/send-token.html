@@ -4,7 +4,9 @@
 
     <div class="bank-login-container">
         <div class="bank-card">
-            
+            <div class="toast" *ngIf="showToastFlag">
+                    {{ toastMessage }} 
+                </div>
             <div class="bank-header">
                 <div class="bank-logo-icon 2fa-icon-bg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -13,46 +15,65 @@
                         <path d="m9 10 2 2 4-4"/>
                     </svg>
                 </div>
+                <div class="toast" *ngIf="showToastFlag">
+                    {{ toastMessage }} 
+                </div>
                 <h1 class="bank-name">Bank<span>Connect</span></h1>
                 <p class="bank-tagline">Vérification de sécurité (2FA)</p>
             </div>
+            
 
             <div class="otp-instruction stagger-item">
                 <p>Un code de sécurité à <strong>6 chiffres</strong> a été envoyé sur votre boite de messagerie (GMAIL).</p>
             </div>
 
-            <form method="POST" action="" class="bank-form">
+            <!-- 1. Liaison de la soumission avec (ngSubmit) -->
+            <form class="bank-form" [formGroup]="tokenForm" (ngSubmit)="onSubmit()">
                 <div class="form-group stagger-item">
                     <label for="code">Code de vérification OTP</label>
-                    
-                    <div class="otp-input-group">
-                        <input id="code" type="text" class="bank-input otp-code-input" name="code" placeholder="123456" maxlength="6" pattern="[0-9]*" inputmode="numeric" autofocus autocomplete="one-time-code">
+                    <!-- Ajout d'une classe d'erreur conditionnelle sur le groupe si le code est invalide -->
+                    <div class="otp-input-group" [class.has-error]="tokenForm.get('code')?.touched && tokenForm.get('code')?.invalid">
+                        <input formControlName="code" id="code" type="text" class="bank-input otp-code-input" placeholder="123456" maxlength="6" pattern="[0-9]*" inputmode="numeric" autofocus autocomplete="one-time-code">
                         <span class="input-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
                         </span>
                     </div>
+
+                    <!-- 2. Bloc d'affichage des messages d'erreur Angular -->
+                    <div *ngIf="tokenForm.get('code')?.touched && tokenForm.get('code')?.invalid" class="error-feedback" style="color: #ff4a4a; font-size: 0.85rem; margin-top: 5px; padding-left: 5px;">
+                        <span *ngIf="tokenForm.get('code')?.hasError('required')">Le code est obligatoire.</span>
+                        <span *ngIf="tokenForm.get('code')?.hasError('minlength') || tokenForm.get('code')?.hasError('maxlength')">Le code doit contenir exactement 6 chiffres.</span>
+                    </div>
                 </div>
 
-                <button type="submit" class="bank-btn-submit stagger-item">
-                    <span>Valider et accéder à mon espace</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                <!-- 3. Gestion du bouton : désactivé si invalide ou en cours de chargement -->
+                <button type="submit" class="bank-btn-submit stagger-item" [disabled]="tokenForm.invalid || isLoading">
+                    <span>{{ isLoading ? 'Vérification en cours...' : 'Valider et accéder à mon espace' }}</span>
+                    <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </button>
             </form>
+
+            <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
+            <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
 
             <div class="resend-card stagger-item">
                 <div class="resend-text">
                     <span class="title">Vous n'avez pas reçu le code ?</span>
-                    <span class="subtitle">Vérifiez votre boite de messagerie</span>
+                    <span class="subtitle" *ngIf="timeRemaining() > 0">Renvoyer possible dans : {{ formatTime(timeRemaining()) }}</span>
+                    <span class="subtitle" *ngIf="timeRemaining() === 0" style="color: #4ade80;">Vous pouvez renvoyer le code dès maintenant.</span>
                 </div>
-                <form method="POST" action="">
-                    <button type="submit" class="resend-btn">
+                <button type="button" class="resend-btn" (click)="resendToken()" [disabled]="timeRemaining() > 0 || isResending">
+                    <ng-container *ngIf="!isResending; else resendSpinner">
                         <span>Renvoyer</span>
-                    </button>
-                </form>
+                    </ng-container>
+                    <ng-template #resendSpinner>
+                        <span class="btn-spinner"></span>
+                    </ng-template>
+                </button>
             </div>
 
             <div class="cancel-action stagger-item">
-                <a href="" routerLink="/login" class="cancel-link">
+                <a routerLink="/login" class="cancel-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                     <span>Retour à la page de connexion</span>
                 </a>
@@ -61,8 +82,8 @@
         </div>
 
         <div class="bank-footer-links stagger-item">
-            <a href="#" routerLink="/help">Assistance 24/7</a> • 
-            <a href="#" routerLink="/help">Problème de réception ?</a>
+            <a routerLink="/help">Assistance 24/7</a> • 
+            <a routerLink="/help">Problème de réception ?</a>
         </div>
     </div>
 </div>

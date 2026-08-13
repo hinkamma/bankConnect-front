@@ -444,16 +444,65 @@ html, body {
 
 .toast {
   position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #1d458f;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 999999;
-  outline: 5px solid lime; /* debug temporaire */
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  background: #1f1315;
+  border-left: 4px solid #ef4444;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #fecaca;
+  z-index: 9999;
+  animation: toast-lifecycle 4s ease forwards;
+}
+
+.toast::before {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+@keyframes toast-lifecycle {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  8% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  88% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+/* ===== Mobile : centré horizontalement ===== */
+@media (max-width: 480px) {
+  .toast {
+    left: 1rem;
+    right: 1rem;
+    top: 1rem;
+    justify-content: center;
+    text-align: center;
+  }
 }
 
 .spinner {

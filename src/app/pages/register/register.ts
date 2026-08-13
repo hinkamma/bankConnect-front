@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-  ReactiveFormsModule
-} from '@angular/forms';
+import {FormBuilder,FormGroup,Validators,AbstractControl,ValidationErrors,ReactiveFormsModule} from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { Auth, LoginResponse } from '../../services/auth';
+import { finalize } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,16 +11,24 @@ import { Auth, LoginResponse } from '../../services/auth';
   styleUrls: ['./register.less'],
   imports: [ReactiveFormsModule, NgIf]
 })
+
+
 export class Register implements OnInit {
   registerForm!: FormGroup;
   isSubmitted = false;
 
-  constructor(private fb: FormBuilder, private auth: Auth) {
+  errorMessage: any;
+  toastMessage: string = '';
+  showToastFlag: boolean = false;
+  isLoading: boolean = false;
+ 
+
+  constructor(private fb: FormBuilder, private auth: Auth, private router: Router) {
     this.registerForm = this.fb.group({
       first_name: ['', [Validators.required, Validators.maxLength(100)]],
       last_name: ['', [Validators.required, Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-      phone: [''],
+       phone: ['', [Validators.pattern(/^[0-9]{9}$/)]],
       role: ['client', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       password_confirmation: ['', [Validators.required]],
@@ -37,6 +40,13 @@ export class Register implements OnInit {
 
   ngOnInit(): void {
     // no-op
+  }
+
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    // Supprime tout ce qui n'est pas un chiffre
+    const cleaned = input.value.replace(/[^0-9]/g, '').slice(0, 9);
+    this.registerForm.get('phone')?.setValue(cleaned, { emitEvent: false });
   }
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -65,6 +75,17 @@ export class Register implements OnInit {
     return !!(confirmation && confirmation.hasError('passwordMismatch') && (confirmation.touched || this.isSubmitted));
   }
 
+    showToast(message: string) {
+    console.log('showToast appelé avec:', message);
+    this.toastMessage = message;
+    this.showToastFlag = true;
+
+    setTimeout(() => {
+      this.showToastFlag = false;
+    }, 5000);
+  }
+
+
   onSubmit(): void {
     this.isSubmitted = true;
 
@@ -72,6 +93,12 @@ export class Register implements OnInit {
       this.registerForm.markAllAsTouched();
       return;
     }
+
+    this.isLoading = true; 
+    this.registerForm.disable({ emitEvent: false });
+
+  this.isLoading = true; // ← AJOUTE CETTE LIGNE (manquante)
+  this.registerForm.disable({ emitEvent: false });
 
     const firstName = (this.registerForm.value.first_name ?? '').trim();
     const lastName = (this.registerForm.value.last_name ?? '').trim();
@@ -90,15 +117,20 @@ export class Register implements OnInit {
     };
 
     
-    this.auth.register(payload).subscribe({
-      next: (response: LoginResponse) => {
-        console.log('Inscription réussie :', response);
-        if (response.token) {
-          localStorage.setItem('token', response.token);
-        }
+     this.auth.register(this.registerForm.value)
+    .pipe(
+      finalize(() => {
+        this.isLoading = false;
+        this.registerForm.enable({ emitEvent: false });
+      })
+    )
+    .subscribe({
+      next: (response) => {
+        this.router.navigate(["/login"]);
       },
-      error: (error: unknown) => {
-        console.error('Erreur lors de l’inscription :', error);
+      error: (error) => {
+        const message = error.error?.message || 'Une erreur est survenue.';
+        this.showToast(message);
       }
     });
   }

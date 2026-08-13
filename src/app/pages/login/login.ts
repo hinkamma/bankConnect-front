@@ -37,7 +37,7 @@ export class Login {
 
     setTimeout(() => {
       this.showToastFlag = false;
-    }, 3000);
+    }, 5000);
   }
 
 
@@ -69,6 +69,8 @@ export class Login {
       },
       error: (err) => {
         const message = err.error?.message || err.error?.back_flash || 'Une erreur est survenue, veuillez réessayer.';
+        console.log(message);
+        console.log(err);
         this.showToast(message);
       }
     });
