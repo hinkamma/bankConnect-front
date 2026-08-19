@@ -1,0 +1,87 @@
+<div class="account-selection">
+  <div class="account-selection__mesh" aria-hidden="true">
+    <span class="account-selection__blob account-selection__blob--1"></span>
+    <span class="account-selection__blob account-selection__blob--2"></span>
+  </div>
+
+  <div class="account-selection__container">
+
+    <div class="account-selection__brand">
+      <div class="account-selection__brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 10L12 4L21 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 10V19H19V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 19V14H15V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="account-selection__brand-name">BankConnect</span>
+    </div>
+
+    <div class="account-selection__header">
+      <span class="account-selection__eyebrow">Espace comptes</span>
+      <h1 class="account-selection__title">Qui se connecte&nbsp;?</h1>
+      <p class="account-selection__subtitle">
+        Choisissez un profil pour continuer ou ajoutez un nouveau compte.
+      </p>
+    </div>
+
+    <!-- État de chargement -->
+    <div class="account-selection__loading" *ngIf="isLoading()">
+      <span class="loading-spinner"></span>
+      <span>Chargement de vos comptes...</span>
+    </div>
+
+    <div class="account-selection__grid" *ngIf="!isLoading()">
+
+      <!-- Comptes réels, générés dynamiquement -->
+      <button
+        type="button"
+        class="account-card"
+        *ngFor="let account of accounts(); let i = index"
+        [style.--delay]="i">
+        <span class="account-card__ring">
+          <span class="account-card__avatar">{{ getInitials(account.user.first_name) }}</span>
+        </span>
+
+        <span class="account-card__info">
+          <span class="account-card__name">{{account.user.first_name}}</span>
+          <span class="account-card__meta">{{ getTypeLabel(account.type) }} · BNK {{ maskAccountNumber(account.account_number) }}</span>
+        </span>
+
+        <span class="account-card__arrow">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+
+      <!-- Ajouter un compte -->
+      <button (click)="goToLogin()"  type="button" class="account-card account-card--add" [style.--delay]="accounts().length">
+        <span class="account-card__ring account-card__ring--dashed">
+          <span class="account-card__avatar account-card__avatar--add">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </span>
+
+        <span class="account-card__info">
+          <span class="account-card__name">Ajouter un compte</span>
+          <span class="account-card__meta">Se connecter avec un autre identifiant</span>
+        </span>
+      </button>
+
+    </div>
+
+    <div class="account-selection__footer">
+      <a (click)="goToRegiter()" class="account-selection__cta">
+        <span class="account-selection__cta-text">Revenir à l'inscription</span>
+        <span class="account-selection__cta-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</div>

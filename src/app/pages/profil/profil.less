@@ -1,11 +1,23 @@
-/* ===================================================
-   CORRECTION DE L'AFFICHAGE DU PROFIL
-   =================================================== */
-
-/* Host / Composant root */
-:host, app-profil, div {
-  display: block;
+:host {
+  display: flex;
+  width: 100%;
+  height: 100vh;
 }
+
+.app-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
 
 .bc-profil {
   --bc-navy: #0f2038;
@@ -211,5 +223,366 @@
   .bc-profil__card {
     width: 100%;
     min-width: 100%;
+  }
+}
+
+
+//  ici on fais la popup  pour modifier les information d'un utilisateur
+
+// Ajoute ceci dans profil.less, en gardant tes classes .modal-overlay, .modal-box, .modal-btn, .btn-spinner déjà existantes ailleur
+// Ajoute ceci dans profil.less, en gardant tes classes .modal-overlay, .modal-box, .modal-btn, .btn-spinner déjà existantes ailleurs
+
+.modal-box--form {
+  max-width: 440px;
+  text-align: left;
+}
+
+.modal-box__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.modal-box__header .modal-title {
+  margin: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--bc-text-muted, #93a3ba);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-form__row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-form__row label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--bc-text-muted, #93a3ba);
+}
+
+.modal-input {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #f4f4f5;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: var(--bc-gold, #c9a15a);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* ===== Modal d'édition des informations ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: fade-in 0.2s ease;
+}
+
+.modal-box--form {
+  background: var(--bc-navy, #0f2038);
+  border: 1px solid var(--bc-navy-border, #1f3a5f);
+  border-radius: 16px;
+  padding: 1.75rem;
+  max-width: 440px;
+  width: 100%;
+  text-align: left;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  animation: modal-in 0.25s cubic-bezier(0.21, 1.02, 0.73, 1);
+}
+
+.modal-box__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--bc-text-muted, #93a3ba);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-form__row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-form__row label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--bc-text-muted, #93a3ba);
+}
+
+.modal-input {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--bc-navy-border, #1f3a5f);
+  border-radius: 8px;
+  color: var(--bc-text, #e7edf5);
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: var(--bc-gold, #c9a66b);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 6px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+}
+
+.modal-btn--cancel {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--bc-text, #e7edf5);
+  border: 1px solid var(--bc-navy-border, #1f3a5f);
+}
+
+.modal-btn--cancel:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-btn--confirm {
+  background: var(--bc-gold, #c9a66b);
+  color: var(--bc-navy, #0f2038);
+}
+
+.modal-btn--confirm:hover {
+  filter: brightness(1.08);
+}
+
+.modal-btn--confirm:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(15, 32, 56, 0.35);
+  border-top-color: var(--bc-navy, #0f2038);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===== Responsive mobile : bottom-sheet ===== */
+@media (max-width: 480px) {
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-box--form {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-btn {
+    width: 100%;
+  }
+}
+
+
+.bc-profil__avatar {
+  overflow: hidden; // pour que l'image respecte le cercle
+}
+
+.bc-profil__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.bc-profil__avatar-input {
+  display: none; // input file totalement invisible, déclenché par le bouton crayon
+}
+
+.bc-profil__avatar-edit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-spinner--sm {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+}
+
+
+
+// la toast dans profil
+
+.toast-error,
+.toast-success {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  max-width: 90%;
+  width: fit-content;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: #f4f4f5;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 9999;
+  animation: toast-up 0.3s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+}
+
+.toast-error::before,
+.toast-success::before {
+  content: "";
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.toast-error::before { background: var(--bc-danger, #e2635c); }
+.toast-success::before { background: var(--bc-success, #4ade80); }
+
+@keyframes toast-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (max-width: 480px) {
+  .toast-error,
+  .toast-success {
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    width: auto;
+    max-width: none;
+    justify-content: center;
+  }
+
+  @keyframes toast-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }

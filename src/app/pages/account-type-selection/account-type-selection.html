@@ -1,0 +1,116 @@
+<div class="account-type">
+  <div class="account-type__mesh" aria-hidden="true">
+    <span class="account-type__blob account-type__blob--1"></span>
+    <span class="account-type__blob account-type__blob--2"></span>
+  </div>
+
+  <div class="account-type__container">
+
+    <div class="bank-header">
+      <div class="bank-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="14" x="2" y="5" rx="3"/>
+          <line x1="2" x2="22" y1="10" y2="10"/>
+        </svg>
+      </div>
+      <h1 class="bank-name">Bank<span>Connect</span></h1>
+      <p class="bank-tagline">faites le choix sur le type de compte bancaire</p>
+    </div>
+
+    <div class="account-type__grid">
+
+      <!-- Compte courant -->
+      <button type="button" class="type-card" [class.type-card--active]="selectedType() === 'courant'" (click)="selectType('courant')" style="--delay: 0">
+        <span class="type-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="6" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M3 10.5H21" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M7 14.5H11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+        </span>
+
+        <span class="type-card__body">
+          <span class="type-card__title">Compte courant</span>
+          <span class="type-card__desc">Pour vos dépenses et transactions du quotidien.</span>
+
+          <span class="type-card__tags">
+            <span class="type-card__tag">Carte incluse</span>
+            <span class="type-card__tag">Virements illimités</span>
+          </span>
+        </span>
+
+        <span class="type-card__select">
+          <span class="type-card__select-circle"></span>
+        </span>
+      </button>
+
+      <!-- Compte épargne -->
+      <button type="button" class="type-card" [class.type-card--active]="selectedType() === 'epagne'" (click)="selectType('epagne')" style="--delay: 1">
+        <span class="type-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M12 4V2M4 12H2M22 12H20" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M8 16C8 13.79 9.79 12 12 12C14.21 12 16 13.79 16 16V19H8V16Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+        </span>
+
+        <span class="type-card__body">
+          <span class="type-card__title-row">
+            <span class="type-card__title">Compte épargne</span>
+            <span class="type-card__badge">Recommandé</span>
+          </span>
+          <span class="type-card__desc">Faites fructifier votre argent avec un taux avantageux.</span>
+
+          <span class="type-card__tags">
+            <span class="type-card__tag">Taux 3,5&nbsp;%</span>
+            <span class="type-card__tag">Sans frais</span>
+          </span>
+        </span>
+
+        <span class="type-card__select">
+          <span class="type-card__select-circle"></span>
+        </span>
+      </button>
+
+      <!-- Compte professionnel -->
+      <button type="button" class="type-card" [class.type-card--active]="selectedType() === 'pro'" (click)="selectType('pro')" style="--delay: 2">
+        <span class="type-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="7.5" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M8 7.5V5.5C8 4.67 8.67 4 9.5 4H14.5C15.33 4 16 4.67 16 5.5V7.5" stroke="currentColor" stroke-width="1.7"/>
+          </svg>
+        </span>
+
+        <span class="type-card__body">
+          <span class="type-card__title">Compte professionnel</span>
+          <span class="type-card__desc">Gérez la trésorerie de votre entreprise ou activité.</span>
+
+          <span class="type-card__tags">
+            <span class="type-card__tag">Facturation</span>
+            <span class="type-card__tag">Multi-utilisateurs</span>
+          </span>
+        </span>
+
+        <span class="type-card__select">
+          <span class="type-card__select-circle"></span>
+        </span>
+      </button>
+
+    </div>
+
+    <div class="toast-error" *ngIf="showToastFlag() && toastType() === 'error'">{{ toastMessage() }}</div>
+
+    <button type="button" class="account-type__submit" [disabled]="!selectedType() || isLoading()" (click)="onSubmit()">
+      <ng-container *ngIf="!isLoading(); else loadingSpinner">
+        <span>Continuer vers mon espace</span>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </ng-container>
+      <ng-template #loadingSpinner>
+        <span class="btn-spinner"></span>
+      </ng-template>
+    </button>
+
+  </div>
+</div>

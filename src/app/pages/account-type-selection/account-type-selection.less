@@ -1,0 +1,579 @@
+// ================= Design tokens =================
+@navy-950: #060c18;
+@navy-900: #0a1526;
+@navy-800: #0e2038;
+
+@gold: #c9a15a;
+@gold-light: #f0d9a8;
+@gold-dim: rgba(201, 161, 90, 0.5);
+
+@white: #ffffff;
+@text-muted: #7c8aa0;
+@glass-border: rgba(255, 255, 255, 0.09);
+@glass-fill: rgba(255, 255, 255, 0.035);
+
+@radius-lg: 16px;
+@radius-md: 12px;
+@radius-full: 999px;
+
+@ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+// =========================================================================
+
+.account-type {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 32px) clamp(14px, 4vw, 20px);
+  background: @navy-950;
+  overflow: hidden;
+
+  &__mesh {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  &__blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.5;
+
+    &--1 {
+      width: min(48vw, 460px);
+      height: min(48vw, 460px);
+      top: -18%;
+      left: -8%;
+      background: radial-gradient(circle, rgba(201, 161, 90, 0.26) 0%, transparent 70%);
+      animation: drift1 22s ease-in-out infinite;
+    }
+
+    &--2 {
+      width: min(40vw, 380px);
+      height: min(40vw, 380px);
+      bottom: -14%;
+      right: -8%;
+      background: radial-gradient(circle, rgba(46, 90, 140, 0.32) 0%, transparent 70%);
+      animation: drift2 26s ease-in-out infinite;
+    }
+  }
+
+  @keyframes drift1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(6%, 8%) scale(1.08); }
+  }
+
+  @keyframes drift2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-6%, -6%) scale(1.06); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__blob { animation: none !important; }
+  }
+
+  &__container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  // ---------------- Brand ----------------
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  &__brand-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    background: rgba(201, 161, 90, 0.12);
+    color: @gold-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg { width: 16px; height: 16px; }
+  }
+
+  &__brand-name {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: @white;
+    letter-spacing: -0.01em;
+  }
+
+  // ---------------- Steps indicator ----------------
+  &__steps {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 22px;
+  }
+
+  &__step {
+    width: 26px;
+    height: 4px;
+    border-radius: @radius-full;
+    background: rgba(255, 255, 255, 0.1);
+
+    &--done {
+      background: @gold-dim;
+    }
+
+    &--active {
+      background: linear-gradient(90deg, @gold, @gold-light);
+    }
+  }
+
+  // ---------------- Header ----------------
+  &__header {
+    text-align: center;
+    margin-bottom: 26px;
+    max-width: 380px;
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: @gold-light;
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    font-size: clamp(19px, 5vw, 23px);
+    font-weight: 700;
+    color: @white;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+
+  &__subtitle {
+    font-size: 12.5px;
+    color: @text-muted;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  // ---------------- Grid ----------------
+  &__grid {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  // ---------------- Submit ----------------
+  &__submit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 20px;
+    background: linear-gradient(135deg, @gold-light, @gold);
+    color: @navy-950;
+    border: none;
+    border-radius: @radius-md;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s @ease, box-shadow 0.2s @ease, filter 0.2s @ease;
+
+    svg { width: 17px; height: 17px; }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px -10px rgba(201, 161, 90, 0.5);
+      filter: brightness(1.05);
+    }
+
+    &:active { transform: translateY(0); }
+
+    &:focus-visible {
+      outline: 2px solid @gold-dim;
+      outline-offset: 3px;
+    }
+  }
+}
+
+// ================= Type card =================
+.type-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  width: 100%;
+  padding: 14px;
+  background: @glass-fill;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid @glass-border;
+  border-radius: @radius-lg;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: cardIn 0.45s @ease forwards;
+  animation-delay: calc(var(--delay, 0) * 70ms);
+  transition: border-color 0.25s @ease, background 0.25s @ease, transform 0.25s @ease, box-shadow 0.25s @ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(201, 161, 90, 0.1), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.3s @ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: @gold-dim;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+
+    &::before { opacity: 1; }
+  }
+
+  &:focus-visible {
+    outline: 2px solid @gold-dim;
+    outline-offset: 2px;
+  }
+
+  &.is-selected {
+    border-color: @gold;
+    background: rgba(201, 161, 90, 0.07);
+
+    .type-card__select-circle {
+      background: @gold;
+      border-color: @gold;
+
+      &::after { opacity: 1; transform: scale(1); }
+    }
+  }
+
+  @keyframes cardIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  &__icon {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: @radius-md;
+    background: rgba(201, 161, 90, 0.1);
+    color: @gold-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg { width: 20px; height: 20px; }
+  }
+
+  &__body {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: @white;
+  }
+
+  &__badge {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: @navy-950;
+    background: linear-gradient(135deg, @gold-light, @gold);
+    padding: 2.5px 7px;
+    border-radius: @radius-full;
+  }
+
+  &__desc {
+    font-size: 12px;
+    color: @text-muted;
+    line-height: 1.45;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 3px;
+  }
+
+  &__tag {
+    font-size: 10.5px;
+    font-weight: 500;
+    color: @gold-light;
+    background: rgba(201, 161, 90, 0.1);
+    border: 1px solid rgba(201, 161, 90, 0.2);
+    padding: 3px 8px;
+    border-radius: @radius-full;
+  }
+
+  &__select {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  &__select-circle {
+    position: relative;
+    display: block;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    background: transparent;
+    transition: background 0.2s @ease, border-color 0.2s @ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: @navy-950;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.4);
+      transition: opacity 0.2s @ease, transform 0.2s @ease;
+    }
+  }
+}
+
+// ================= Responsive =================
+@media (max-width: 359px) {
+  .type-card {
+    padding: 12px;
+    gap: 10px;
+
+    &__icon { width: 34px; height: 34px; svg { width: 17px; height: 17px; } }
+    &__title { font-size: 13px; }
+    &__desc { font-size: 11px; }
+  }
+}
+
+
+.bank-header { animation-delay: 0.15s; }
+.role-selector-wrapper { animation-delay: 0.25s; }
+.form-group:nth-of-type(1) { animation-delay: 0.35s; }
+.form-group:nth-of-type(2) { animation-delay: 0.45s; }
+.bank-btn-submit { animation-delay: 0.55s; }
+.bank-security-badge { animation-delay: 0.65s; }
+.bank-footer-links { animation-delay: 0.75s; }
+
+/* ==========================================
+   4. EN-TÊTE BankConnect
+   ========================================== */
+.bank-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.bank-logo-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px auto;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: #ffffff;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(30, 58, 138, 0.35);
+}
+
+.bank-name {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: whitesmoke;
+  letter-spacing: -0.5px;
+}
+.bank-name span { color: #2563eb; }
+
+.bank-tagline {
+  margin: 4px 0 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.stagger-item {
+  opacity: 0;
+  animation: cascadeFadeIn 0.45s ease-out forwards;
+}
+
+
+.type-card--active {
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.type-card__select-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.2s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.type-card--active .type-card__select-circle {
+  border-color: #2563eb;
+  background: #2563eb;
+}
+
+.type-card--active .type-card__select-circle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.account-type__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px; // évite que le bouton change de hauteur entre les deux états
+  // garde tes autres styles existants (couleur de fond, padding, etc.)
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(6, 12, 24, 0.25); // @navy-950 en transparence
+  border-top-color: #060c18; // @navy-950 plein, même couleur que le texte du bouton
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+// le toast
+.toast-error {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  max-width: 90%;
+  width: fit-content;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: #f4f4f5;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 9999;
+  animation: toast-up 0.3s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+}
+
+.toast-error::before {
+  content: "";
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+
+@keyframes toast-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (max-width: 480px) {
+  .toast-error {
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    width: auto;
+    max-width: none;
+    justify-content: center;
+  }
+
+  @keyframes toast-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

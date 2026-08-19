@@ -14,7 +14,7 @@ import { finalize } from 'rxjs';
 })
 export class SendToken implements OnInit, OnDestroy {
   timeRemaining = signal(60);
- 
+
   isLoading = false;
   isResending = false;
   tokenForm!: FormGroup;
@@ -60,7 +60,7 @@ export class SendToken implements OnInit, OnDestroy {
 
     this.countdownInterval = setInterval(() => {
       if (this.timeRemaining() > 0) {
-        this.timeRemaining.update(v => v - 1); 
+        this.timeRemaining.update(v => v - 1);
       } else {
         clearInterval(this.countdownInterval);
       }
@@ -89,7 +89,11 @@ export class SendToken implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (response) => {
-        this.router.navigate(['/dashboard']);
+        if (response.hasAccount) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/accountTypeSelection']);
+        }
       },
       error: (error) => {
         console.error('Une erreur réseau ou serveur est survenue', error);
@@ -118,7 +122,6 @@ export class SendToken implements OnInit, OnDestroy {
     }
 
     this.isResending = true;
-    console.log(this.isResending);
 
     this.auth.resendCode(UserId).pipe(
       finalize(() => {

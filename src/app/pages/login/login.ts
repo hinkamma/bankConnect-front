@@ -17,11 +17,10 @@ export class Login {
   errorMessage: any;
   toastMessage: string = '';
   showToastFlag: boolean = false;
+  toastType: 'error' | 'success' = 'error';
   isLoading: boolean = false;
 
-
-
-  constructor(private fb: FormBuilder,private authService: Auth,private router: Router) {
+  constructor(private fb: FormBuilder, private authService: Auth, private router: Router) {
     this.loginForm = this.fb.group({
       role: ['client', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -29,18 +28,15 @@ export class Login {
     });
   }
 
-  
-  showToast(message: string) {
-    console.log('showToast appelé avec:', message);
+  showToast(message: string, type: 'error' | 'success' = 'error') {
     this.toastMessage = message;
+    this.toastType = type;
     this.showToastFlag = true;
 
     setTimeout(() => {
       this.showToastFlag = false;
     }, 5000);
   }
-
-
 
   onSubmit() {
     if (this.loginForm.invalid) {
@@ -61,7 +57,7 @@ export class Login {
       next: (res) => {
         if (!res?.token) {
           const message = res?.message || res?.back_flash || 'Identifiants incorrects. Veuillez réessayer.';
-          this.showToast(message);
+          this.showToast(message, 'error');
           return;
         }
 
@@ -69,11 +65,8 @@ export class Login {
       },
       error: (err) => {
         const message = err.error?.message || err.error?.back_flash || 'Une erreur est survenue, veuillez réessayer.';
-        console.log(message);
-        console.log(err);
-        this.showToast(message);
+        this.showToast(message, 'error');
       }
     });
   }
- 
 }

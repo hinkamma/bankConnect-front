@@ -442,69 +442,89 @@ html, body {
   margin-top: 4px;
 }
 
-.toast {
+
+// le toast
+
+/* remplace l'ancien bloc .toast, .toast::before, @keyframes toast-lifecycle, et la media query associée par ceci */
+
+.toast-error,
+.toast-success {
   position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.85rem 1.1rem;
-  border-radius: 10px;
-  background: #1f1315;
-  border-left: 4px solid #ef4444;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  gap: 0.65rem;
+  max-width: 90%;
+  width: fit-content;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: #f4f4f5;
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #fecaca;
   z-index: 9999;
-  animation: toast-lifecycle 4s ease forwards;
+  animation: toast-up 0.3s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
 }
 
-.toast::before {
+.toast-error::before,
+.toast-success::before {
+  content: "";
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
+}
+
+.toast-error::before {
   background: #ef4444;
-  color: #fff;
-  font-size: 0.75rem;
 }
 
-@keyframes toast-lifecycle {
-  0% {
+.toast-success::before {
+  background: #22c55e;
+}
+
+@keyframes toast-up {
+  from {
     opacity: 0;
-    transform: translateY(-12px);
+    transform: translate(-50%, 12px);
   }
-  8% {
+  to {
     opacity: 1;
-    transform: translateY(0);
-  }
-  88% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-12px);
+    transform: translate(-50%, 0);
   }
 }
 
-/* ===== Mobile : centré horizontalement ===== */
 @media (max-width: 480px) {
-  .toast {
-    left: 1rem;
-    right: 1rem;
-    top: 1rem;
+  .toast-error,
+  .toast-success {
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    width: auto;
+    max-width: none;
     justify-content: center;
-    text-align: center;
+  }
+
+  @keyframes toast-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
+
+// le spinner
 .spinner {
   display: inline-block;
   width: 18px;

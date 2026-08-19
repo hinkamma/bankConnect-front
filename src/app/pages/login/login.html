@@ -2,11 +2,9 @@
     <div class="bg-glow glow-1"></div>
     <div class="bg-glow glow-2"></div>
 
-   
-
     <div class="bank-login-container">
         <div class="bank-card">
-            
+
             <div class="bank-header">
                 <div class="bank-logo-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -16,14 +14,10 @@
                 </div>
                 <h1 class="bank-name">Bank<span>Connect</span></h1>
                 <p class="bank-tagline">Portail d'accès bancaire sécurisé</p>
-
-                <div class="toast" *ngIf="showToastFlag">
-                    {{ toastMessage }} 
-                </div>
             </div>
 
             <form class="bank-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                
+
                 <div class="role-selector-wrapper stagger-item">
                     <label class="role-label">Choisissez votre profil :</label>
                     <div class="role-tabs">
@@ -42,7 +36,7 @@
                         <div class="tab-slider"></div>
                     </div>
                 </div>
-                
+
                 <div class="form-group stagger-item">
                     <label for="email">Identifiant / Adresse e-mail</label>
                     <div class="input-wrapper">
@@ -75,16 +69,16 @@
                         <span *ngIf="loginForm.get('password')?.hasError('minlength')">6 caractères minimum.</span>
                     </div>
                 </div>
- 
+
                 <button type="submit" class="bank-btn-submit" [disabled]="isLoading">
                     <span *ngIf="!isLoading">Continuer vers la vérification</span>
                     <span *ngIf="isLoading" class="spinner"></span>
                 </button>
-                
+
             </form>
 
             <div class="register-card">
-                
+
                 <div class="register-text">
                     <span class="title">Nouveau chez BankConnect ?</span>
                     <span class="subtitle">Ouvrez votre compte en ligne</span>
@@ -103,13 +97,16 @@
                     <span>Étape suivante : <strong>Validation à 2 facteurs (2FA)</strong></span>
                 </div>
             </div>
-                
+
         </div>
 
         <div class="bank-footer-links stagger-item">
-            <a href="#">Assistance 24/7</a> • 
-            <a href="#">Centre de sécurité</a> • 
+            <a href="#">Assistance 24/7</a> •
+            <a href="#">Centre de sécurité</a> •
             <a href="#">Urgence / Opposition</a>
         </div>
     </div>
+
+    <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
+    <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
 </div>
