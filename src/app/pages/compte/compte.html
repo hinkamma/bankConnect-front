@@ -2,9 +2,7 @@
 
 
 <div class="app-wrapper" >
-      <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
-      <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
-
+    
   <div class="sideBar">
     <app-navigation></app-navigation>
   </div>
@@ -224,6 +222,17 @@
 
 
   </main>
+</div>
+
+
+<!-- Tout en bas du fichier HTML -->
+<div class="toast-container" *ngIf="showToastFlag">
+  <div class="toast toast-error" *ngIf="toastType === 'error'">
+    {{ toastMessage }}
+  </div>
+  <div class="toast toast-success" *ngIf="toastType === 'success'">
+    {{ toastMessage }}
+  </div>
 </div>
 
 
