@@ -14,10 +14,14 @@ import { finalize } from 'rxjs';
 })
 export class Login {
   loginForm: FormGroup<{ role: FormControl<string | null>; email: FormControl<string | null>; password: FormControl<string | null>; }>;
+
+
   errorMessage: any;
   toastMessage: string = '';
+
   showToastFlag: boolean = false;
   toastType: 'error' | 'success' = 'error';
+  
   isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, private authService: Auth, private router: Router) {
@@ -60,7 +64,6 @@ export class Login {
           this.showToast(message, 'error');
           return;
         }
-
         this.router.navigate(['/sendToken']);
       },
       error: (err) => {

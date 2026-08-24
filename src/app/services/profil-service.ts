@@ -13,6 +13,7 @@ export interface AccountItem {
     id: number;
     first_name: string;
     last_name: string;
+    adress:string;
   };
 }
 
@@ -149,8 +150,8 @@ export class ProfilService {
   );
 }
 
-  updateProfilePerso(data: { first_name: string; last_name: string; email: string; phone?: string; address?: string }): Observable<any> {
-    const token = localStorage.getItem('token'); // Remplacez 'token' par le nom exact de votre clé dans le localStorage
+  updateProfilePerso(data: { first_name: string; last_name: string; email: string; phone?: string; adress?: string }): Observable<any> {
+    const token = localStorage.getItem('token');
 
     console.log(token)
     const headers = new HttpHeaders({
@@ -159,5 +160,17 @@ export class ProfilService {
     });
 
     return this.http.put(`${this.apiUrl}/profilUpdate`, data, { headers });
+  }
+
+
+  updatePassword(data: { current_password: string; password: string; password_confirmation: string }): Observable<any> {
+    const token = localStorage.getItem('token'); // Vérifie le nom de ta clé dans le localStorage
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put(`${this.apiUrl}/updatePassword`, data, { headers });
   }
 }

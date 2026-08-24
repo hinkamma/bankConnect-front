@@ -6,7 +6,15 @@
 
   <main class="app-main">
 
-    <div class="bc-profil">
+    <!-- LOADER GLOBAL SOUVERAIN (Centré au milieu de la page)
+    <div class="page-loader-screen" *ngIf="!isLoading()">
+      <div class="page-loader-card">
+        <div class="page-spinner"></div>
+        <span class="page-loader-text">Chargement de vos informations...</span>
+      </div>
+    </div> -->
+
+    <div class="bc-profil"  >
 
       <header class="bc-profil__header">
         <h1 class="bc-profil__title">Mon profil</h1>
@@ -19,7 +27,7 @@
           <div class="bc-profil__avatar-wrap">
             <div class="bc-profil__avatar" [class.bc-profil__avatar--has-photo]="avatarPreview()">
               <img *ngIf="avatarPreview()" [src]="avatarPreview()" alt="Photo de profil" class="bc-profil__avatar-img">
-              <span *ngIf="!avatarPreview()">{{ this.accountInfo().user.first_name}}</span>
+              <span *ngIf="!avatarPreview()">{{ accountInfo()?.user?.first_name?.charAt(0) }}</span>
             </div>
 
             <button type="button" class="bc-profil__avatar-edit" aria-label="Modifier la photo" (click)="triggerAvatarInput()" [disabled]="isUploadingAvatar()">
@@ -38,13 +46,13 @@
               (change)="onAvatarSelected($event)">
           </div>
 
-          <p class="bc-profil__name">{{ this.accountInfo().user.first_name }} {{ accountInfo()?.user.last_name }}</p>
+          <p class="bc-profil__name">{{ accountInfo()?.user?.first_name }} {{ accountInfo()?.user?.last_name }}</p>
           <p class="bc-profil__role">Compte particulier</p>
-          <span class="bc-profil__badge">Client depuis {{ this.formatDateFr(this.accountInfo().created_at) }} </span>
+          <span class="bc-profil__badge" *ngIf="accountInfo()?.created_at">Client depuis {{ formatDateFr(accountInfo().created_at) }}</span>
 
           <div class="bc-profil__mini-stats">
             <div>
-              <span class="bc-profil__mini-value">{{this.accountsCount()}}</span>
+              <span class="bc-profil__mini-value">{{ accountsCount() }}</span>
               <span class="bc-profil__mini-label">{{ accountsCount() > 1 ? 'Comptes' : 'Compte' }}</span>
             </div>
             <div>
@@ -57,7 +65,6 @@
         <div class="bc-profil__main">
 
           <div class="bc-panel">
-
             <div class="bc-panel__header">
               <h2 class="bc-panel__title">Informations personnelles</h2>
               <button type="button" class="bc-panel__link" (click)="openEditModal()">Modifier</button>
@@ -65,25 +72,24 @@
 
             <div class="bc-info-row">
               <span class="bc-info-row__label">Nom complet</span>
-              <span class="bc-info-row__value">{{ accountInfo()?.user.first_name }} {{ accountInfo()?.user.last_name }}</span>
+              <span class="bc-info-row__value">{{ accountInfo()?.user?.first_name }} {{ accountInfo()?.user?.last_name }}</span>
             </div>
 
             <div class="bc-info-row">
               <span class="bc-info-row__label">Adresse e-mail</span>
-              <span class="bc-info-row__value">{{ accountInfo()?.user.email }}</span>
+              <span class="bc-info-row__value">{{ accountInfo()?.user?.email }}</span>
             </div>
 
             <div class="bc-info-row">
               <span class="bc-info-row__label">Téléphone</span>
-              <span class="bc-info-row__value">{{ accountInfo()?.user.phone }}</span>
+              <span class="bc-info-row__value">{{ accountInfo()?.user?.phone }}</span>
             </div>
 
             <div class="bc-info-row">
               <span class="bc-info-row__label">Adresse</span>
-              <span class="bc-info-row__value">{{ accountInfo()?.user.address }}</span>
+              <span class="bc-info-row__value">{{ accountInfo()?.user?.adress }}</span>
             </div>
           </div>
-
 
           <div class="bc-panel">
             <h2 class="bc-panel__title">Sécurité</h2>
@@ -101,7 +107,8 @@
                 <p class="bc-security-row__label">Mot de passe</p>
                 <p class="bc-security-row__hint">Dernière modification il y a 3 mois</p>
               </div>
-              <button type="button" class="bc-panel__link">Modifier</button>
+              <!--  Événement d'ouverture de la modale Mot de passe -->
+              <button type="button" class="bc-panel__link" (click)="openPasswordModal()">Modifier</button>
             </div>
 
             <div class="bc-security-row">
@@ -119,7 +126,9 @@
     </div>
   </main>
 
-  <!-- Modal : édition des informations personnelles -->
+  <!-- ========================================================= -->
+  <!-- MODAL 1 : Édition des informations personnelles           -->
+  <!-- ========================================================= -->
   <div class="modal-overlay" *ngIf="showEditModal()" (click)="closeEditModal()">
     <div class="modal-box modal-box--form" (click)="$event.stopPropagation()">
       <div class="modal-box__header">
@@ -155,6 +164,7 @@
 
         <div class="modal-form__row">
           <label for="address">Adresse</label>
+          <!-- Correction : formControlName="address" (avec 2 'd') pour correspondre au FormBuilder -->
           <input id="address" type="text" formControlName="address" class="modal-input" placeholder="Douala, Littoral, Cameroun">
         </div>
 
@@ -162,7 +172,8 @@
           <button type="button" class="modal-btn modal-btn--cancel" (click)="closeEditModal()">
             Annuler
           </button>
-          <button type="submit" class="modal-btn modal-btn--confirm" [disabled]="isSaving()" (click)="onSubmitEditInforPerso()">
+          <!-- Suppression de (click)="onSubmitEditInforPerso()" pour laisser faire le submit natif du form -->
+          <button type="submit" class="modal-btn modal-btn--confirm" [disabled]="isSaving()">
             <span *ngIf="!isSaving()">Enregistrer</span>
             <span class="btn-spinner" *ngIf="isSaving()"></span>
           </button>
@@ -171,6 +182,51 @@
     </div>
   </div>
 
+  <!-- ========================================================= -->
+  <!-- MODAL 2 : Modification du mot de passe                   -->
+  <!-- ========================================================= -->
+  <div class="modal-overlay" *ngIf="showPasswordModal()" (click)="closePasswordModal()">
+    <div class="modal-box modal-box--form" (click)="$event.stopPropagation()">
+      <div class="modal-box__header">
+        <h2 class="modal-title">Changer de mot de passe</h2>
+        <button type="button" class="modal-close" (click)="closePasswordModal()" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <form class="modal-form" [formGroup]="passwordForm" (ngSubmit)="onSubmitPassword()">
+
+        <div class="modal-form__row">
+          <label for="current_password">Mot de passe actuel</label>
+          <input id="current_password" type="password" formControlName="current_password" class="modal-input" placeholder="••••••••">
+        </div>
+
+        <div class="modal-form__row">
+          <label for="password">Nouveau mot de passe</label>
+          <input id="password" type="password" formControlName="password" class="modal-input" placeholder="8 caractères minimum">
+        </div>
+
+        <div class="modal-form__row">
+          <label for="password_confirmation">Confirmer le nouveau mot de passe</label>
+          <input id="password_confirmation" type="password" formControlName="password_confirmation" class="modal-input" placeholder="••••••••">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="modal-btn modal-btn--cancel" (click)="closePasswordModal()">
+            Annuler
+          </button>
+          <button type="submit" class="modal-btn modal-btn--confirm" [disabled]="isSavingPassword()">
+            <span *ngIf="!isSavingPassword()">Mettre à jour</span>
+            <span class="btn-spinner" *ngIf="isSavingPassword()"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toasts de notification -->
   <div class="toast-error" *ngIf="showToastFlag() && toastType() === 'error'">{{ toastMessage() }}</div>
   <div class="toast-success" *ngIf="showToastFlag() && toastType() === 'success'">{{ toastMessage() }}</div>
 

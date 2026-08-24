@@ -1,10 +1,11 @@
 import { ProfilResponse } from './../../services/profil-service';
-import { Component, OnInit, signal, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, ElementRef, PLATFORM_ID, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { ProfilService } from '../../services/profil-service';
 import { Navigation } from "../../navigation/navigation/navigation";
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-profil',
@@ -16,6 +17,8 @@ import { Navigation } from "../../navigation/navigation/navigation";
 export class Profil implements OnInit {
   @ViewChild('avatarInput') avatarInput!: ElementRef<HTMLInputElement>;
 
+
+
   // ===== Données du compte =====
   accountInfo = signal<any | null>(null);
   isLoadingInfo = signal(false);
@@ -24,15 +27,22 @@ export class Profil implements OnInit {
   avatarPreview = signal<string | null>(null);
   isUploadingAvatar = signal(false);
 
-  // ===== Modal d'édition =====
+  // ===== Modal d'édition des infos personnelles =====
   showEditModal = signal(false);
   isSaving = signal(false);
   editForm: FormGroup;
+
+  // ===== Modal de modification du mot de passe =====
+  showPasswordModal = signal(false);
+  isSavingPassword = signal(false);
+  passwordForm: FormGroup;
 
   // ===== Toast =====
   toastMessage = signal('');
   showToastFlag = signal(false);
   toastType = signal<'error' | 'success'>('error');
+
+  private platformId = inject(PLATFORM_ID);
 
   // signal pour trouver le nombre de compte de lutilisateur connecté
   accountsCount = signal(0);
@@ -43,17 +53,25 @@ export class Profil implements OnInit {
       last_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: [''],
-      address: [''],
+      adress: [''],
+    });
+
+    // Formulaire de modification de mot de passe
+    this.passwordForm = this.fb.group({
+      current_password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      password_confirmation: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.loadAccountInfo();
-    this.loadProfilPhoto();
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadAccountInfo();
+      this.loadProfilPhoto();
+    }
 
   }
-
-
 
   onSubmitEditInforPerso(): void {
     if (this.editForm.invalid) {
@@ -73,7 +91,7 @@ export class Profil implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
-          console.log("nous sommes a ce niveau")
+
           this.showEditModal.set(false);
           this.showToast(response.message ?? 'Informations mises à jour avec succès.', 'success');
           this.loadAccountInfo(); // Recharger les infos affichées sur la page
@@ -100,19 +118,22 @@ export class Profil implements OnInit {
 
         if (res?.data) {
           // Forcer TypeScript à accepter res.data comme une string
+
           this.avatarPreview.set(res.data as unknown as string);
+
         } else {
           this.avatarPreview.set(null);
         }
 
-        console.log("Résultat du signal :", this.avatarPreview());
+
+
+
       },
       error: (error) => {
         console.error('Erreur lors du chargement de la photo :', error);
       }
     });
   }
-
 
   // formatage de la date
   formatDateFr(dateString: string): string {
@@ -130,9 +151,12 @@ export class Profil implements OnInit {
     return `${jour} ${nomMois} ${annee}`;
   }
 
-  loadAccountInfo(): void {
+    loadAccountInfo(): void {
     const userId = Number(localStorage.getItem('user_id'));
+
+    // Sécurité si pas de user_id dans le localStorage
     if (!userId) {
+      console.warn('Aucun User ID trouvé dans le localStorage');
       return;
     }
 
@@ -146,15 +170,11 @@ export class Profil implements OnInit {
       )
       .subscribe({
         next: (res: any) => {
-
           const accounts = res.accounts ?? res.data ?? [];
           this.accountsCount.set(accounts.length);
 
-
-          this.accountInfo.set(accounts[0] ?? null);
-          const account = res.accounts?.[0] ?? res.data?.[0] ?? null;
+          const account = accounts[0] ?? null;
           this.accountInfo.set(account);
-
         },
         error: (error) => {
           console.error('Erreur lors du chargement du profil :', error);
@@ -162,7 +182,6 @@ export class Profil implements OnInit {
         }
       });
   }
-
   // ===== Gestion de l'avatar =====
 
   triggerAvatarInput(): void {
@@ -222,13 +241,14 @@ export class Profil implements OnInit {
 
   openEditModal(): void {
     const info = this.accountInfo();
+    console.log(info);
     if (info) {
       this.editForm.patchValue({
         first_name: info.first_name ?? info.user?.first_name ?? '',
         last_name: info.last_name ?? info.user?.last_name ?? '',
         email: info.email ?? info.user?.email ?? '',
         phone: info.phone ?? info.user?.phone ?? '',
-        address: info.address ?? info.user?.address ?? '',
+        adress: info.adress ?? info.user.adress ?? '',
       });
     }
     this.showEditModal.set(true);
@@ -246,7 +266,7 @@ export class Profil implements OnInit {
 
     this.isSaving.set(true);
 
-    this.profil.updateAvatar(this.editForm.value)
+    this.profil.updateProfilePerso(this.editForm.value)
       .pipe(
         finalize(() => {
           this.isSaving.set(false);
@@ -256,10 +276,70 @@ export class Profil implements OnInit {
         next: (response: any) => {
           this.showEditModal.set(false);
           this.showToast(response.message ?? 'Informations mises à jour avec succès.', 'success');
-          this.loadAccountInfo(); // recharge les données affichées après modification
+
+          // Recharge les données affichées dans la page
+          this.loadAccountInfo();
         },
         error: (error) => {
-          const message = error.error?.message ?? 'Impossible de mettre à jour vos informations.';
+          // Extraction précise de l'erreur
+          let message = 'Impossible de mettre à jour vos informations.';
+          if (error.error?.errors) {
+            const firstKey = Object.keys(error.error.errors)[0];
+            message = error.error.errors[firstKey][0];
+          } else if (error.error?.message) {
+            message = error.error.message;
+          }
+          this.showToast(message, 'error');
+        }
+      });
+  }
+
+  // ===== Gestion de la modal du mot de passe =====
+
+  openPasswordModal(): void {
+    this.passwordForm.reset();
+    this.showPasswordModal.set(true);
+  }
+
+  closePasswordModal(): void {
+    this.showPasswordModal.set(false);
+  }
+
+  onSubmitPassword(): void {
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      this.showToast('Veuillez remplir correctement tous les champs.', 'error');
+      return;
+    }
+
+    const { password, password_confirmation } = this.passwordForm.value;
+
+    if (password !== password_confirmation) {
+      this.showToast('Le nouveau mot de passe et la confirmation ne correspondent pas.', 'error');
+      return;
+    }
+
+    this.isSavingPassword.set(true);
+
+    this.profil.updatePassword(this.passwordForm.value)
+      .pipe(
+        finalize(() => {
+          this.isSavingPassword.set(false);
+        })
+      )
+      .subscribe({
+        next: (response: any) => {
+          this.showPasswordModal.set(false);
+          this.showToast(response.message ?? 'Mot de passe modifié avec succès.', 'success');
+        },
+        error: (error) => {
+          let message = 'Impossible de modifier le mot de passe.';
+          if (error.error?.errors) {
+            const firstKey = Object.keys(error.error.errors)[0];
+            message = error.error.errors[firstKey][0];
+          } else if (error.error?.message) {
+            message = error.error.message;
+          }
           this.showToast(message, 'error');
         }
       });

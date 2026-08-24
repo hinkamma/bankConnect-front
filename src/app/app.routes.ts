@@ -21,17 +21,17 @@ export const routes: Routes = [
 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {path: 'login', component:Login},
-  {path: 'register', component:Register},
-  {path: 'sendToken', component:SendToken},
-  {path: 'accountTypeSelection', component:AccountTypeSelection},
+  {path: 'register', component:Register, canActivate:[authGuard]},
+  {path: 'sendToken', component:SendToken, canActivate:[authGuard]},
+  {path: 'accountTypeSelection', component:AccountTypeSelection,canActivate:[authGuard]},
 
-  { path: 'dashboard', component: Dashboard,  },
-  { path: 'notifications', component: Notifications, },
-  { path: 'virement', component: Virement },
-  { path: 'historique', component: Historique },
-  { path: 'compte', component: Compte},
-  {path: 'parametre', component: Parametre},
-  {path: 'profil', component: Profil},
+  { path: 'dashboard', component: Dashboard, canActivate:[authGuard] },
+  { path: 'notifications', component: Notifications, canActivate:[authGuard]},
+  { path: 'virement', component: Virement,canActivate:[authGuard]},
+  { path: 'historique', component: Historique,canActivate:[authGuard] },
+  { path: 'compte', component: Compte,canActivate:[authGuard]},
+  {path: 'parametre', component: Parametre,},
+  {path: 'profil', component: Profil,canActivate:[authGuard]},
 
 
   {path: 'accountSelection',component:AccountSelection},

@@ -88,15 +88,32 @@
     </a>
   </nav>
 
-
-
-
+  <!-- BLOC UTILISATEUR DYNAMIQUE -->
   <div class="bc-nav__user">
-    <div class="bc-nav__avatar">hF</div>
-    <div class="bc-nav__user-info">
-      <span class="bc-nav__user-name">Freddy Hinkamma</span>
-      <span class="bc-nav__user-role">Compte particulier</span>
+    <div class="bc-nav__avatar">
+      <!-- Si une photo existe dans userAccount, on l'affiche -->
+      <ng-container *ngIf="userAccount?.avatar_url; else textAvatar">
+        <img [src]="" [alt]="userAccount.user.last_name" class="bc-nav__avatar-img" />
+      </ng-container>
+
+      <!-- Sinon, on affiche les initiales dynamiques (ex: FH) -->
+      <ng-template #textAvatar>
+        {{ userInitials }}
+      </ng-template>
     </div>
+
+    <div class="bc-nav__user-info">
+      <!-- Affiche "Prénom Nom" ou 'Chargement...' pendant l'appel API -->
+      <span class="bc-nav__user-name">
+        {{ this.userAccount.user.last_name}}
+      </span>
+
+      <!-- Affiche le rôle ou le type de compte s'il existe -->
+      <span class="bc-nav__user-role">
+        compte {{ userAccount?.role || userAccount?.type || 'Compte particulier' }}
+      </span>
+    </div>
+
     <button type="button" class="bc-nav__logout" aria-label="Déconnexion" (click)="showLogoutConfirm = true">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -104,7 +121,7 @@
       </svg>
     </button>
 
-    <!-- La modal reste hors de .bc-nav__user, directement dans <aside> ou mieux à la racine du composant -->
+    <!-- Modal de confirmation de déconnexion -->
     <div class="modal-overlay" *ngIf="showLogoutConfirm" (click)="showLogoutConfirm = false">
       <div class="modal-box" (click)="$event.stopPropagation()">
         <div class="modal-icon">

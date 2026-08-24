@@ -1,11 +1,24 @@
+
+
+
 <div class="app-wrapper">
 
   <div class="sideBar">
     <app-navigation></app-navigation>
   </div>
 
-  <main class="app-main">
-    <div class="bc-virement">
+  <main class="app-main"  >
+
+    <!-- LOADER GLOBAL SOUVERAIN (Centré au milieu de la page) -->
+    <div class="page-loader-screen" *ngIf="isLoading()">
+      <div class="page-loader-card">
+        <div class="page-spinner"></div>
+        <span class="page-loader-text">Chargement de vos informations...</span>
+      </div>
+    </div>
+
+
+    <div class="bc-virement"  *ngIf="!isLoading()">
 
       <header class="bc-virement__header">
         <h1 class="bc-virement__title">Nouveau virement</h1>
@@ -14,108 +27,263 @@
 
       <div class="bc-virement__layout">
 
-        <form class="bc-form">
+        <form [formGroup]="virementForm" (ngSubmit)="onSubmitVirement()" class="bc-form">
 
+          <!-- ONGLETS DESTINATAIRES -->
           <div class="bc-form__tabs">
-            <button type="button" class="bc-form__tab is-active">Vers un bénéficiaire</button>
-            <button type="button" class="bc-form__tab">Entre mes comptes</button>
+            <button
+              type="button"
+              class="bc-form__tab"
+              [class.is-active]="transferType() === 'beneficiary'"
+              (click)="setTransferType('beneficiary')">
+              Vers un bénéficiaire
+            </button>
+            <button
+              type="button"
+              class="bc-form__tab"
+              [class.is-active]="transferType() === 'self'"
+              (click)="setTransferType('self')">
+              Entre mes comptes
+            </button>
           </div>
 
+
+          <!-- COMMUTATEUR : TYPE DE VIREMENT (UNIQUEMENT VISIBLE POUR LES BÉNÉFICIAIRES) -->
+          <div class="bc-form__tabs mb-3" *ngIf="transferType() === 'beneficiary'">
+            <button
+              type="button"
+              class="bc-form__tab"
+              [class.is-active]="!isProgrammed"
+              (click)="toggleProgrammed(false)">
+              <!-- Bootstrap Icon: bi-lightning-charge-fill -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-charge-fill bc-tab-icon" viewBox="0 0 16 16">
+                <path d="M11.251.055a.5.5 0 0 1 .249.403v5.158h3.5a.5.5 0 0 1 .372.834l-8 9a.5.5 0 0 1-.834-.57l1.326-5.423H4a.5.5 0 0 1-.394-.809l7-8.5a.5.5 0 0 1 .645-.093z"/>
+              </svg>
+              <span>  Immédiat</span>
+            </button>
+
+            <button
+              type="button"
+              class="bc-form__tab"
+              [class.is-active]="isProgrammed"
+              (click)="toggleProgrammed(true)">
+              <!-- Bootstrap Icon: bi-calendar-event -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-event bc-tab-icon" viewBox="0 0 16 16">
+                <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+              </svg>
+              <span>  Programmé</span>
+            </button>
+          </div>
+
+          <!-- COMPTE CONCERNÉ / COMPTE SOURCE -->
           <label class="bc-field">
-            <span class="bc-field__label">Compte source</span>
-            <select class="bc-field__control">
-              <option>Compte courant — 312 300 FCFA</option>
-              <option>Compte épargne — 140 000 FCFA</option>
+            <span class="bc-field__label">
+              {{ transferType() === 'self' ? 'Compte à créditer' : 'Compte source' }}
+            </span>
+            <select class="bc-field__control" formControlName="source_account_id">
+              <option value="" disabled>Sélectionnez un compte</option>
+              <option *ngFor="let acc of sourceAccounts()" [value]="acc.id">
+                Compte {{ acc.type || acc.account_type || '' }} — {{ (acc.solde ?? acc.balance ?? 0) | number:'1.0-0' }} FCFA (N° {{ acc.account_number }})
+              </option>
             </select>
           </label>
 
-          <label class="bc-field">
+          <!-- BÉNÉFICIAIRE (Masqué si "Entre mes comptes") -->
+          <label class="bc-field" *ngIf="transferType() === 'beneficiary'">
             <span class="bc-field__label">Bénéficiaire</span>
-            <select class="bc-field__control">
-              <option>Chanceline Kaneza Hinkamma — CM •••• 7723</option>
-              <option>Paul Essomba — CM •••• 5510</option>
-              <option>+ Ajouter un nouveau bénéficiaire</option>
+            <select class="bc-field__control" formControlName="account_number_dest">
+              <option value="" disabled selected>Choisir un bénéficiaire</option>
+              <option *ngFor="let item of beneficiaries()" [value]="item.account_number">
+                {{ item.nickname ? item.nickname : item.account_number }} ({{ item.account_number }})
+              </option>
             </select>
           </label>
 
+          <!-- MONTANT -->
           <label class="bc-field">
             <span class="bc-field__label">Montant</span>
             <div class="bc-field__amount">
-              <input type="text" class="bc-field__amount-input" placeholder="0" value="25 000" />
+              <input type="number" class="bc-field__amount-input" formControlName="amount" />
               <span class="bc-field__amount-suffix">FCFA</span>
             </div>
           </label>
 
-          <label class="bc-field">
-            <span class="bc-field__label">Motif (facultatif)</span>
-            <input type="text" class="bc-field__control" placeholder="Ex. Frais de scolarité" />
+          <!-- 🎯 CHAMP DATE DE PROGRAMMATION (Visible uniquement si "Virement Programmé") -->
+          <label class="bc-field" *ngIf="isProgrammed">
+            <span class="bc-field__label">Date d'exécution du virement</span>
+            <input
+              type="datetime-local"
+              class="bc-field__control"
+              formControlName="scheduled_date" />
           </label>
 
+          <!-- DESCRIPTION -->
           <label class="bc-field">
-            <span class="bc-field__label">Date d'exécution</span>
-            <div class="bc-field__date-options">
-              <button type="button" class="bc-chip is-active">Immédiat</button>
-              <button type="button" class="bc-chip">Programmé</button>
-            </div>
+            <span class="bc-field__label">Description / Motif (facultatif)</span>
+            <input type="text" class="bc-field__control" formControlName="description" placeholder="Ex. Dépôt personnel" autocomplete="off"/>
           </label>
 
+          <!-- BOUTON DE SOUMISSION DYNAMIQUE -->
           <div class="bc-form__actions">
-            <button type="button" class="bc-btn-secondary">Annuler</button>
-            <button type="button" class="bc-btn-primary">Valider le virement</button>
+            <button type="submit" class="bc-btn-primary" [disabled]="virementForm.invalid || isSubmittingTransfer()">
+              <span *ngIf="!isSubmittingTransfer()">
+                {{ isProgrammed ? 'Programmer le virement' : (transferType() === 'self' ? 'Valider le dépôt' : 'Valider le virement') }}
+              </span>
+              <span *ngIf="isSubmittingTransfer()">Traitement en cours...</span>
+            </button>
           </div>
 
         </form>
 
+
+        <!-- PANNEAU DROIT (RÉCAPITULATIF & BÉNÉFICIAIRES) -->
         <aside class="bc-virement__side">
 
           <div class="bc-panel">
             <h2 class="bc-panel__title">Récapitulatif</h2>
+
+            <!-- COMPTE SOURCE -->
             <div class="bc-recap__row">
               <span>Compte source</span>
-              <span>Compte courant</span>
+              <span>
+                {{ getSelectedAccount() ? (getSelectedAccount().account_type || 'Compte') + ' (N° ' + getSelectedAccount().account_number + ')' : '—' }}
+              </span>
             </div>
+
+            <!-- BÉNÉFICIAIRE -->
             <div class="bc-recap__row">
               <span>Bénéficiaire</span>
-              <span>Chanceline K.</span>
+              <span>
+                {{ getSelectedBeneficiary() ? (getSelectedBeneficiary().nickname || getSelectedBeneficiary().account_number) : '—' }}
+              </span>
             </div>
+
+            <!-- TYPE DE VIREMENT -->
+            <div class="bc-recap__row">
+              <span>Type</span>
+              <span>{{ isProgrammed ? 'Programmé' : 'Immédiat' }}</span>
+            </div>
+
+            <!-- FRAIS -->
             <div class="bc-recap__row">
               <span>Frais</span>
-              <span>0 FCFA</span>
+              <span>{{getFees()}} FCFA</span>
             </div>
+
+            <!-- TOTAL DÉBITÉ -->
             <div class="bc-recap__row bc-recap__row--total">
               <span>Total débité</span>
-              <span>25 000 FCFA</span>
+              <span>{{ getTotalAmount() | number:'1.0-0' }} FCFA</span>
             </div>
           </div>
 
+          <!-- SECTION BÉNÉFICIAIRES -->
           <div class="bc-panel">
             <div class="bc-panel__header">
               <h2 class="bc-panel__title">Bénéficiaires enregistrés</h2>
-              <button type="button" class="bc-panel__link">Gérer</button>
+              <button type="button" class="bc-panel__link" (click)="openAddBeneficiaryModal()">Gérer</button>
             </div>
 
-            <div class="bc-beneficiaire">
-              <div class="bc-beneficiaire__avatar">CK</div>
+            <div *ngIf="beneficiaries().length === 0" class="bc-empty-text">
+              Aucun bénéficiaire enregistré.
+            </div>
+
+            <!-- LISTE DYNAMIQUE DES BÉNÉFICIAIRES -->
+            <div class="bc-beneficiaire" *ngFor="let item of beneficiaries()">
+              <div class="bc-beneficiaire__avatar">
+                {{ (item.nickname || 'B').substring(0, 2).toUpperCase() }}
+              </div>
+
               <div class="bc-beneficiaire__info">
-                <span class="bc-beneficiaire__name">Chanceline Kaneza Hinkamma</span>
-                <span class="bc-beneficiaire__number">CM •••• •••• 7723</span>
+                <span class="bc-beneficiaire__name">{{ item.nickname || 'Bénéficiaire' }}</span>
+                <span class="bc-beneficiaire__number">{{ item.account_number }}</span>
+              </div>
+
+              <div class="bc-beneficiaire__actions">
+                <button type="button" class="bc-btn-icon bc-btn-icon--edit" (click)="openEditBeneficiaryModal(item)" title="Modifier">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bc-icon">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                  </svg>
+                </button>
+
+                <button type="button" class="bc-btn-icon bc-btn-icon--danger" (click)="onDeleteBeneficiary(item.id)" title="Supprimer">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bc-icon">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                  </svg>
+                </button>
               </div>
             </div>
 
-            <div class="bc-beneficiaire">
-              <div class="bc-beneficiaire__avatar">PE</div>
-              <div class="bc-beneficiaire__info">
-                <span class="bc-beneficiaire__name">Paul Essomba</span>
-                <span class="bc-beneficiaire__number">CM •••• •••• 5510</span>
-              </div>
-            </div>
           </div>
 
         </aside>
 
+        <!-- TOASTS DE NOTIFICATION -->
+        <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
+        <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
       </div>
 
     </div>
   </main>
+</div>
 
+<!-- MODALE D'AJOUT DE BÉNÉFICIAIRE -->
+<div class="bc-modal-overlay" *ngIf="showAddBeneficiaryModal()">
+  <div class="bc-modal">
 
+    <div class="bc-modal__header">
+      <div>
+        <h2 class="bc-modal__title">Ajouter un bénéficiaire</h2>
+        <p class="bc-modal__subtitle">Saisissez les coordonnées bancaires du destinataire</p>
+      </div>
+      <button type="button" class="bc-modal__close" (click)="closeAddBeneficiaryModal()">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="addBeneficiaryForm" (ngSubmit)="onSubmitBeneficiary()" class="bc-modal__form">
+
+      <!-- Numéro de compte -->
+      <div class="bc-modal__field">
+        <label for="account_number" class="bc-modal__label">Numéro de compte / IBAN *</label>
+        <input
+          id="account_number"
+          type="text"
+          formControlName="account_number"
+          class="bc-modal__input"
+          placeholder="Ex: BNK07373000 ou CM21..." autocomplete="off"/>
+      </div>
+
+      <!-- Surnom (nickname) -->
+      <div class="bc-modal__field">
+        <label for="nickname" class="bc-modal__label">Surnom / Libellé (optionnel)</label>
+        <input
+          id="nickname"
+          type="text"
+          formControlName="nickname"
+          class="bc-modal__input"
+          placeholder="Ex: Chanceline, Loyer..." autocomplete="off"/>
+      </div>
+
+      <!-- Actions -->
+      <div class="bc-modal__actions">
+        <button type="button" class="bc-btn-secondary" (click)="closeAddBeneficiaryModal()">Annuler</button>
+        <button type="submit" class="bc-btn-primary" [disabled]="isSubmittingBeneficiary()">
+          {{ isSubmittingBeneficiary() ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
+  <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
+</div>

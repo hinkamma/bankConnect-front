@@ -1,3 +1,62 @@
+/* ==========================================
+   LOADER GLOBAL SOUVERAIN (Centré et stylisé)
+   ========================================== */
+.page-loader-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* Centrage Horizontal */
+  justify-content: center; /* Centrage Vertical */
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+
+  .page-loader-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 36px 48px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  }
+
+  /* Spinner animé */
+  .page-spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #2563eb; /* Couleur bleu banque moderne */
+    border-radius: 50%;
+    animation: spinLoader 0.8s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+  }
+
+  /* Texte du loader */
+  .page-loader-text {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #475569;
+    letter-spacing: 0.2px;
+  }
+}
+
+/* Keyframes pour la rotation */
+@keyframes spinLoader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
 :host {
   display: flex;
   width: 100%;
@@ -11,10 +70,15 @@
   overflow: hidden;
 }
 
+/* CORRECTION : La zone main prend tout l'espace restant */
 .app-main {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  background-color: #f8fafc;
+  overflow-y: auto; /* Permet le scroll du contenu sans casser le loader */
 }
 
 
@@ -584,5 +648,137 @@
   @keyframes toast-up {
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+
+
+
+
+
+// boite de dialogue qui permet de gere rla modification du mot de passe
+
+// ==========================================
+// MODALE DU MOT DE PASSE (CHARTE NATIVE)
+// ==========================================
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); // Arrière-plan assombri standard
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 460px;
+  padding: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color, #1e293b); // Palette native de ton projet
+      margin: 0;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        color: #0f172a;
+      }
+    }
+  }
+}
+
+.modal-form {
+  &__row {
+    .modal-input {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+
+      //FORCE LA COULEUR DU TEXTE TAPE EN FONCE
+      background-color: #ffffff;
+      color: #0f172a !important; // Noir/Ardoise très sombre pour une visibilité totale
+
+      //FORCE LA COULEUR DU PLACEHOLDER (Ex: 8 caractères minimum)
+      &::placeholder {
+        color: #64748b !important; // Gris moyen bien visible
+        opacity: 1;
+      }
+
+      &:focus {
+        border-color: #0f172a;
+        color: #0f172a !important;
+      }
+    }
+  }
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+
+  .modal-btn {
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &--cancel {
+      background: transparent;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+
+      &:hover {
+        background-color: #f8fafc;
+      }
+    }
+
+    &--confirm {
+      // Reprend les variables globales/styles natifs de tes boutons de confirmation
+      background-color: #0f172a;
+      border: 1px solid #0f172a;
+      color: #ffffff;
+
+      &:hover {
+        background-color: #1e293b;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
   }
 }

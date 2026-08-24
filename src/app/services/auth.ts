@@ -137,6 +137,9 @@ export class Auth {
     // 1. Récupérer le jeton de connexion stocké dans le navigateur
     const token = localStorage.getItem('token') ?? '';
 
+
+
+    console.log("le token de lutilisateur connecter :",token);
     // 2. Créer l'en-tête d'autorisation que Laravel attend
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
@@ -151,7 +154,7 @@ export class Auth {
     // 4. L'ERREUR ÉTAIT ICI : Il faut passer l'objet { headers } en troisième paramètre !
 
     return this.http.post<LoginResponse>(
-      `${this.apiUrl}/verify_code`,
+      `${this.apiUrl}/verify_code/${data.user_id}`,
       payload,
       { headers } // <-- On donne la clé d'accès à la requête HTTP
     ).pipe(

@@ -1,164 +1,236 @@
-<div class="app-wrapper">
+
+
+
+<div class="app-wrapper" >
+      <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
+      <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
 
   <div class="sideBar">
     <app-navigation></app-navigation>
   </div>
 
-  <main class="app-main">
-    <div class="bc-comptes">
+  <main class="app-main" >
 
-    <header class="bc-comptes__header">
-      <div>
-        <h1 class="bc-comptes__title">Mes comptes</h1>
-        <p class="bc-comptes__subtitle">Gérez vos comptes et consultez leurs détails</p>
+
+    <!-- LOADER GLOBAL SOUVERAIN (Centré au milieu de la page) -->
+    <div class="page-loader-screen" *ngIf="isLoading()">
+      <div class="page-loader-card">
+        <div class="page-spinner"></div>
+        <span class="page-loader-text">Chargement de vos informations...</span>
       </div>
-      <button type="button" class="bc-btn-primary">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-        Nouveau compte
-      </button>
-    </header>
+    </div>
 
-    <div class="bc-comptes__layout">
 
-      <div class="bc-comptes__list">
+    <div class="bc-comptes" *ngIf="!isLoading()">
 
-        <button type="button" class="bc-compte-item is-active">
-          <div class="bc-compte-item__icon bc-compte-item__icon--navy">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M2 10h20" stroke="currentColor" stroke-width="1.6"/>
-            </svg>
-          </div>
-          <div class="bc-compte-item__info">
-            <span class="bc-compte-item__name">Compte courant</span>
-            <span class="bc-compte-item__number">CM •••• •••• 4471</span>
-          </div>
-          <span class="bc-compte-item__balance">312 300 FCFA</span>
-        </button>
-
-        <button type="button" class="bc-compte-item">
-          <div class="bc-compte-item__icon bc-compte-item__icon--gold">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="7" width="18" height="4" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M5 11v9h14v-9M10 11v9M14 11v9" stroke="currentColor" stroke-width="1.6"/>
-            </svg>
-          </div>
-          <div class="bc-compte-item__info">
-            <span class="bc-compte-item__name">Compte épargne</span>
-            <span class="bc-compte-item__number">CM •••• •••• 2098</span>
-          </div>
-          <span class="bc-compte-item__balance">140 000 FCFA</span>
-        </button>
-
-        <button type="button" class="bc-compte-item bc-compte-item--muted">
-          <div class="bc-compte-item__icon bc-compte-item__icon--grey">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="7" width="20" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M6 11h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="bc-compte-item__info">
-            <span class="bc-compte-item__name">Compte professionnel</span>
-            <span class="bc-compte-item__number">Non activé</span>
-          </div>
-          <span class="bc-compte-item__badge">Inactif</span>
-        </button>
-
-      </div>
-
-      <div class="bc-compte-detail">
-
-        <div class="bc-compte-detail__banner">
-          <div>
-            <span class="bc-compte-detail__banner-label">Compte courant</span>
-            <p class="bc-compte-detail__banner-balance">312 300 FCFA</p>
-          </div>
-          <span class="bc-compte-detail__banner-status">Actif</span>
+      <header class="bc-comptes__header">
+        <div>
+          <h1 class="bc-comptes__title">Mes comptes</h1>
+          <p class="bc-comptes__subtitle">Gérez vos comptes et consultez leurs détails</p>
         </div>
+        <button type="button" class="bc-btn-primary" (click)="openCreateAccountModal()">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Nouveau compte
+        </button>
 
-        <div class="bc-compte-detail__grid">
-          <div class="bc-compte-detail__field">
-            <span class="bc-compte-detail__label">Numéro de compte</span>
-            <span class="bc-compte-detail__value">4471 0032 8817</span>
-          </div>
-          <div class="bc-compte-detail__field">
-            <span class="bc-compte-detail__label">IBAN</span>
-            <span class="bc-compte-detail__value">CM21 1002 3456 7890 4471</span>
-          </div>
-          <div class="bc-compte-detail__field">
-            <span class="bc-compte-detail__label">Type de compte</span>
-            <span class="bc-compte-detail__value">Compte courant particulier</span>
-          </div>
-          <div class="bc-compte-detail__field">
-            <span class="bc-compte-detail__label">Date d'ouverture</span>
-            <span class="bc-compte-detail__value">03 mars 2024</span>
-          </div>
-          <div class="bc-compte-detail__field">
-            <span class="bc-compte-detail__label">Plafond de virement</span>
-            <span class="bc-compte-detail__value">500 000 FCFA / jour</span>
-          </div>
-          <div class="bc-compte-detail__field">
-            <span class="bc-compte-detail__label">Agence</span>
-            <span class="bc-compte-detail__value">BankConnect Douala Akwa</span>
+        <!-- Modal Nouveau Compte -->
+        <div class="bc-modal-overlay" *ngIf="showCreateAccountModal()">
+          <div class="bc-modal">
+
+            <!-- En-tête -->
+            <div class="bc-modal__header">
+              <div>
+                <h2 class="bc-modal__title">Créer un nouveau compte</h2>
+                <p class="bc-modal__subtitle">Sélectionnez le type de compte que vous souhaitez ouvrir</p>
+              </div>
+              <button type="button" class="bc-modal__close" (click)="closeCreateAccountModal()">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Formulaire -->
+            <form [formGroup]="createAccountForm" (ngSubmit)="onSubmitCreateAccount()" class="bc-modal__form">
+
+              <!-- Type de compte -->
+              <div class="bc-modal__field">
+                <label for="type" class="bc-modal__label">Type de compte</label>
+                <select id="type" formControlName="type" class="bc-modal__select">
+                  <option value="" disabled selected>Choisissez un type de compte</option>
+                  <option value="courant">Compte Courant</option>
+                  <option value="epagne">Compte Épargne</option>
+                  <option value="pro">Compte Professionnel</option>
+                </select>
+              </div>
+
+              <!-- Actions -->
+              <div class="bc-modal__actions">
+                <button type="button" class="bc-btn-secondary" (click)="closeCreateAccountModal()">Annuler</button>
+                <button type="submit" class="bc-btn-primary" [disabled]="isSubmitting()">
+                  {{ isSubmitting() ? 'Création...' : 'Créer le compte' }}
+                </button>
+              </div>
+
+            </form>
+
           </div>
         </div>
 
-        <div class="bc-compte-detail__actions">
-          <button type="button" class="bc-btn-secondary">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Télécharger le RIB
-          </button>
-          <button type="button" class="bc-btn-secondary">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/>
-            </svg>
-            Bloquer le compte
-          </button>
-          <button type="button" class="bc-btn-danger">
-            Clôturer le compte
-          </button>
-        </div>
+      </header>
 
-        <div class="bc-compte-detail__tx">
-          <h3 class="bc-compte-detail__tx-title">Dernières transactions</h3>
+      <div class="bc-comptes__layout">
 
-          <div class="bc-tx">
-            <div class="bc-tx__icon bc-tx__icon--red">
+        <!-- LISTE DYNAMIQUE DES COMPTES -->
+        <div class="bc-comptes__list">
+
+          <!-- Message si aucun compte -->
+          <p *ngIf="accounts().length === 0 && !isLoadingAccounts()" class="bc-empty-text">
+            Aucun compte trouvé.
+          </p>
+
+          <!-- Boucle sur la liste des comptes -->
+          <button
+            type="button"
+            *ngFor="let acc of accounts()"
+            class="bc-compte-item"
+            [class.is-active]="selectedAccount()?.id === acc.id"
+            (click)="selectAccount(acc)">
+
+            <div class="bc-compte-item__icon" [ngClass]="{
+              'bc-compte-item__icon--navy': acc.type === 'courant',
+              'bc-compte-item__icon--gold': acc.type === 'epagne',
+              'bc-compte-item__icon--grey': acc.type === 'pro'
+            }">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M2 10h20" stroke="currentColor" stroke-width="1.6"/>
               </svg>
             </div>
-            <div class="bc-tx__info">
-              <span class="bc-tx__name">Virement — Chanceline K.</span>
-              <span class="bc-tx__meta">Aujourd'hui, 09:12</span>
+
+            <div class="bc-compte-item__info">
+              <span class="bc-compte-item__name">
+                {{ acc.type === 'courant' ? 'Compte courant' : (acc.type === 'epagne' ? 'Compte épargne' : 'Compte professionnel') }}
+              </span>
+              <span class="bc-compte-item__number">{{ acc.account_number }}</span>
             </div>
-            <span class="bc-tx__amount bc-tx__amount--out">- 25 000 FCFA</span>
+
+            <span class="bc-compte-item__balance">{{ acc.solde }} FCFA</span>
+          </button>
+
+        </div>
+
+        <!-- DETAILS DU COMPTE SELECTIONNE -->
+        <div class="bc-compte-detail" *ngIf="selectedAccount() as acc">
+
+          <div class="bc-compte-detail__banner">
+            <div>
+              <span class="bc-compte-detail__banner-label">
+                {{ acc.type === 'courant' ? 'Compte courant' : (acc.type === 'epagne' ? 'Compte épargne' : 'Compte professionnel') }}
+              </span>
+              <p class="bc-compte-detail__banner-balance">{{ acc.solde }} FCFA</p>
+            </div>
+            <span class="bc-compte-detail__banner-status">{{ acc.status || 'Actif' }}</span>
           </div>
 
-          <div class="bc-tx">
-            <div class="bc-tx__icon bc-tx__icon--teal">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17 7L7 17M7 17h8M7 17V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+          <div class="bc-compte-detail__grid">
+            <div class="bc-compte-detail__field">
+              <span class="bc-compte-detail__label">Numéro de compte</span>
+              <span class="bc-compte-detail__value">{{ acc.account_number }}</span>
             </div>
-            <div class="bc-tx__info">
-              <span class="bc-tx__name">Dépôt — Salaire</span>
-              <span class="bc-tx__meta">Hier, 18:30</span>
+            <div class="bc-compte-detail__field">
+              <span class="bc-compte-detail__label">Type de compte</span>
+              <span class="bc-compte-detail__value">
+                {{ acc.type === 'courant' ? 'Compte courant particulier' : (acc.type === 'epagne' ? 'Compte épargne' : 'Compte professionnel') }}
+              </span>
             </div>
-            <span class="bc-tx__amount bc-tx__amount--in">+ 180 000 FCFA</span>
+            <div class="bc-compte-detail__field">
+              <span class="bc-compte-detail__label">Date d'ouverture</span>
+              <span class="bc-compte-detail__value">{{ acc.created_at ? (acc.created_at | date:'dd MMMM yyyy') : 'N/A' }}</span>
+            </div>
+            <div class="bc-compte-detail__field">
+              <span class="bc-compte-detail__label">Plafond de virement</span>
+              <span class="bc-compte-detail__value">500 000 FCFA / jour</span>
+            </div>
           </div>
+
+          <div class="bc-compte-detail__actions">
+            <button type="button" class="bc-btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Télécharger le RIB
+            </button>
+            <button type="button" class="bc-btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M8 11V8a4 4 0 018 0v3" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+              Bloquer le compte
+            </button>
+            <button type="button" class="bc-btn-danger">
+              Clôturer le compte
+            </button>
+          </div>
+
+
+          <!-- DERNIÈRES TRANSACTIONS -->
+          <div class="bc-compte-detail__tx">
+            <h3 class="bc-compte-detail__tx-title">Dernières transactions</h3>
+
+            <!-- Message si aucune transaction -->
+            <p *ngIf="!acc.transactions || acc.transactions.length === 0" class="bc-empty-text">
+              Aucune transaction récente pour ce compte.
+            </p>
+
+            <!-- Liste dynamique si des transactions existent -->
+            <ng-container *ngIf="acc.transactions && acc.transactions.length > 0">
+              <div class="bc-tx" *ngFor="let tx of acc.transactions">
+
+                <!-- Icône : Rouge si débit (out), Teal/Vert si crédit (in) -->
+                <div class="bc-tx__icon" [ngClass]="tx.type === 'debit' ? 'bc-tx__icon--red' : 'bc-tx__icon--teal'">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      [attr.d]="tx.type === 'debit' ? 'M7 17L17 7M17 7H9M17 7v8' : 'M17 7L7 17M7 17h8M7 17V9'"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+                  </svg>
+                </div>
+
+                <div class="bc-tx__info">
+                  <span class="bc-tx__name">{{ tx.label || tx.description }}</span>
+                  <span class="bc-tx__meta">{{ tx.created_at | date:'short' }}</span>
+                </div>
+
+                <span class="bc-tx__amount" [ngClass]="tx.type === 'debit' ? 'bc-tx__amount--out' : 'bc-tx__amount--in'">
+                  {{ tx.type === 'debit' ? '-' : '+' }} {{ tx.amount }} FCFA
+                </span>
+
+              </div>
+            </ng-container>
+
+          </div>
+
         </div>
 
       </div>
+
 
     </div>
 
-  </div>
 
   </main>
+</div>
+
+
+
+
+
+
+
+
 

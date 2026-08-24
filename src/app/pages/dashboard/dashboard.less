@@ -1,3 +1,54 @@
+/* ==========================================
+   LOADER GLOBAL SOUVERAIN (Centré et stylisé)
+   ========================================== */
+.page-loader-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+
+  .page-loader-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 36px 48px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  }
+
+  .page-spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #2563eb;
+    border-radius: 50%;
+    animation: spinLoader 0.8s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+  }
+
+  .page-loader-text {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #475569;
+    letter-spacing: 0.2px;
+  }
+}
+
+@keyframes spinLoader {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 :host {
   display: flex;
   width: 100%;
@@ -13,12 +64,13 @@
 
 .app-main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  background-color: #f8fafc;
   overflow-y: auto;
-  overflow-x: hidden;
 }
-
-
-
 
 .bc-dash {
   --bc-navy: #0f2038;
@@ -50,7 +102,6 @@
 }
 
 /* Header */
-
 .bc-dash__header {
   display: flex;
   align-items: center;
@@ -147,7 +198,6 @@
 }
 
 /* Summary cards */
-
 .bc-dash__summary {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -238,7 +288,6 @@
 }
 
 /* Accounts */
-
 .bc-dash__accounts {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -333,7 +382,6 @@
 }
 
 /* Quick actions */
-
 .bc-dash__actions {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -376,12 +424,12 @@
 }
 
 /* Lower section */
-
 .bc-dash__lower {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 16px;
-  align-items: start;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .bc-panel {
@@ -389,6 +437,16 @@
   border: 1px solid var(--bc-border);
   border-radius: 14px;
   padding: 20px 22px;
+  min-width: 0 !important;
+  box-sizing: border-box;
+}
+
+.bc-panel--transactions {
+  flex: 2;
+}
+
+.bc-panel--side {
+  flex: 1;
 }
 
 .bc-panel__header {
@@ -414,13 +472,14 @@
 }
 
 /* Transactions */
-
 .bc-tx {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 0;
   border-bottom: 1px solid var(--bc-border);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .bc-tx:last-child {
@@ -466,14 +525,19 @@
 }
 
 .bc-tx__name {
-  font-size: 13px;
-  font-weight: 500;
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .bc-tx__meta {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 12px;
   color: var(--bc-text-muted);
 }
@@ -482,18 +546,13 @@
   font-size: 13px;
   font-weight: 600;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
-.bc-tx__amount--in {
-  color: var(--bc-teal);
-}
-
-.bc-tx__amount--out {
-  color: var(--bc-red);
-}
+.bc-tx__amount--in { color: var(--bc-teal); }
+.bc-tx__amount--out { color: var(--bc-red); }
 
 /* Breakdown */
-
 .bc-breakdown {
   list-style: none;
   margin: 0 0 20px;
@@ -526,7 +585,6 @@
 }
 
 /* Goal */
-
 .bc-goal {
   padding-top: 16px;
   border-top: 1px solid var(--bc-border);
@@ -571,7 +629,68 @@
   color: var(--bc-text-muted);
 }
 
-/* Responsive */
+/* Conteneur global du dashboard */
+.bc-dash {
+  padding: 1rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header Avatar */
+.bc-dash__header {
+  .bc-dash__header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .bc-dash__search {
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 640px) {
+      display: none;
+    }
+  }
+
+  .bc-dash__avatar {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: #0f172a;
+    color: #fff;
+    font-weight: 600;
+
+    .bc-dash__avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+@media (max-width: 1024px) {
+  .bc-dash__lower {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .bc-panel--transactions,
+  .bc-panel--side {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+}
 
 @media (max-width: 1100px) {
   .bc-dash__summary,
@@ -581,10 +700,6 @@
 
   .bc-dash__actions {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .bc-dash__lower {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -602,105 +717,200 @@
   .bc-dash__search input {
     width: 120px;
   }
-}
 
-/* ===================================================
-   CORRECTION RESPONSIVE DASHBOARD & DÉBORDEMENT DROITE
-   =================================================== */
-
-/* 1. Sécuriser le conteneur principal */
-.app-wrapper, .app-main, .bc-dash {
-  width: 100%;
-  max-width: 100vw;
-  box-sizing: border-box;
-  overflow-x: hidden; /* Évite tout scroll horizontal indésirable */
-}
-
-/* 2. Correction de la grille/layout des cartes inférieures */
-.bc-dash__lower {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* TRÈS IMPORTANT : 
-  'min-width: 0' empêche Flexbox/Grid d'imposer la largeur minimale 
-  de son contenu texte (évite le débordement à droite)
-*/
-.bc-panel {
-  min-width: 0 !important; 
-  box-sizing: border-box;
-}
-
-.bc-panel--transactions {
-  flex: 2; /* Prend 2/3 de l'espace */
-}
-
-.bc-panel--side {
-  flex: 1; /* Prend 1/3 de l'espace */
-}
-
-/* 3. Sécuriser le contenu d'une transaction */
-.bc-tx {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.bc-tx__info {
-  flex: 1;
-  min-width: 0; /* Permet le tronquage propre du texte long */
-}
-
-.bc-tx__name {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; /* Ajoute '...' si le texte est trop long sur petit écran */
-  font-weight: 600;
-}
-
-.bc-tx__meta {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 0.8rem;
-  color: #64748b;
-}
-
-.bc-tx__amount {
-  white-space: nowrap; /* Conserve le montant sur une ligne */
-  font-weight: 700;
-  flex-shrink: 0; /* Empêche le montant de s'écraser */
-}
-
-/* 4. PASSAGE EN RESPONSIVE / MOBILE / TABLETTE */
-@media (max-width: 1024px) {
-  .bc-dash__lower {
-    flex-direction: column; /* Empile les deux cartes l'une sous l'autre sur écran moyen/petit */
-    gap: 20px;
-  }
-
-  .bc-panel--transactions,
-  .bc-panel--side {
-    width: 100%;
-    flex: 1 1 100%;
-  }
-}
-
-@media (max-width: 640px) {
-  /* Ajustements spécifiques sur très petits écrans */
   .bc-tx {
     gap: 8px;
   }
-  
+
   .bc-tx__amount {
     font-size: 0.88rem;
   }
 }
 
+@media (max-width: 480px) {
+  .app-main {
+    padding: 0.75rem;
+    overflow-x: hidden;
+  }
+
+  .bc-dash__title {
+    font-size: 1.25rem;
+  }
+}
+
+/* ===================================================
+   MODALE DE VIREMENT - PROPRE & SOBRE (FOND BLANC)
+   =================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.modal-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  color: #0f172a;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+  }
+
+  &__title-group {
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .modal-subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin: 0.2rem 0 0 0;
+    }
+  }
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  line-height: 1;
+
+  &:hover {
+    color: #0f172a;
+  }
+}
+
+.modal-body {
+  padding: 1.5rem;
+
+  &--loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.5rem;
+    color: #64748b;
+  }
+}
+
+/* FORMULAIRE SOBRE ET CLAIR */
+.bc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  &__label {
+    font-size: 0.825rem;
+    font-weight: 500;
+    color: #334155;
+  }
+
+  &__input,
+  &__select {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: #0f172a;
+    font-size: 0.9rem;
+    outline: none;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: var(--primary-color, #0f172a);
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+    }
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+  }
+}
+
+/* BOUTONS D'ACTION */
+.bc-btn {
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+
+  /* Bouton Annuler */
+  &--outline {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #475569;
+
+    &:hover {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+  }
+
+  /* UNIQEMENT LE BOUTON PRINCIPAL D'ACTION PREND LA COULEUR DE TON OPTION (#0f172a) */
+  &--primary {
+    background-color: var(--primary-color, #0f172a);
+    color: #ffffff;
+    border: 1px solid var(--primary-color, #0f172a);
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

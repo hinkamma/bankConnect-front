@@ -5,12 +5,23 @@
   </div>
 
   <main class="app-main">
-    
-    <div class="bc-dash">
+
+    <!-- LOADER GLOBAL -->
+    <div class="page-loader-screen" *ngIf="isLoading()">
+      <div class="page-loader-card">
+        <div class="page-spinner"></div>
+        <span class="page-loader-text">Chargement de votre tableau de bord...</span>
+      </div>
+    </div>
+
+    <!-- CONTENU DU DASHBOARD -->
+    <div class="bc-dash" *ngIf="!isLoading()">
+
+      <!-- HEADER DYNAMIQUE -->
       <header class="bc-dash__header">
         <div>
           <p class="bc-dash__eyebrow">Bonjour</p>
-          <h1 class="bc-dash__title">Freddy Hinkamma</h1>
+          <h1 class="bc-dash__title">{{ user()?.first_name }} {{ user()?.last_name }}</h1>
         </div>
 
         <div class="bc-dash__header-actions">
@@ -30,10 +41,15 @@
             <span class="bc-dash__icon-dot"></span>
           </button>
 
-          <div class="bc-dash__avatar">FH</div>
+          <!-- AVATAR / INITIALES -->
+          <div class="bc-dash__avatar">
+            <img *ngIf="avatarPreview()" [src]="avatarPreview()" alt="Avatar" class="bc-dash__avatar-img" />
+            <span *ngIf="!avatarPreview()">{{ getUserInitials() }}</span>
+          </div>
         </div>
       </header>
 
+      <!-- CARTES DE RÉSUMÉ -->
       <section class="bc-dash__summary">
         <article class="bc-summary-card bc-summary-card--dark">
           <div class="bc-summary-card__top">
@@ -45,7 +61,7 @@
               </svg>
             </span>
           </div>
-          <p class="bc-summary-card__value">452 300 FCFA</p>
+          <p class="bc-summary-card__value">{{ getTotalBalance() | number:'1.0-0' }} FCFA</p>
           <span class="bc-summary-card__trend bc-summary-card__trend--up">+4,2 % ce mois</span>
         </article>
 
@@ -76,29 +92,20 @@
         </article>
       </section>
 
+      <!-- LISTE DES COMPTES DYNAMIQUE -->
       <section class="bc-dash__accounts">
-        <div class="bc-account-card bc-account-card--navy">
+        <div class="bc-account-card"
+             *ngFor="let acc of accounts(); let i = index"
+             [class.bc-account-card--navy]="i === 0">
           <div class="bc-account-card__row">
-            <span class="bc-account-card__type">Compte courant</span>
+            <span class="bc-account-card__type">{{ acc.type ?? 'Compte courant' }}</span>
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bc-account-card__chip">
               <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
               <path d="M2 10h20" stroke="currentColor" stroke-width="1.6"/>
             </svg>
           </div>
-          <p class="bc-account-card__balance">312 300 FCFA</p>
-          <p class="bc-account-card__number">CM •••• •••• 4471</p>
-        </div>
-
-        <div class="bc-account-card">
-          <div class="bc-account-card__row">
-            <span class="bc-account-card__type">Compte épargne</span>
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="bc-account-card__chip">
-              <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M2 10h20" stroke="currentColor" stroke-width="1.6"/>
-            </svg>
-          </div>
-          <p class="bc-account-card__balance">140 000 FCFA</p>
-          <p class="bc-account-card__number">CM •••• •••• 2098</p>
+          <p class="bc-account-card__balance">{{ (acc.balance ?? acc.solde ?? 0) | number:'1.0-0' }} FCFA</p>
+          <p class="bc-account-card__number">CM •••• •••• {{ acc.account_number?.slice(-4) ?? '0000' }}</p>
         </div>
 
         <div class="bc-account-card bc-account-card--ghost">
@@ -113,8 +120,9 @@
         </div>
       </section>
 
+      <!-- BOUTONS D'ACTIONS RAPIDES -->
       <section class="bc-dash__actions">
-        <button type="button" class="bc-quick-action">
+        <button type="button" class="bc-quick-action" (click)="openActionModal('virement')">
           <span class="bc-quick-action__icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M7 7h13m0 0l-4-4m4 4l-4 4M17 17H4m0 0l4 4m-4-4l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -122,7 +130,8 @@
           </span>
           <span>Virement</span>
         </button>
-        <button type="button" class="bc-quick-action">
+
+        <button type="button" class="bc-quick-action" (click)="openActionModal('depot')">
           <span class="bc-quick-action__icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -130,7 +139,8 @@
           </span>
           <span>Dépôt</span>
         </button>
-        <button type="button" class="bc-quick-action">
+
+        <button type="button" class="bc-quick-action" (click)="openActionModal('retrait')">
           <span class="bc-quick-action__icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -138,7 +148,8 @@
           </span>
           <span>Retrait</span>
         </button>
-        <button type="button" class="bc-quick-action">
+
+        <button type="button" class="bc-quick-action" (click)="openActionModal('factures')">
           <span class="bc-quick-action__icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.6"/>
@@ -149,68 +160,8 @@
         </button>
       </section>
 
-      <section class="bc-dash__lower ">
-
-        <div class="bc-panel bc-panel--transactions">
-          <div class="bc-panel__header">
-            <h2 class="bc-panel__title">Transactions récentes</h2>
-            <button type="button" class="bc-panel__link">Tout voir</button>
-          </div>
-
-          <div class="bc-tx">
-            <div class="bc-tx__icon bc-tx__icon--red">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="bc-tx__info">
-              <span class="bc-tx__name">Virement — Chanceline K.</span>
-              <span class="bc-tx__meta">Aujourd'hui, 09:12 · Compte courant</span>
-            </div>
-            <span class="bc-tx__amount bc-tx__amount--out">- 25 000 FCFA</span>
-          </div>
-
-          <div class="bc-tx">
-            <div class="bc-tx__icon bc-tx__icon--teal">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17 7L7 17M7 17h8M7 17V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="bc-tx__info">
-              <span class="bc-tx__name">Dépôt — Salaire Collège St-Gérôme</span>
-              <span class="bc-tx__meta">Hier, 18:30 · Compte courant</span>
-            </div>
-            <span class="bc-tx__amount bc-tx__amount--in">+ 180 000 FCFA</span>
-          </div>
-
-          <div class="bc-tx">
-            <div class="bc-tx__icon bc-tx__icon--red">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="bc-tx__info">
-              <span class="bc-tx__name">Facture ENEO</span>
-              <span class="bc-tx__meta">12 juil., 08:05 · Compte courant</span>
-            </div>
-            <span class="bc-tx__amount bc-tx__amount--out">- 14 500 FCFA</span>
-          </div>
-
-          <div class="bc-tx">
-            <div class="bc-tx__icon bc-tx__icon--gold">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="3" y="7" width="18" height="4" stroke="currentColor" stroke-width="1.6"/>
-                <path d="M5 11v9h14v-9M10 11v9M14 11v9" stroke="currentColor" stroke-width="1.6"/>
-              </svg>
-            </div>
-            <div class="bc-tx__info">
-              <span class="bc-tx__name">Épargne programmée</span>
-              <span class="bc-tx__meta">10 juil., 07:00 · Compte épargne</span>
-            </div>
-            <span class="bc-tx__amount bc-tx__amount--out">- 20 000 FCFA</span>
-          </div>
-        </div>
-
+      <!-- REPARTITION DES DEPENSES -->
+      <section class="bc-dash__lower">
         <div class="bc-panel bc-panel--side">
           <div class="bc-panel__header">
             <h2 class="bc-panel__title">Répartition des dépenses</h2>
@@ -224,27 +175,6 @@
               </div>
               <div class="bc-breakdown__bar"><span style="width: 33%;"></span></div>
             </li>
-            <li class="bc-breakdown__item">
-              <div class="bc-breakdown__labels">
-                <span>Virements</span>
-                <span>29 %</span>
-              </div>
-              <div class="bc-breakdown__bar"><span style="width: 29%;"></span></div>
-            </li>
-            <li class="bc-breakdown__item">
-              <div class="bc-breakdown__labels">
-                <span>Épargne</span>
-                <span>23 %</span>
-              </div>
-              <div class="bc-breakdown__bar"><span style="width: 23%;"></span></div>
-            </li>
-            <li class="bc-breakdown__item">
-              <div class="bc-breakdown__labels">
-                <span>Divers</span>
-                <span>15 %</span>
-              </div>
-              <div class="bc-breakdown__bar"><span style="width: 15%;"></span></div>
-            </li>
           </ul>
 
           <div class="bc-goal">
@@ -256,12 +186,121 @@
             <p class="bc-goal__note">140 000 / 200 000 FCFA</p>
           </div>
         </div>
-
       </section>
 
+    </div> <!-- FIN DE .bc-dash -->
+
+
+    <!-- MODALE DYNAMIQUE (PLACÉE HORS DE .bc-dash POUR ÉVITER LES CONFLITS CSS) -->
+    <div class="modal-overlay" *ngIf="activeModal()" (click)="closeModal()">
+      <div class="modal-box" (click)="$event.stopPropagation()">
+
+        <!-- HEADER MODALE -->
+        <div class="modal-box__header">
+          <div class="modal-box__title-group">
+            <h2 class="modal-title" *ngIf="activeModal() === 'virement'">Effectuer un Virement</h2>
+            <p class="modal-subtitle" *ngIf="activeModal() === 'virement'">Transférez des fonds en toute sécurité</p>
+          </div>
+          <button type="button" class="modal-close" (click)="closeModal()" aria-label="Fermer">✕</button>
+        </div>
+
+        <!-- SPINNER CHARGEMENT -->
+        <div class="modal-body modal-body--loading" *ngIf="isLoadingActionData()">
+          <div class="btn-spinner"></div>
+          <p>Chargement du formulaire...</p>
+        </div>
+
+        <!-- MODALE VIREMENT -->
+        <div class="modal-overlay" *ngIf="activeModal()" (click)="closeModal()">
+          <div class="modal-box" (click)="$event.stopPropagation()">
+
+            <!-- HEADER -->
+            <div class="modal-box__header">
+              <div class="modal-box__title-group">
+                <h2 class="modal-title" *ngIf="activeModal() === 'virement'">Effectuer un Virement</h2>
+                <p class="modal-subtitle" *ngIf="activeModal() === 'virement'">Sélectionnez le bénéficiaire et le montant</p>
+              </div>
+              <button type="button" class="modal-close" (click)="closeModal()" aria-label="Fermer">✕</button>
+            </div>
+
+            <!-- LOADER -->
+            <div class="modal-body modal-body--loading" *ngIf="isLoadingActionData()">
+              <p class="page-loader-text">Chargement des données...</p>
+            </div>
+
+            <!-- FORMULAIRE -->
+            <div class="modal-body" *ngIf="!isLoadingActionData() && activeModal() === 'virement'">
+              <form (ngSubmit)="submitVirement()" class="bc-form">
+
+                <!-- 1. COMPTE ÉMETTEUR -->
+                <div class="bc-form__group">
+                  <label class="bc-form__label">Compte à débiter</label>
+                  <select class="bc-form__select" [(ngModel)]="virementForm.accountFromId" name="accountFromId" required>
+                    <option value="" disabled selected>Sélectionnez un compte</option>
+                    <option *ngFor="let acc of accounts()" [value]="acc.id || acc.account_number">
+                      {{ acc.type ?? 'Compte courant' }} — {{ (acc.balance ?? acc.solde ?? 0) | number:'1.0-0' }} FCFA
+                    </option>
+                  </select>
+                </div>
+
+                <!-- 2. SÉLECTION DU BÉNÉFICIAIRE -->
+                <div class="bc-form__group">
+                  <label class="bc-form__label">Bénéficiaire</label>
+                  <select class="bc-form__select" [(ngModel)]="virementForm.beneficiaryId" name="beneficiaryId" required>
+                    <option value="" disabled selected>Sélectionnez un bénéficiaire</option>
+                    <option *ngFor="let b of beneficiaries()" [value]="b.id || b.account_number">
+                      {{ b.nickname }} de ({{ b.account_number }})
+                    </option>
+                  </select>
+                </div>
+
+                <!-- 3. MONTANT & MOTIF -->
+                <div class="bc-form__row">
+                  <div class="bc-form__group">
+                    <label class="bc-form__label">Montant (FCFA)</label>
+                    <input
+                      type="number"
+                      class="bc-form__input"
+                      placeholder="0"
+                      min="500"
+                      [(ngModel)]="virementForm.amount"
+                      name="amount"
+                      required
+                    />
+                  </div>
+
+                  <div class="bc-form__group">
+                    <label class="bc-form__label">Motif (Optionnel)</label>
+                    <input
+                      type="text"
+                      class="bc-form__input"
+                      placeholder="Ex: Loyer, Cadeau..."
+                      [(ngModel)]="virementForm.reason"
+                      name="reason"
+                    />
+                  </div>
+                </div>
+
+                <!-- BOUTONS D'ACTION -->
+                <div class="bc-form__actions">
+                  <button type="button" class="bc-btn bc-btn--outline" (click)="closeModal()">
+                    Annuler
+                  </button>
+                  <button type="submit" class="bc-btn bc-btn--navy" [disabled]="isSubmittingAction()">
+                    <span *ngIf="!isSubmittingAction()">Valider le virement</span>
+                    <span *ngIf="isSubmittingAction()">Validation en cours...</span>
+                  </button>
+                </div>
+
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
     </div>
+
   </main>
 
 </div>
-
-

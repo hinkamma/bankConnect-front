@@ -1,3 +1,65 @@
+/* ==========================================
+   LOADER GLOBAL SOUVERAIN (Centré et stylisé)
+   ========================================== */
+.page-loader-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* Centrage Horizontal */
+  justify-content: center; /* Centrage Vertical */
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+
+  .page-loader-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 36px 48px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+  }
+
+  /* Spinner animé */
+  .page-spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #2563eb; /* Couleur bleu banque moderne */
+    border-radius: 50%;
+    animation: spinLoader 0.8s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+  }
+
+  /* Texte du loader */
+  .page-loader-text {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #475569;
+    letter-spacing: 0.2px;
+  }
+}
+
+/* Keyframes pour la rotation */
+@keyframes spinLoader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+
 :host {
   display: flex;
   width: 100%;
@@ -11,12 +73,16 @@
   overflow: hidden;
 }
 
+/* CORRECTION : La zone main prend tout l'espace restant */
 .app-main {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  background-color: #f8fafc;
+  overflow-y: auto; /* Permet le scroll du contenu sans casser le loader */
 }
-
 /* ===================================================
    CORRECTION RESPONSIVE - PAGE VIREMENT
    =================================================== */
@@ -35,7 +101,7 @@
   gap: 24px;
 }
 
-/* IMPORTANT : Permet au formulaire et au panneau latéral 
+/* IMPORTANT : Permet au formulaire et au panneau latéral
    de ne pas dépasser la largeur de l'écran */
 .bc-form,
 .bc-virement__side,
@@ -125,7 +191,7 @@
     flex-direction: column-reverse;
     gap: 10px;
   }
-  
+
   .bc-form__actions button {
     width: 100%;
   }
@@ -430,5 +496,511 @@
 @media (max-width: 560px) {
   .bc-virement {
     padding: 20px 16px 32px;
+  }
+}
+
+
+
+
+
+// ==========================================
+//  MODALE D'AJOUT DE BÉNÉFICIAIRE
+// ==========================================
+
+.bc-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.5); // Arrière-plan assombri
+  backdrop-filter: blur(4px);             // Effet de flou moderne
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.bc-modal {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: scaleUp 0.25s ease-out;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 4px 0;
+  }
+
+  &__subtitle {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  &__close {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: #f3f4f6;
+      color: #374151;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    color: #111827;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: #0d9488; // Couleur principale (Teal/Vert bancaire)
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #f3f4f6;
+  }
+}
+
+// ------------------------------------------
+// 🔔 ALERTES (Succès / Erreur)
+// ------------------------------------------
+
+.bc-alert {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+
+  &--danger {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+  }
+
+  &--success {
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+  }
+}
+
+// ------------------------------------------
+// ANIMATIONS
+// ------------------------------------------
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+
+.bc-modal {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 90vh;        // 👈 Empêche la modale d'être plus grande que l'écran
+  overflow-y: auto;        // 👈 Ajoute un scroll si le contenu déborde
+  padding: 24px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: scaleUp 0.25s ease-out;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 4px 0;
+  }
+
+  &__subtitle {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  &__close {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: #f3f4f6;
+      color: #374151;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    color: #111827;
+    outline: none;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: #0d9488;
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #f3f4f6;
+  }
+}
+
+// ------------------------------------------
+// 🎯 STYLE SPÉCIFIQUE POUR LES BOUTONS
+// ------------------------------------------
+
+.bc-btn-primary {
+  background-color: #0d9488; // Vert/Teal principal
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #0f766e;
+  }
+
+  &:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+  }
+}
+
+.bc-btn-secondary {
+  background-color: transparent;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+  }
+}
+
+
+.bc-empty-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+  background-color: #f9fafb;
+  border: 1px dashed #e5e7eb;
+  border-radius: 12px;
+  margin-top: 12px;
+
+  .bc-empty-icon {
+    width: 28px;
+    height: 28px;
+    color: #9ca3af;
+  }
+}
+
+
+.bc-beneficiaire__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bc-btn-icon {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  .bc-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  // Option Modifier (Bleu/Gris discret)
+  &--edit {
+    color: #6b7280;
+
+    &:hover {
+      background-color: #f3f4f6;
+      color: #2563eb; // Bleu moderne au survol
+    }
+  }
+
+  // Option Supprimer (Rouge discret)
+  &--danger {
+    color: #9ca3af;
+
+    &:hover {
+      background-color: #fef2f2;
+      color: #dc2626; // Rouge d'alerte au survol
+    }
+  }
+}
+
+
+// ------------------------------------------
+// 💳 STYLE DU CHAMP SELECT COMPTE SOURCE
+// ------------------------------------------
+
+.bc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151; // Gris foncé
+  }
+
+  &__control {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    // Personnalisation au survol et au focus
+    &:hover {
+      border-color: #9ca3af;
+    }
+
+    &:focus {
+      border-color: #2563eb; // Bleu banque accentué
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    // Style de la première option (Placeholder désactivé)
+    option:disabled {
+      color: #9ca3af;
+    }
+
+    // Style des options
+    option {
+      padding: 8px;
+      color: #1f2937;
+      background-color: #ffffff;
+    }
+  }
+}
+
+
+
+// le toast
+
+
+.toast-error,
+.toast-success {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  max-width: 90%;
+  width: fit-content;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  color: #f4f4f5;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 9999;
+  animation: toast-up 0.3s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+}
+
+.toast-error::before,
+.toast-success::before {
+  content: "";
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.toast-error::before {
+  background: #ef4444;
+}
+
+.toast-success::before {
+  background: #22c55e;
+}
+
+@keyframes toast-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (max-width: 480px) {
+  .toast-error,
+  .toast-success {
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    width: auto;
+    max-width: none;
+    justify-content: center;
+  }
+
+  @keyframes toast-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
