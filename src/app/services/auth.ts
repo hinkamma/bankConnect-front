@@ -100,7 +100,7 @@ export class Auth {
       accept: data.accept ?? true,
     };
 
-    return this.http.post<LoginResponse>(`${this.apiUrl}/register`, payload).pipe(
+    return this.http.post<LoginResponse>(`${this.apiUrl}/register/`, payload).pipe(
       tap((response) => {
         if (response?.token) {
         }
