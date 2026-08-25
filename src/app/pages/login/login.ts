@@ -21,7 +21,7 @@ export class Login {
 
   showToastFlag: boolean = false;
   toastType: 'error' | 'success' = 'error';
-  
+
   isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, private authService: Auth, private router: Router) {
@@ -40,6 +40,10 @@ export class Login {
     setTimeout(() => {
       this.showToastFlag = false;
     }, 5000);
+  }
+
+  goToLogin(){
+    this.router.navigate(["/register"])
   }
 
   onSubmit() {

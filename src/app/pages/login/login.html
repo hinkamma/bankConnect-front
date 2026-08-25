@@ -70,7 +70,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="bank-btn-submit" [disabled]="isLoading">
+                <button type="submit" class="bank-btn-submit" (click)="goToLogin()" >
                     <span *ngIf="!isLoading">Continuer vers la vérification</span>
                     <span *ngIf="isLoading" class="spinner"></span>
                 </button>
