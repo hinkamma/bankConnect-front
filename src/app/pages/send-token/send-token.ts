@@ -75,11 +75,21 @@ export class SendToken implements OnInit, OnDestroy {
       return;
     }
 
+    // 1. Récupération propre du user_id
+    const rawUserId = localStorage.getItem("user_id");
+    const UserId = rawUserId ? Number(rawUserId) : null;
+
+    // 2. Sécurité : Si l'ID est nul ou invalide, on ne fait pas la requête HTTP
+    if (!UserId || isNaN(UserId)) {
+      this.showToast("Session expirée ou utilisateur introuvable. Veuillez vous re-connecter.");
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.isLoading = true;
     this.tokenForm.disable({ emitEvent: false });
 
     const CodeSaisi = this.tokenForm.get('code')?.value ?? '';
-    const UserId = Number(localStorage.getItem("user_id"));
 
     this.auth.SendToken({ user_id: UserId, token: CodeSaisi }).pipe(
       finalize(() => {

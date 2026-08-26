@@ -138,8 +138,6 @@ export class Auth {
     const token = localStorage.getItem('token') ?? '';
 
 
-
-    console.log("le token de lutilisateur connecter :",token);
     // 2. Créer l'en-tête d'autorisation que Laravel attend
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
