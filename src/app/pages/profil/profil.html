@@ -6,13 +6,13 @@
 
   <main class="app-main">
 
-    <!-- LOADER GLOBAL SOUVERAIN (Centré au milieu de la page)
-    <div class="page-loader-screen" *ngIf="!isLoading()">
+
+    <div class="page-loader-screen" *ngIf="isLoading()">
       <div class="page-loader-card">
         <div class="page-spinner"></div>
         <span class="page-loader-text">Chargement de vos informations...</span>
       </div>
-    </div> -->
+    </div>
 
     <div class="bc-profil"  >
 
@@ -56,8 +56,8 @@
               <span class="bc-profil__mini-label">{{ accountsCount() > 1 ? 'Comptes' : 'Compte' }}</span>
             </div>
             <div>
-              <span class="bc-profil__mini-value">2</span>
-              <span class="bc-profil__mini-label">Bénéficiaires</span>
+              <span class="bc-profil__mini-value">{{ totalBeneficiaires() }}</span>
+              <span class="bc-profil__mini-label">{{ totalBeneficiaires() > 1 ? 'bénéficiaires' : 'bénéficiaire' }}</span>
             </div>
           </div>
         </aside>
@@ -105,7 +105,7 @@
             <div class="bc-security-row">
               <div>
                 <p class="bc-security-row__label">Mot de passe</p>
-                <p class="bc-security-row__hint">Dernière modification il y a 3 mois</p>
+                <p class="bc-security-row__hint">Dernière modification {{formatActivityDate(accountInfo().user.password_changed_at)}}</p>
               </div>
               <!--  Événement d'ouverture de la modale Mot de passe -->
               <button type="button" class="bc-panel__link" (click)="openPasswordModal()">Modifier</button>
@@ -114,7 +114,7 @@
             <div class="bc-security-row">
               <div>
                 <p class="bc-security-row__label">Dernière connexion</p>
-                <p class="bc-security-row__hint">Aujourd'hui, 08:47 · Douala, Cameroun</p>
+                <p class="bc-security-row__hint"> {{formatActivityDate(accountInfo().user.last_login_at)}}</p>
               </div>
             </div>
           </div>
@@ -144,28 +144,28 @@
 
         <div class="modal-form__row">
           <label for="first_name">Prénom</label>
-          <input id="first_name" type="text" formControlName="first_name" class="modal-input" placeholder="Freddy">
+          <input id="first_name" type="text" formControlName="first_name" class="modal-input" placeholder="Freddy" autocomplete="off">
         </div>
 
         <div class="modal-form__row">
           <label for="last_name">Nom</label>
-          <input id="last_name" type="text" formControlName="last_name" class="modal-input" placeholder="Hinkamma Sakamsou">
+          <input id="last_name" type="text" formControlName="last_name" class="modal-input" placeholder="Hinkamma Sakamsou" autocomplete="off">
         </div>
 
         <div class="modal-form__row">
           <label for="email">Adresse e-mail</label>
-          <input id="email" type="email" formControlName="email" class="modal-input" placeholder="freddy@bankconnect.cm">
+          <input id="email" type="email" formControlName="email" class="modal-input" placeholder="freddy@bankconnect.cm" autocomplete="off">
         </div>
 
         <div class="modal-form__row">
           <label for="phone">Téléphone</label>
-          <input id="phone" type="tel" formControlName="phone" class="modal-input" placeholder="+237 6XX XXX XXX">
+          <input id="phone" type="tel" formControlName="phone" class="modal-input" placeholder="+237 6XX XXX XXX" autocomplete="off">
         </div>
 
-        <div class="modal-form__row">
-          <label for="address">Adresse</label>
+        <div class="modal-form__row modal-input-row">
+          <label for="adress">Adresse</label>
           <!-- Correction : formControlName="address" (avec 2 'd') pour correspondre au FormBuilder -->
-          <input id="address" type="text" formControlName="address" class="modal-input" placeholder="Douala, Littoral, Cameroun">
+          <input id="adress" type="text" formControlName="adress" class="modal-input modal-input-email" placeholder="Douala, Littoral, Cameroun" autocomplete="off">
         </div>
 
         <div class="modal-actions">
@@ -200,17 +200,17 @@
 
         <div class="modal-form__row">
           <label for="current_password">Mot de passe actuel</label>
-          <input id="current_password" type="password" formControlName="current_password" class="modal-input" placeholder="••••••••">
+          <input id="current_password" type="password" formControlName="current_password" class="modal-input" placeholder="••••••••" autocomplete="off">
         </div>
 
         <div class="modal-form__row">
           <label for="password">Nouveau mot de passe</label>
-          <input id="password" type="password" formControlName="password" class="modal-input" placeholder="8 caractères minimum">
+          <input id="password" type="password" formControlName="password" class="modal-input" placeholder="8 caractères minimum" autocomplete="off">
         </div>
 
         <div class="modal-form__row">
           <label for="password_confirmation">Confirmer le nouveau mot de passe</label>
-          <input id="password_confirmation" type="password" formControlName="password_confirmation" class="modal-input" placeholder="••••••••">
+          <input id="password_confirmation" type="password" formControlName="password_confirmation" class="modal-input" placeholder="••••••••" autocomplete="off">
         </div>
 
         <div class="modal-actions">
@@ -226,8 +226,14 @@
     </div>
   </div>
 
-  <!-- Toasts de notification -->
-  <div class="toast-error" *ngIf="showToastFlag() && toastType() === 'error'">{{ toastMessage() }}</div>
-  <div class="toast-success" *ngIf="showToastFlag() && toastType() === 'success'">{{ toastMessage() }}</div>
+</div>
 
+<!-- Tout en bas du fichier HTML -->
+<div class="toast-container" *ngIf="showToastFlag">
+  <div class="toast toast-error" *ngIf="toastType === 'error'">
+    {{ toastMessage }}
+  </div>
+  <div class="toast toast-success" *ngIf="toastType === 'success'">
+    {{ toastMessage }}
+  </div>
 </div>

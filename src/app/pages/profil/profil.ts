@@ -1,5 +1,5 @@
-import { ProfilResponse } from './../../services/profil-service';
-import { Component, OnInit, signal, ViewChild, ElementRef, PLATFORM_ID, inject } from '@angular/core';
+import { Beneficiaire, ProfilResponse } from './../../services/profil-service';
+import { Component, OnInit, signal, ViewChild, ElementRef, PLATFORM_ID, inject, ChangeDetectorRef, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
@@ -17,6 +17,18 @@ import { isPlatformBrowser } from '@angular/common';
 export class Profil implements OnInit {
   @ViewChild('avatarInput') avatarInput!: ElementRef<HTMLInputElement>;
 
+  beneficiaires = signal<Beneficiaire[]>([]);
+
+  totalBeneficiaires = computed(() => this.beneficiaires().length);
+
+  //  Signal de chargement global de la page
+    isLoading = signal<boolean>(true);
+
+  errorMessage: any;
+  toastMessage: string = '';
+
+  showToastFlag: boolean = false;
+  toastType: 'error' | 'success' = 'error';
 
 
   // ===== Données du compte =====
@@ -37,17 +49,13 @@ export class Profil implements OnInit {
   isSavingPassword = signal(false);
   passwordForm: FormGroup;
 
-  // ===== Toast =====
-  toastMessage = signal('');
-  showToastFlag = signal(false);
-  toastType = signal<'error' | 'success'>('error');
 
   private platformId = inject(PLATFORM_ID);
 
   // signal pour trouver le nombre de compte de lutilisateur connecté
   accountsCount = signal(0);
 
-  constructor(private profil: ProfilService, private fb: FormBuilder) {
+  constructor(private profil: ProfilService, private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.editForm = this.fb.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
@@ -69,14 +77,98 @@ export class Profil implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.loadAccountInfo();
       this.loadProfilPhoto();
+      this.chargerBeneficiaires()
     }
 
+
   }
+
+  chargerBeneficiaires(): void {
+    this.isLoading.set(true);
+
+    this.profil.getBeneficiaires().subscribe({
+      next: (data: any) => {
+        const liste = Array.isArray(data) ? data : (data.beneficiaires || data.data || []);
+        this.beneficiaires.set(liste);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des bénéficiaires', err);
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  formatActivityDate(dateString: string | null | undefined): string {
+  if (!dateString) return 'Jamais';
+
+  // 1. Conversion de la chaîne en objet Date (compatibilité Safari/Mobile)
+  const date = new Date(dateString.replace(' ', 'T'));
+  const now = new Date();
+
+  // Différence globale en millisecondes et en jours
+  const diffInMs = now.getTime() - date.getTime();
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+  // Heure au format HH:mm (ex: 08:47)
+  const time = date.toLocaleTimeString('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  // 2. Gestion des jours calendaires (Aujourd'hui / Hier)
+  const isToday = date.toDateString() === now.toDateString();
+
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  const isYesterday = date.toDateString() === yesterday.toDateString();
+
+  if (isToday) {
+    return `Aujourd'hui à ${time}`;
+  }
+
+  if (isYesterday) {
+    return `Hier à ${time}`;
+  }
+
+  // 3. Moins d'une semaine (ex: "Il y a 3 jours à 14:20")
+  if (diffInDays < 7) {
+    return `Il y a ${diffInDays} jours à ${time}`;
+  }
+
+  // 4. Moins d'un mois (ex: "Il y a 2 semaines")
+  const diffInWeeks = Math.floor(diffInDays / 7);
+  if (diffInDays < 30) {
+    return `Il y a ${diffInWeeks} ${diffInWeeks > 1 ? 'semaines' : 'semaine'}`;
+  }
+
+  // 5. Dates plus anciennes (ex: "Le 12 juillet 2026")
+  const fullDate = date.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+
+  return `Le ${fullDate}`;
+}
+
+
+  showToast(message: string, type: 'error' | 'success' = 'error') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToastFlag = true;
+
+    setTimeout(() => {
+      this.showToastFlag = false;
+      this.cdr.detectChanges();
+    }, 3000);
+  }
+
 
   onSubmitEditInforPerso(): void {
     if (this.editForm.invalid) {
       this.editForm.markAllAsTouched();
-      this.showToast('Veuillez remplir correctement tous les champs.', 'error');
+      this.showToast("Veuillez remplir correctement tous les champs", 'error');
       return;
     }
 
@@ -93,7 +185,7 @@ export class Profil implements OnInit {
         next: (response: any) => {
 
           this.showEditModal.set(false);
-          this.showToast(response.message ?? 'Informations mises à jour avec succès.', 'success');
+          this.showToast(response.message ?? 'Informations mises à jour avec succès.', 'error');
           this.loadAccountInfo(); // Recharger les infos affichées sur la page
         },
         error: (error) => {
@@ -120,6 +212,8 @@ export class Profil implements OnInit {
           // Forcer TypeScript à accepter res.data comme une string
 
           this.avatarPreview.set(res.data as unknown as string);
+
+          console.log("photo: ",res)
 
         } else {
           this.avatarPreview.set(null);
@@ -173,12 +267,16 @@ export class Profil implements OnInit {
           const accounts = res.accounts ?? res.data ?? [];
           this.accountsCount.set(accounts.length);
 
+          console.log("result :", accounts);
           const account = accounts[0] ?? null;
           this.accountInfo.set(account);
+
+          this.isLoading.set(false)
         },
         error: (error) => {
           console.error('Erreur lors du chargement du profil :', error);
           this.showToast('Impossible de charger vos informations.', 'error');
+          this.isLoading.set(false)
         }
       });
   }
@@ -289,7 +387,7 @@ export class Profil implements OnInit {
           } else if (error.error?.message) {
             message = error.error.message;
           }
-          this.showToast(message, 'error');
+          // this.showToast(message, 'error');
         }
       });
   }
@@ -329,6 +427,7 @@ export class Profil implements OnInit {
       )
       .subscribe({
         next: (response: any) => {
+
           this.showPasswordModal.set(false);
           this.showToast(response.message ?? 'Mot de passe modifié avec succès.', 'success');
         },
@@ -343,17 +442,5 @@ export class Profil implements OnInit {
           this.showToast(message, 'error');
         }
       });
-  }
-
-  // ===== Toast =====
-
-  showToast(message: string, type: 'error' | 'success' = 'error') {
-    this.toastMessage.set(message);
-    this.toastType.set(type);
-    this.showToastFlag.set(true);
-
-    setTimeout(() => {
-      this.showToastFlag.set(false);
-    }, 5000);
   }
 }

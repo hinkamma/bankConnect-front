@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {FormBuilder,FormGroup,Validators,AbstractControl,ValidationErrors,ReactiveFormsModule} from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { Auth, LoginResponse } from '../../services/auth';
@@ -17,13 +17,18 @@ export class Register implements OnInit {
   registerForm!: FormGroup;
   isSubmitted = false;
 
+
   errorMessage: any;
   toastMessage: string = '';
-  showToastFlag: boolean = false;
-  isLoading: boolean = false;
- 
 
-  constructor(private fb: FormBuilder, private auth: Auth, private router: Router) {
+  showToastFlag: boolean = false;
+  toastType: 'error' | 'success' = 'error';
+
+
+  isLoading: boolean = false;
+
+
+  constructor(private fb: FormBuilder, private auth: Auth, private router: Router, private cdr : ChangeDetectorRef) {
     this.registerForm = this.fb.group({
       first_name: ['', [Validators.required, Validators.maxLength(100)]],
       last_name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -75,14 +80,17 @@ export class Register implements OnInit {
     return !!(confirmation && confirmation.hasError('passwordMismatch') && (confirmation.touched || this.isSubmitted));
   }
 
-    showToast(message: string) {
-    console.log('showToast appelé avec:', message);
+
+    showToast(message: string, type: 'error' | 'success' = 'error') {
     this.toastMessage = message;
+    this.toastType = type;
     this.showToastFlag = true;
 
     setTimeout(() => {
       this.showToastFlag = false;
-    }, 5000);
+      this.cdr.detectChanges();
+    }, 3000);
+
   }
 
 
@@ -94,10 +102,10 @@ export class Register implements OnInit {
       return;
     }
 
-    this.isLoading = true; 
+    this.isLoading = true;
     this.registerForm.disable({ emitEvent: false });
 
-  this.isLoading = true; // ← AJOUTE CETTE LIGNE (manquante)
+  this.isLoading = true; 
   this.registerForm.disable({ emitEvent: false });
 
     const firstName = (this.registerForm.value.first_name ?? '').trim();
@@ -116,7 +124,7 @@ export class Register implements OnInit {
       accept: !!this.registerForm.value.accept
     };
 
-    
+
      this.auth.register(this.registerForm.value)
     .pipe(
       finalize(() => {
@@ -130,7 +138,7 @@ export class Register implements OnInit {
       },
       error: (error) => {
         const message = error.error?.message || 'Une erreur est survenue.';
-        this.showToast(message);
+        this.showToast(message, "error");
       }
     });
   }

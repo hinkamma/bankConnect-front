@@ -19,6 +19,8 @@ export interface SendTokenPayload {
 
 export interface LoginResponse {
   user_id: string;
+  first_name:string;
+  profile_photo:string;
   success: any;
   message: any;
   back_flash: any;
@@ -76,6 +78,13 @@ export class Auth {
         if (response?.token) {
           localStorage.setItem('token', response.token);
         }
+
+        //preparation des données a affichées dans la navbar de lutilisateur  connecté
+        const userDisplay = {
+          first_name: response.first_name,
+          profile_photo: response.profile_photo
+        };
+        localStorage.setItem('user_display', JSON.stringify(userDisplay));
       })
     );
   }

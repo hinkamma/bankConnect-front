@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { NgIf } from "@angular/common";
 import { finalize } from 'rxjs';
@@ -12,6 +12,10 @@ import { ProfilService } from '../../services/profil-service';
   styleUrl: './navigation.less',
 })
 export class Navigation implements OnInit {
+
+  //  Chargement instantané (0 ms d'attente !)
+  user = signal<{ first_name: string; profile_photo: string } | null>(null);
+
   showLogoutConfirm = false;
   isLoggingOut = false;
 
@@ -19,14 +23,25 @@ export class Navigation implements OnInit {
   userAccount: any = null;
 
   constructor(
-    private auth: Auth, 
-    private router: Router, 
+    private auth: Auth,
+    private router: Router,
     private profil: ProfilService
   ) {}
 
   ngOnInit(): void {
     this.userConnect();
+    this.loadUserFromStorage();
   }
+
+  loadUserFromStorage(): void {
+    const savedUser = localStorage.getItem('user_display');
+
+    if (savedUser) {
+      this.user.set(JSON.parse(savedUser));
+    }
+    console.log("afficharge de la data: ",this.user())
+  }
+
 
   userConnect(): void {
     // Récupération de l'ID utilisateur (depuis localStorage ou token)
@@ -47,19 +62,6 @@ export class Navigation implements OnInit {
     });
   }
 
-  // Getter sécurisé contre les valeurs undefined
-    get userInitials(): string {
-      if (!this.userAccount) return 'BC';
-      
-      // Si l'objet utilisateur est imbriqué (ex: account.user.nom) ou direct
-      const user = this.userAccount.user || this.userAccount;
-      
-      const prenom = user && typeof user.prenom === 'string' ? user.prenom.charAt(0) : '';
-      const nom = user && typeof user.nom === 'string' ? user.nom.charAt(0) : '';
-
-      const initials = (prenom + nom).toUpperCase();
-      return initials || 'BC';
-    }
 
   confirmLogout(): void {
     this.isLoggingOut = true;

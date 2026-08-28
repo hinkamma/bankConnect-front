@@ -42,7 +42,9 @@
               type="button"
               class="bc-form__tab"
               [class.is-active]="transferType() === 'self'"
-              (click)="setTransferType('self')">
+              (click)="setTransferType('self')"
+               *ngIf="invisible()"
+              >
               Entre mes comptes
             </button>
           </div>
@@ -109,7 +111,7 @@
             </div>
           </label>
 
-          <!-- 🎯 CHAMP DATE DE PROGRAMMATION (Visible uniquement si "Virement Programmé") -->
+          <!-- CHAMP DATE DE PROGRAMMATION (Visible uniquement si "Virement Programmé") -->
           <label class="bc-field" *ngIf="isProgrammed">
             <span class="bc-field__label">Date d'exécution du virement</span>
             <input
@@ -201,7 +203,7 @@
               </div>
 
               <div class="bc-beneficiaire__actions">
-                <button type="button" class="bc-btn-icon bc-btn-icon--edit" (click)="openEditBeneficiaryModal(item)" title="Modifier">
+                <button type="button" class="bc-btn-icon bc-btn-icon--edit" (click)="openEditBeneficiaryModal()" title="Modifier">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bc-icon">
                     <path d="M12 20h9"></path>
                     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
@@ -223,9 +225,6 @@
 
         </aside>
 
-        <!-- TOASTS DE NOTIFICATION -->
-        <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
-        <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
       </div>
 
     </div>
@@ -248,7 +247,7 @@
       </button>
     </div>
 
-    <form [formGroup]="addBeneficiaryForm" (ngSubmit)="onSubmitBeneficiary()" class="bc-modal__form">
+    <form [formGroup]="editBeneficiaryForm" (ngSubmit)="onSubmitBeneficiary()" class="bc-modal__form">
 
       <!-- Numéro de compte -->
       <div class="bc-modal__field">
@@ -284,6 +283,73 @@
 
   </div>
 
-  <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
-  <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
+</div>
+
+
+
+<!-- MODALE DE MODIFICATION DE BÉNÉFICIAIRE -->
+<div class="bc-modal-overlay" *ngIf="showEditBeneficiaryModal()">
+  <div class="bc-modal">
+
+    <div class="bc-modal__header">
+      <div>
+        <h2 class="bc-modal__title">Modifier un bénéficiaire</h2>
+        <p class="bc-modal__subtitle">Modifier les coordonnées bancaires du destinataire</p>
+      </div>
+      <button type="button" class="bc-modal__close" (click)="closeEditBeneficiaryModal()">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="addBeneficiaryForm" (ngSubmit)="onSubmitBeneficiary()" class="bc-modal__form">
+
+      <!-- Numéro de compte -->
+      <div class="bc-modal__field">
+        <label for="account_number" class="bc-modal__label">Numéro de compte / IBAN *</label>
+        <input
+          id="account_number"
+          type="text"
+          formControlName="account_number"
+          class="bc-modal__input"
+          placeholder="Ex: BNK07373000 ou CM21..." autocomplete="off"/>
+      </div>
+
+      <!-- Surnom (nickname) -->
+      <div class="bc-modal__field">
+        <label for="nickname" class="bc-modal__label">Surnom / Libellé (optionnel)</label>
+        <input
+          id="nickname"
+          type="text"
+          formControlName="nickname"
+          class="bc-modal__input"
+          placeholder="Ex: Chanceline, Loyer..." autocomplete="off"/>
+      </div>
+
+      <!-- Actions -->
+      <div class="bc-modal__actions">
+        <button type="button" class="bc-btn-secondary" (click)="closeEditBeneficiaryModal()">Annuler</button>
+        <button type="submit" class="bc-btn-primary" [disabled]="onSubmitEditBeneficiary()">
+          {{ isSubmittingBeneficiary() ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+
+
+<!-- Tout en bas du fichier HTML -->
+<div class="toast-container" *ngIf="showToastFlag">
+  <div class="toast toast-error" *ngIf="toastType === 'error'">
+    {{ toastMessage }}
+  </div>
+  <div class="toast toast-success" *ngIf="toastType === 'success'">
+    {{ toastMessage }}
+  </div>
 </div>

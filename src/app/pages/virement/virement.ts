@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { Navigation } from '../../navigation/navigation/navigation';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -11,7 +11,11 @@ import { VirementService } from '../../services/virement-service';
   templateUrl: './virement.html',
   styleUrl: './virement.less',
 })
-export class Virement implements OnInit {
+export class Virement implements OnInit, OnDestroy {
+
+  private toastTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  invisible=signal<boolean>(true);
 
   //  Signal de chargement global de la page
   isLoading = signal<boolean>(true);
@@ -22,8 +26,11 @@ export class Virement implements OnInit {
   isProgrammed: boolean = false;
 
   showAddBeneficiaryModal = signal<boolean>(false);
+  showEditBeneficiaryModal =signal<boolean>(false)
   isSubmittingBeneficiary = signal<boolean>(false);
   isSubmittingTransfer = signal<boolean>(false);
+
+
 
   errorMessage: any;
   toastMessage: string = '';
@@ -40,16 +47,19 @@ export class Virement implements OnInit {
   beneficiaries = signal<any[]>([]);
 
   addBeneficiaryForm: FormGroup;
+  editBeneficiaryForm: FormGroup;
   virementForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private virementService: VirementService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {
+  constructor(private fb: FormBuilder,private virementService: VirementService, @Inject(PLATFORM_ID) private platformId: Object, private cdr: ChangeDetectorRef) {
     this.addBeneficiaryForm = this.fb.group({
       account_number: ['', [Validators.required]],
       nickname: ['']
+    });
+
+    // Formulaire dédié à la modification
+    this.editBeneficiaryForm = this.fb.group({
+      account_number: [{ value: '', disabled: true }, [Validators.required]], 
+      nickname: ['', [Validators.required]]
     });
 
     this.virementForm = this.fb.group({
@@ -68,14 +78,71 @@ export class Virement implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+
+    if (this.toastTimeout) {
+      clearTimeout(this.toastTimeout);
+    }
+  }
+
+
+
+  onSubmitEditBeneficiary(): void {
+    if (this.editBeneficiaryForm.invalid) {
+      this.editBeneficiaryForm.markAllAsTouched();
+      return;
+    }
+
+    const currentBeneficiary = this.editingBeneficiary();
+    if (!currentBeneficiary) return;
+
+    this.isSubmittingBeneficiary.set(true);
+
+    const payload = {
+      nickname: this.editBeneficiaryForm.value.nickname
+    };
+
+    const token = isPlatformBrowser(this.platformId) ? localStorage.getItem('token') || '' : '';
+
+    // Appel au service pour mettre à jour (ex: updateBeneficiary(id, payload, token))
+    this.virementService.updateBeneficiary(currentBeneficiary.id, payload, token).subscribe({
+      next: (res) => {
+        this.isSubmittingBeneficiary.set(false);
+
+        // Mettre à jour localement la liste des bénéficiaires
+        this.beneficiaries.update((list) =>
+          list.map((b) => (b.id === currentBeneficiary.id ? { ...b, ...payload } : b))
+        );
+
+        this.showToast(res.message || 'Bénéficiaire modifié avec succès !', 'success');
+
+        setTimeout(() => {
+          this.closeEditBeneficiaryModal();
+        }, 500);
+      },
+      error: (err) => {
+        this.isSubmittingBeneficiary.set(false);
+        const msg = err.error?.message || 'Erreur lors de la modification du bénéficiaire.';
+        this.showToast(msg, 'error');
+      }
+    });
+  }
+
+
   showToast(message: string, type: 'error' | 'success' = 'error') {
     this.toastMessage = message;
     this.toastType = type;
     this.showToastFlag = true;
 
-    setTimeout(() => {
+    if (this.toastTimeout) {
+      clearTimeout(this.toastTimeout);
+    }
+
+    this.toastTimeout=setTimeout(() => {
       this.showToastFlag = false;
+      this.cdr.detectChanges();
     }, 3000);
+
   }
 
   // Méthode pour changer d'onglet (Vers bénéficiaire / Entre mes comptes)
@@ -98,11 +165,14 @@ export class Virement implements OnInit {
 
     if (this.isProgrammed) {
       scheduledControl?.setValidators([Validators.required]);
+      this.invisible.set(false);
     } else {
       scheduledControl?.clearValidators();
       scheduledControl?.setValue('');
+      this.invisible.set(true);
     }
     scheduledControl?.updateValueAndValidity();
+
   }
 
   getSelectedAccount() {
@@ -162,10 +232,12 @@ export class Virement implements OnInit {
           this.showToast(res.message, 'success');
           this.loadUserAccounts();
           this.virementForm.reset();
+
+          console.log('type: ',this.showToastFlag);
         },
         error: (err) => {
           this.isSubmittingTransfer.set(false);
-          this.showToast(err.error?.message || 'Erreur lors du dépôt', 'error');
+          this.showToast(err.error?.message, 'error');
         }
       });
 
@@ -186,6 +258,8 @@ export class Virement implements OnInit {
           this.virementForm.reset();
           this.isProgrammed = false; // Réinitialise le toggle
           this.showToast(res.message || 'Virement programmé avec succès !', 'success');
+
+          console.log('type: ',this.toastType);
         },
         error: (err) => {
           this.isSubmittingTransfer.set(false);
@@ -250,8 +324,6 @@ export class Virement implements OnInit {
   }
 
   onDeleteBeneficiary(id: number): void {
-    if (!confirm('Voulez-vous vraiment supprimer ce bénéficiaire ?')) return;
-
     const token = isPlatformBrowser(this.platformId) ? localStorage.getItem('token') || '' : '';
 
     this.virementService.deleteBeneficiary(id, token).subscribe({
@@ -268,15 +340,14 @@ export class Virement implements OnInit {
     });
   }
 
-  openEditBeneficiaryModal(beneficiary: any): void {
-    this.editingBeneficiary.set(beneficiary);
+  openEditBeneficiaryModal(): void {
+    this.showEditBeneficiaryModal.set(true);
 
-    this.addBeneficiaryForm.patchValue({
-      account_number: beneficiary.account_number,
-      nickname: beneficiary.nickname
-    });
+    this.editingBeneficiary.set(this.beneficiaries());
+    console.log(this.editingBeneficiary());
 
-    this.showAddBeneficiaryModal.set(true);
+
+
   }
 
   loadBeneficiaries(): void {
@@ -306,6 +377,10 @@ export class Virement implements OnInit {
 
   closeAddBeneficiaryModal(): void {
     this.showAddBeneficiaryModal.set(false);
+  }
+
+  closeEditBeneficiaryModal(){
+    this.showEditBeneficiaryModal.set(false)
   }
 
   onSubmitBeneficiary(): void {

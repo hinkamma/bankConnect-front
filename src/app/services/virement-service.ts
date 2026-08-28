@@ -51,7 +51,7 @@ export class VirementService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.put<any>(`${this.apiUrl}/Update_beneficiaires/${id}`, payload, { headers });
+    return this.http.put<any>(`${this.apiUrl}/Update_beneficiaires`, payload, { headers });
   }
 
   /**
@@ -119,4 +119,6 @@ export class VirementService {
       headers
     });
   }
+
+
 }

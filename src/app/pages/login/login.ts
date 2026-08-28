@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
@@ -24,7 +24,7 @@ export class Login {
 
   isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder, private authService: Auth, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: Auth, private router: Router, private cdr: ChangeDetectorRef) {
     this.loginForm = this.fb.group({
       role: ['client', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -39,11 +39,13 @@ export class Login {
 
     setTimeout(() => {
       this.showToastFlag = false;
+      this.cdr.detectChanges();
     }, 5000);
   }
 
-  goToLogin(){
-    this.router.navigate(["/register"])
+  goToLogin(event?: Event) {
+    event?.preventDefault();
+    this.router.navigate(['/register']);
   }
 
   onSubmit() {

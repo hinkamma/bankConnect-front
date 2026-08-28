@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, ChangeDetectorRef } from '@angular/core';
 import { Validators, ReactiveFormsModule, FormGroup, FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { Auth } from '../../services/auth';
@@ -13,35 +13,31 @@ import { finalize } from 'rxjs';
   styleUrl: './send-token.less',
 })
 export class SendToken implements OnInit, OnDestroy {
-  timeRemaining = signal(60);
+  timeRemaining = signal(300);
 
   isLoading = false;
   isResending = false;
   tokenForm!: FormGroup;
 
-  toastMessage: string = '';
-  showToastFlag: boolean = false;
 
-  private countdownInterval: any;
-  private router: Router;
+
+  errorMessage: any;
+  toastMessage: string = '';
+
+  showToastFlag: boolean = false;
   toastType: 'error' | 'success' = 'error';
 
-  constructor(private fb: FormBuilder, private auth: Auth, router: Router) {
+  private countdownInterval: any;
+  private toastTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  constructor(private fb: FormBuilder, private auth: Auth, private router: Router, private cdr:ChangeDetectorRef) {
     this.tokenForm = fb.group({
       code: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
     });
     this.router = router;
   }
 
-  private showToast(message: string, type: 'error' | 'success' = 'error') {
-    this.toastMessage = message;
-    this.toastType = type;
-    this.showToastFlag = true;
 
-    setTimeout(() => {
-      this.showToastFlag = false;
-    }, 5000);
-  }
   ngOnInit(): void {
     this.startCountdown();
   }
@@ -50,6 +46,9 @@ export class SendToken implements OnInit, OnDestroy {
     // Nettoyage indispensable pour éviter les fuites mémoire
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
+    }
+    if (this.toastTimeout) {
+      clearTimeout(this.toastTimeout);
     }
   }
 
@@ -69,19 +68,34 @@ export class SendToken implements OnInit, OnDestroy {
 
 
 
+  showToast(message: string, type: 'error' | 'success' = 'error') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToastFlag = true;
+
+    if (this.toastTimeout) {
+      clearTimeout(this.toastTimeout);
+    }
+
+    this.toastTimeout = setTimeout(() => {
+      this.showToastFlag = false;
+      this.cdr.detectChanges();
+    }, 3000);
+  }
+
+
   onSubmit(): void {
     if (this.tokenForm.invalid) {
       this.tokenForm.markAllAsTouched();
       return;
     }
-
     // 1. Récupération propre du user_id
     const rawUserId = localStorage.getItem("user_id");
     const UserId = rawUserId ? Number(rawUserId) : null;
 
     // 2. Sécurité : Si l'ID est nul ou invalide, on ne fait pas la requête HTTP
     if (!UserId || isNaN(UserId)) {
-      this.showToast("Session expirée ou utilisateur introuvable. Veuillez vous re-connecter.");
+      this.showToast("Session expirée ou utilisateur introuvable. Veuillez vous re-connecter.","error");
       this.router.navigate(['/login']);
       return;
     }
@@ -99,16 +113,19 @@ export class SendToken implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (response) => {
-        if (response.hasAccount) {
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.router.navigate(['/accountTypeSelection']);
-        }
+        this.showToast('Validation réussie !', 'success');
+
+        setTimeout(() => {
+          if (response.hasAccount) {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.router.navigate(['/accountTypeSelection']);
+          }
+        }, 3000);
       },
       error: (error) => {
-        console.error('Une erreur réseau ou serveur est survenue', error);
         const message = error.error?.message || error.error?.back_flash || 'Une erreur est survenue, veuillez réessayer.';
-        this.showToast(message);
+        this.showToast(message, "error");
       }
     });
   }
@@ -127,7 +144,7 @@ export class SendToken implements OnInit, OnDestroy {
     const UserId = Number(localStorage.getItem("user_id"));
 
     if (!UserId) {
-      this.showToast('Session invalide, veuillez recommencer l\'inscription.');
+      this.showToast('Session invalide, veuillez recommencer l\'inscription.',"error");
       return;
     }
 
@@ -140,13 +157,13 @@ export class SendToken implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (response) => {
-        this.showToast(response?.message ?? 'Un nouveau code a été envoyé.');
+        this.showToast(response?.message ?? 'Un nouveau code a été envoyé.', "success");
         this.timeRemaining.set(60);
         this.startCountdown();
       },
       error: (error) => {
         const message = error.error?.message || 'Impossible de renvoyer le code, réessayez.';
-        this.showToast(message);
+        this.showToast(message, "error");
         console.log(error);
       }
     });

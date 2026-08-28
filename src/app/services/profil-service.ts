@@ -4,6 +4,24 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
+export interface Beneficiaire {
+  id: number;
+  user_id: number;
+  account_number: string;
+  nickname: string;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+// Interface pour la réponse globale de l'API (ex: si Laravel renvoie { data: [...] } ou un tableau direct)
+export interface BeneficiaireResponse {
+  success?: boolean;
+  message?: string;
+  data?: Beneficiaire[];
+  // Si ton API retourne directement le tableau sans wrapper "data", tu peux typer directement Beneficiaire[]
+}
+
+
 export interface AccountItem {
   id: number;
   type: 'courant' | 'epagne' | 'pro';
@@ -171,6 +189,20 @@ export class ProfilService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.put(`${this.apiUrl}/updatePassword`, data, { headers });
+    return this.http.put(`${this.apiUrl}/profil/up`, data, { headers });
   }
+
+//cette fonction recupere la liste des beneficiaire de lutilisateur connecté
+getBeneficiaires(): Observable<any> {
+  const token = localStorage.getItem('token');
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+
+  return this.http.get<any>(
+    `${this.apiUrl}/Lister_beneficiaires`,
+    { headers }
+  );
+}
 }

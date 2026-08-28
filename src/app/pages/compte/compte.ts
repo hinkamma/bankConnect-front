@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Navigation } from './../../navigation/navigation/navigation';
@@ -38,7 +38,7 @@ export class Compte implements OnInit {
   isSubmitting = signal<boolean>(false);
   createAccountForm: FormGroup;
 
-  constructor(private fb: FormBuilder,private accountService :AccountService) {
+  constructor(private fb: FormBuilder,private accountService :AccountService, private cdr:  ChangeDetectorRef) {
     this.createAccountForm = this.fb.group({
       type: ['', [Validators.required]],
     });
@@ -50,13 +50,14 @@ export class Compte implements OnInit {
     this.loadAccounts();
   }
 
-   showToast(message: string, type: 'error' | 'success' = 'error') {
+  showToast(message: string, type: 'error' | 'success' = 'error') {
     this.toastMessage = message;
     this.toastType = type;
     this.showToastFlag = true;
 
     setTimeout(() => {
       this.showToastFlag = false;
+      this.cdr.detectChanges()
     }, 3000);
   }
 

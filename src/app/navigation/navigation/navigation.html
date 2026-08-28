@@ -92,24 +92,24 @@
   <div class="bc-nav__user">
     <div class="bc-nav__avatar">
       <!-- Si une photo existe dans userAccount, on l'affiche -->
-      <ng-container *ngIf="userAccount?.avatar_url; else textAvatar">
-        <img [src]="" [alt]="userAccount.user.last_name" class="bc-nav__avatar-img" />
+      <ng-container *ngIf="this.user()">
+        <img [src]="this.user()?.profile_photo" [alt]="this.user()?.profile_photo" class="bc-nav__avatar-img" />
       </ng-container>
 
       <!-- Sinon, on affiche les initiales dynamiques (ex: FH) -->
       <ng-template #textAvatar>
-        {{ userInitials }}
+        dddd
       </ng-template>
     </div>
 
     <div class="bc-nav__user-info">
       <!-- Affiche "Prénom Nom" ou 'Chargement...' pendant l'appel API -->
-      <span class="bc-nav__user-name">
-        {{ this.userAccount.user.last_name}}
+      <span class="bc-nav__user-name" *ngIf=" user()">
+
       </span>
 
       <!-- Affiche le rôle ou le type de compte s'il existe -->
-      <span class="bc-nav__user-role">
+      <span class="bc-nav__user-role" *ngIf=" this.user()">
         compte {{ userAccount?.role || userAccount?.type || 'Compte particulier' }}
       </span>
     </div>

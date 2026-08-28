@@ -4,9 +4,6 @@
 
     <div class="bank-login-container">
         <div class="bank-card">
-            <div class="toast" *ngIf="showToastFlag">
-                    {{ toastMessage }} 
-                </div>
             <div class="bank-header">
                 <div class="bank-logo-icon 2fa-icon-bg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -15,13 +12,10 @@
                         <path d="m9 10 2 2 4-4"/>
                     </svg>
                 </div>
-                <div class="toast" *ngIf="showToastFlag">
-                    {{ toastMessage }} 
-                </div>
                 <h1 class="bank-name">Bank<span>Connect</span></h1>
                 <p class="bank-tagline">Vérification de sécurité (2FA)</p>
             </div>
-            
+
 
             <div class="otp-instruction stagger-item">
                 <p>Un code de sécurité à <strong>6 chiffres</strong> a été envoyé sur votre boite de messagerie (GMAIL).</p>
@@ -53,9 +47,6 @@
                 </button>
             </form>
 
-            <div class="toast-error" *ngIf="showToastFlag && toastType === 'error'">{{ toastMessage }}</div>
-            <div class="toast-success" *ngIf="showToastFlag && toastType === 'success'">{{ toastMessage }}</div>
-
             <div class="resend-card stagger-item">
                 <div class="resend-text">
                     <span class="title">Vous n'avez pas reçu le code ?</span>
@@ -82,8 +73,19 @@
         </div>
 
         <div class="bank-footer-links stagger-item">
-            <a routerLink="/help">Assistance 24/7</a> • 
+            <a routerLink="/help">Assistance 24/7</a> •
             <a routerLink="/help">Problème de réception ?</a>
         </div>
     </div>
+</div>
+
+
+<!-- Tout en bas du fichier HTML -->
+<div class="toast-container" *ngIf="showToastFlag">
+  <div class="toast toast-error" *ngIf="toastType === 'error'">
+    {{ toastMessage }}
+  </div>
+  <div class="toast toast-success" *ngIf="toastType === 'success'">
+    {{ toastMessage }}
+  </div>
 </div>
