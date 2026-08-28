@@ -1,14 +1,10 @@
+<div class="app-wrapper">
 
-
-
-<div class="app-wrapper" >
-    
   <div class="sideBar">
     <app-navigation></app-navigation>
   </div>
 
-  <main class="app-main" >
-
+  <main class="app-main">
 
     <!-- LOADER GLOBAL SOUVERAIN (Centré au milieu de la page) -->
     <div class="page-loader-screen" *ngIf="isLoading()">
@@ -17,7 +13,6 @@
         <span class="page-loader-text">Chargement de vos informations...</span>
       </div>
     </div>
-
 
     <div class="bc-comptes" *ngIf="!isLoading()">
 
@@ -173,8 +168,7 @@
             </button>
           </div>
 
-
-          <!-- DERNIÈRES TRANSACTIONS -->
+          <!-- DERNIÈRES TRANSACTIONS GROUPÉES PAR DATE -->
           <div class="bc-compte-detail__tx">
             <h3 class="bc-compte-detail__tx-title">Dernières transactions</h3>
 
@@ -183,30 +177,40 @@
               Aucune transaction récente pour ce compte.
             </p>
 
-            <!-- Liste dynamique si des transactions existent -->
+            <!-- Liste dynamique groupée par date (Aujourd'hui, Hier, etc.) -->
             <ng-container *ngIf="acc.transactions && acc.transactions.length > 0">
-              <div class="bc-tx" *ngFor="let tx of acc.transactions">
+              <div *ngFor="let group of getGroupedTransactions(acc.transactions)" class="bc-tx-group">
 
-                <!-- Icône : Rouge si débit (out), Teal/Vert si crédit (in) -->
-                <div class="bc-tx__icon" [ngClass]="tx.type === 'debit' ? 'bc-tx__icon--red' : 'bc-tx__icon--teal'">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      [attr.d]="tx.type === 'debit' ? 'M7 17L17 7M17 7H9M17 7v8' : 'M17 7L7 17M7 17h8M7 17V9'"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"/>
-                  </svg>
-                </div>
-
-                <div class="bc-tx__info">
-                  <span class="bc-tx__name">{{ tx.label || tx.description }}</span>
-                  <span class="bc-tx__meta">{{ tx.created_at | date:'short' }}</span>
-                </div>
-
-                <span class="bc-tx__amount" [ngClass]="tx.type === 'debit' ? 'bc-tx__amount--out' : 'bc-tx__amount--in'">
-                  {{ tx.type === 'debit' ? '-' : '+' }} {{ tx.amount }} FCFA
+                <!-- En-tête de la période -->
+                <span class="bc-tx-group__date" style="display: block; font-size: 0.8rem; font-weight: 600; color: #6b7280; text-transform: uppercase; margin: 1.2rem 0 0.5rem 0;">
+                  {{ group.dateLabel }}
                 </span>
+
+                <!-- Boucle sur les transactions du groupe -->
+                <div class="bc-tx" *ngFor="let tx of group.items">
+
+                  <!-- Icône : Rouge si débit (out), Teal/Vert si crédit (in) -->
+                  <div class="bc-tx__icon" [ngClass]="(tx.sens === 'DEBIT' || tx.type === 'debit') ? 'bc-tx__icon--red' : 'bc-tx__icon--teal'">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        [attr.d]="(tx.sens === 'DEBIT' || tx.type === 'debit') ? 'M7 17L17 7M17 7H9M17 7v8' : 'M17 7L7 17M7 17h8M7 17V9'"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+
+                  <div class="bc-tx__info">
+                    <span class="bc-tx__name">{{ tx.description || tx.label || tx.type }}</span>
+                    <span class="bc-tx__meta">{{ tx.partenaire || (tx.created_at | date:'HH:mm') }}</span>
+                  </div>
+
+                  <span class="bc-tx__amount" [ngClass]="(tx.sens === 'DEBIT' || tx.type === 'debit') ? 'bc-tx__amount--out' : 'bc-tx__amount--in'">
+                    {{ (tx.sens === 'DEBIT' || tx.type === 'debit') ? '-' : '+' }} {{ tx.amount || tx.montant }} FCFA
+                  </span>
+
+                </div>
 
               </div>
             </ng-container>
@@ -217,13 +221,10 @@
 
       </div>
 
-
     </div>
-
 
   </main>
 </div>
-
 
 <!-- Tout en bas du fichier HTML -->
 <div class="toast-container" *ngIf="showToastFlag">
@@ -234,12 +235,3 @@
     {{ toastMessage }}
   </div>
 </div>
-
-
-
-
-
-
-
-
-

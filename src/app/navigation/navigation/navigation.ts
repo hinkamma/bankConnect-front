@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { NgIf } from "@angular/common";
 import { finalize } from 'rxjs';
@@ -7,7 +7,8 @@ import { ProfilService } from '../../services/profil-service';
 
 @Component({
   selector: 'app-navigation',
-  imports: [RouterModule, NgIf],
+  standalone: true,
+  imports: [RouterModule, NgIf,],
   templateUrl: './navigation.html',
   styleUrl: './navigation.less',
 })
@@ -25,12 +26,14 @@ export class Navigation implements OnInit {
   constructor(
     private auth: Auth,
     private router: Router,
-    private profil: ProfilService
+    private profil: ProfilService,
+    private cdr :ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.userConnect();
     this.loadUserFromStorage();
+    this.cdr.detectChanges();
   }
 
   loadUserFromStorage(): void {
