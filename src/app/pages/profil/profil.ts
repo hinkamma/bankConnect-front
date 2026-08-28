@@ -21,6 +21,11 @@ export class Profil implements OnInit {
 
   totalBeneficiaires = computed(() => this.beneficiaires().length);
 
+
+  // Signal pour contrôler l'ouverture de la modale d'e-mail
+  showEmailModal = signal<boolean>(false);
+
+
   //  Signal de chargement global de la page
     isLoading = signal<boolean>(true);
 
@@ -81,6 +86,14 @@ export class Profil implements OnInit {
     }
 
 
+  }
+
+  openEmailModal(): void {
+  this.showEmailModal.set(true);
+  }
+
+  closeEmailModal(): void {
+    this.showEmailModal.set(false);
   }
 
   chargerBeneficiaires(): void {

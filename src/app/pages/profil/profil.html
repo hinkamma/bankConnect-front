@@ -72,22 +72,82 @@
 
             <div class="bc-info-row">
               <span class="bc-info-row__label">Nom complet</span>
-              <span class="bc-info-row__value">{{ accountInfo()?.user?.first_name }} {{ accountInfo()?.user?.last_name }}</span>
+              <span class="bc-info-row__valued">{{ accountInfo()?.user?.first_name }} {{ accountInfo()?.user?.last_name }}</span>
             </div>
 
-            <div class="bc-info-row">
-              <span class="bc-info-row__label">Adresse e-mail</span>
-              <span class="bc-info-row__value">{{ accountInfo()?.user?.email }}</span>
+
+            <!-- MODALE AFFICHAGE E-MAIL SUR MOBILE -->
+            <div class="bc-modal-overlay" *ngIf="showEmailModal()">
+              <div class="bc-modal bc-modal--small">
+
+                <div class="bc-modal__header">
+                  <h3 class="bc-modal__title">Adresse e-mail</h3>
+                  <button type="button" class="bc-modal__close" (click)="closeEmailModal()">&times;</button>
+                </div>
+
+                <div class="bc-modal__body">
+                  <div class="bc-email-display-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="bc-email-icon">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <p class="bc-email-text">{{ accountInfo()?.user?.email }}</p>
+                  </div>
+                </div>
+
+                <div class="bc-modal__footer">
+                  <button type="button" class="bc-btn bc-btn--secondary" (click)="closeEmailModal()">Fermer</button>
+                </div>
+
+              </div>
             </div>
 
             <div class="bc-info-row">
               <span class="bc-info-row__label">Téléphone</span>
-              <span class="bc-info-row__value">{{ accountInfo()?.user?.phone }}</span>
+              <span class="bc-info-row__valued">{{ accountInfo()?.user?.phone }}</span>
             </div>
 
+            <!-- LIGNE D'INFORMATION DE L'ADRESSE E-MAIL -->
             <div class="bc-info-row">
-              <span class="bc-info-row__label">Adresse</span>
-              <span class="bc-info-row__value">{{ accountInfo()?.user?.adress }}</span>
+              <span class="bc-info-row__label">Adresse e-mail</span>
+
+              <!-- Affiché uniquement sur Desktop / Écran large -->
+              <span >
+                {{ accountInfo()?.user?.email }}
+              </span>
+
+              <!-- Bouton icône (œil) affiché uniquement sur Mobile -->
+              <button
+                type="button"
+                class="bc-email-mobile-btn"
+                (click)="openEmailModal()"
+                title="Afficher l'adresse e-mail">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bc-icon">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+
+
+            <!-- MODALE D'AFFICHAGE E-MAIL SUR MOBILE -->
+            <div class="bc-modal-overlay" *ngIf="showEmailModal()" (click)="closeEmailModal()">
+              <!-- (click)="$event.stopPropagation()" empêche la fermeture si on clique à l'intérieur de la carte -->
+              <div class="bc-modal-card" (click)="$event.stopPropagation()">
+                <!-- Corps de la modale -->
+                <div class="bc-modal-card__body">
+                  <p class="bc-modal-card__label">Adresse e-mail associée au compte :</p>
+                  <div class="bc-email-box">
+                    <span class="bc-email-box__text">{{ accountInfo()?.user?.email }}</span>
+                  </div>
+                </div>
+
+                <!-- Pied de modale / Bouton d'action -->
+                <div class="bc-modal-card__footer">
+                  <button type="button" class="bc-btn-full" (click)="closeEmailModal()">Fermer</button>
+                </div>
+
+              </div>
             </div>
           </div>
 

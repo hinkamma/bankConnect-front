@@ -100,6 +100,8 @@
   --bc-text: #1a2433;
   --bc-text-muted: #6b7688;
 
+ 
+
   padding: 28px 32px 40px;
   background-color: var(--bc-bg);
   font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif;
@@ -631,7 +633,7 @@
     .modal-close {
       background: transparent;
       border: none;
-      color: #64748b;
+      color: #0f172a;
       cursor: pointer;
       padding: 4px;
       display: flex;
@@ -661,7 +663,7 @@
 
       //FORCE LA COULEUR DU PLACEHOLDER (Ex: 8 caractères minimum)
       &::placeholder {
-        color: #64748b !important; // Gris moyen bien visible
+        color: #0f172a !important; // Gris moyen bien visible
         opacity: 1;
       }
 
@@ -820,10 +822,201 @@
   }
 }
 
+// ==========================================
+// 1. LIGNE D'INFORMATION EMAIL (Desktop & Mobile)
+// ==========================================
 
-.modal-input-row{
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+.bc-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+
+
+  &__label {
+    font-size: 0.9rem;
+    color: #a1a1aa;
+  }
+
+  &__value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #f4f4f5;
+  }
+}
+
+/* Texte visible sur PC par défaut */
+.bc-email-desktop {
+  display: inline-block;
+}
+
+/* Bouton icône pour ouvrir la modale (caché sur PC) */
+.bc-email-mobile-btn {
+  display: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #3b82f6;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+
+  &:active {
+    background: #3f3f46;
+  }
+
+  .bc-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Bascule responsive sur Smartphone (<= 480px) */
+@media (max-width: 480px) {
+  .bc-email-desktop {
+    display: none !important; // Masque l'e-mail long qui casse la mise en page
+  }
+
+  .bc-email-mobile-btn {
+    display: inline-flex !important; // Affiche l'icône
+  }
+}
+
+
+// ==========================================
+// 2. MODALE MOBILE D'AFFICHAGE DE L'EMAIL
+// ==========================================
+
+/* Fond sombre de la modale */
+.bc-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(4px); // Flou d'arrière-plan moderne
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 16px;
   box-sizing: border-box;
+}
+
+/* Carte principale de la modale */
+.bc-modal-card {
+  background: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 380px;
+  padding: 20px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* En-tête */
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  &__icon-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .bc-modal-icon {
+      width: 22px;
+      height: 22px;
+      color: #3b82f6; // Bleu d'accentuation
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #f4f4f5;
+    }
+  }
+
+  &__close {
+    background: transparent;
+    border: none;
+    color: #a1a1aa;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  /* Corps de la modale */
+  &__body {
+    margin-bottom: 20px;
+  }
+
+  &__label {
+    font-size: 0.825rem;
+    color: #a1a1aa;
+    margin: 0 0 8px 0;
+  }
+
+  /* Boîte d'affichage de l'adresse e-mail */
+  .bc-email-box {
+    color:#27272a;
+
+    &__text {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #27272a;
+      word-break: break-all; // Coupe l'e-mail proprement si nécessaire
+      display: block;
+      text-align: center;
+    }
+  }
+
+  /* Actions et bouton */
+  &__footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .bc-btn-full {
+    width: 100%;
+    padding: 12px;
+    background: #16324f;
+    border: 1px solid #16324f;
+    border-radius: 10px;
+    color: #f4f4f5;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:active {
+      background: #16324f;
+    }
+  }
+}
+
+/* Animation fluide d'apparition */
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
