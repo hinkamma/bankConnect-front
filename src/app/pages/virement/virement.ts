@@ -15,6 +15,7 @@ export class Virement implements OnInit, OnDestroy {
 
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
+
   invisible=signal<boolean>(true);
 
   //  Signal de chargement global de la page
@@ -38,6 +39,9 @@ export class Virement implements OnInit, OnDestroy {
   showToastFlag: boolean = false;
   toastType: 'error' | 'success' = 'error';
 
+  //  pour le chargement des boites de dialogues
+  isLoadingActionData = signal<boolean>(false);
+
   // Signal pour la liste des comptes sources
   sourceAccounts = signal<any[]>([]);
 
@@ -58,7 +62,7 @@ export class Virement implements OnInit, OnDestroy {
 
     // Formulaire dédié à la modification
     this.editBeneficiaryForm = this.fb.group({
-      account_number: [{ value: '', disabled: true }, [Validators.required]], 
+      account_number: [{ value: '', disabled: true }],
       nickname: ['', [Validators.required]]
     });
 
@@ -99,8 +103,11 @@ export class Virement implements OnInit, OnDestroy {
     this.isSubmittingBeneficiary.set(true);
 
     const payload = {
+      account_number: this.editBeneficiaryForm.value.account_number,
       nickname: this.editBeneficiaryForm.value.nickname
     };
+
+
 
     const token = isPlatformBrowser(this.platformId) ? localStorage.getItem('token') || '' : '';
 
@@ -340,15 +347,26 @@ export class Virement implements OnInit, OnDestroy {
     });
   }
 
-  openEditBeneficiaryModal(): void {
+  openEditBeneficiaryModal(item: any): void {
+
+    this.isLoadingActionData.set(true);
+
+    if (!item) return;
+
+    // 1. Ouvrir la modale d'édition
     this.showEditBeneficiaryModal.set(true);
 
-    this.editingBeneficiary.set(this.beneficiaries());
-    console.log(this.editingBeneficiary());
+    // 2. Stocker le bénéficiaire dans le signal
+    this.editingBeneficiary.set(item);
 
+    // 3. Injecter les données récupérées dans les champs du formulaire
+    this.editBeneficiaryForm.patchValue({
+      account_number: item.account_number || '',
+      nickname: item.nickname || ''
+    });
 
-
-  }
+    console.log('Bénéficiaire sélectionné pour modification :', this.editingBeneficiary());
+}
 
   loadBeneficiaries(): void {
     if (!isPlatformBrowser(this.platformId)) return;

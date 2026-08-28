@@ -44,14 +44,14 @@ export class VirementService {
 
 
 
-  updateBeneficiary(id: number, payload: { nickname?: string }, token: string): Observable<any> {
+  updateBeneficiary(id: number, payload: { account_number:string, nickname?: string }, token: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.put<any>(`${this.apiUrl}/Update_beneficiaires`, payload, { headers });
+    return this.http.put<any>(`${this.apiUrl}/Update_beneficiaires/${id}`, payload, { headers });
   }
 
   /**
