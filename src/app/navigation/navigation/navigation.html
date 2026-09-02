@@ -88,24 +88,16 @@
     </a>
   </nav>
 
-  <!-- BLOC UTILISATEUR DYNAMIQUE -->
   <div class="bc-nav__user">
-    <div class="bc-nav__avatar">
-      <!-- Si une photo existe dans userAccount, on l'affiche -->
-      <ng-container *ngIf="this.user()">
-        <img [src]="this.user()?.profile_photo" [alt]="this.user()?.profile_photo" class="bc-nav__avatar-img" />
-      </ng-container>
-
-      <!-- Sinon, on affiche les initiales dynamiques (ex: FH) -->
-      <ng-template #textAvatar>
-        dddd
-      </ng-template>
+    <div class="bc-dash__avatar">
+      <img *ngIf="user()?.profile_photo" [src]="user()?.profile_photo" alt="Avatar" class="bc-dash__avatar-img" />
     </div>
 
+    
     <div class="bc-nav__user-info">
       <!-- Affiche "Prénom Nom" ou 'Chargement...' pendant l'appel API -->
       <span class="bc-nav__user-name" *ngIf=" user()">
-
+        {{ this.user()?.first_name}}
       </span>
 
       <!-- Affiche le rôle ou le type de compte s'il existe -->

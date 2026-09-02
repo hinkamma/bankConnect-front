@@ -15,7 +15,7 @@ import { ProfilService } from '../../services/profil-service';
 export class Navigation implements OnInit {
 
   //  Chargement instantané (0 ms d'attente !)
-  user = signal<{ first_name: string; profile_photo: string } | null>(null);
+  user = signal<{ first_name: string ;last_name:string; profile_photo: string } | null>(null);
 
   showLogoutConfirm = false;
   isLoggingOut = false;
@@ -48,7 +48,7 @@ export class Navigation implements OnInit {
 
   userConnect(): void {
     // Récupération de l'ID utilisateur (depuis localStorage ou token)
-    const userId = Number(localStorage.getItem('user_id')) || 1;
+    const userId = Number(localStorage.getItem('user_id'));
 
     this.profil.display_account(userId).subscribe({
       next: (response: any) => {

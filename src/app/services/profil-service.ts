@@ -141,8 +141,7 @@ export class ProfilService {
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
-      // Ne PAS fixer 'Content-Type' ici — le navigateur le génère automatiquement
-      // avec le bon "boundary" pour le multipart/form-data
+
     });
 
     const formData = new FormData();
@@ -171,11 +170,17 @@ export class ProfilService {
   updateProfilePerso(data: { first_name: string; last_name: string; email: string; phone?: string; adress?: string }): Observable<any> {
     const token = localStorage.getItem('token');
 
-    console.log(token)
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
+
+    //preparation des données a affichées dans la navbar de lutilisateur  connecté
+    const userDisplay = {
+      first_name: data.first_name,
+      last_name:data.last_name,
+    };
+    localStorage.setItem('user_display', JSON.stringify(userDisplay));
 
     return this.http.put(`${this.apiUrl}/profilUpdate`, data, { headers });
   }

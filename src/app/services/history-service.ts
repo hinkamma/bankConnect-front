@@ -33,7 +33,7 @@ export class HistoryService {
 
   constructor(private http: HttpClient) {}
 
-  getHistoryOperations(token: string, page:number): Observable<HistoryResponse> {
+  getHistoryOperations(token: any, page:number): Observable<HistoryResponse> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/json'

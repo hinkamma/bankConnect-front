@@ -20,6 +20,7 @@ export interface SendTokenPayload {
 export interface LoginResponse {
   user_id: string;
   first_name:string;
+  last_name:string;
   profile_photo:string;
   success: any;
   message: any;
@@ -72,6 +73,7 @@ export class Auth {
 
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, payload).pipe(
       tap((response) => {
+        console.log("voici la response de login :", response)
         if (response?.user_id) {
           localStorage.setItem('user_id', String(response.user_id));
         }
@@ -82,6 +84,7 @@ export class Auth {
         //preparation des données a affichées dans la navbar de lutilisateur  connecté
         const userDisplay = {
           first_name: response.first_name,
+          last_name:response.last_name,
           profile_photo: response.profile_photo
         };
         localStorage.setItem('user_display', JSON.stringify(userDisplay));

@@ -16,7 +16,7 @@ export class Historique implements OnInit {
   isLoading = signal<boolean>(true);
   errorMessage = signal<string>('');
 
-  // Signals pour la pagination
+  //Signals pour la pagination
   currentPage = signal<number>(1);
   lastPage = signal<number>(1);
 

@@ -7,6 +7,8 @@ import { ProfilService } from '../../services/profil-service';
 import { Navigation } from "../../navigation/navigation/navigation";
 import { isPlatformBrowser } from '@angular/common';
 
+
+
 @Component({
   selector: 'app-profil',
   standalone: true,
@@ -199,7 +201,7 @@ export class Profil implements OnInit {
 
           this.showEditModal.set(false);
           this.showToast(response.message ?? 'Informations mises à jour avec succès.', 'error');
-          this.loadAccountInfo(); // Recharger les infos affichées sur la page
+       
         },
         error: (error) => {
           let message = 'Impossible de mettre à jour vos informations.';

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { Navigation } from './../../navigation/navigation/navigation';
 import { AccountService } from '../../services/account-service';
+import { HistoryService } from '../../services/history-service'; // Import de votre service
 
 export interface TransactionGroup {
   dateLabel: string;
@@ -33,9 +34,13 @@ export class Compte implements OnInit {
 
   selectedAccount = signal<any>(null);
 
-  // Liste dynamique des comptes
+  // Signaux pour les comptes et les transactions
   accounts = signal<any[]>([]);
   isLoadingAccounts = signal<boolean>(false);
+
+  // NOUVEAU : Gestion des transactions chargées via HistoryService
+  accountTransactions = signal<any[]>([]);
+  isLoadingTransactions = signal<boolean>(false);
 
   // Modal & Formulaire
   showCreateAccountModal = signal<boolean>(false);
@@ -45,6 +50,7 @@ export class Compte implements OnInit {
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
+    private historyService: HistoryService, // Injection du HistoryService
     private cdr: ChangeDetectorRef
   ) {
     this.createAccountForm = this.fb.group({
@@ -67,8 +73,37 @@ export class Compte implements OnInit {
     }, 3000);
   }
 
+  /**
+   * Sélectionne un compte et lance la requête pour charger ses transactions
+   */
   selectAccount(acc: any): void {
     this.selectedAccount.set(acc);
+    if (acc) {
+      this.loadAccountTransactions(acc.id);
+    }
+  }
+
+  /**
+   * Charge les transactions du compte sélectionné avec HistoryService
+   */
+  loadAccountTransactions(accountId: number): void {
+    this.isLoadingTransactions.set(true);
+
+    // Appel de getHistoryOperations (page 1 par défaut, ajustez les arguments si nécessaire)
+    const token=localStorage.getItem('token') || null;
+    this.historyService.getHistoryOperations(token, 1).subscribe({
+      next: (response: any) => {
+        // Extraction des transactions selon la structure renvoyée (ex: response.data ou response)
+        const list = Array.isArray(response) ? response : (response.data || response.operations || []);
+        this.accountTransactions.set(list);
+        this.isLoadingTransactions.set(false);
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des transactions :', err);
+        this.accountTransactions.set([]);
+        this.isLoadingTransactions.set(false);
+      }
+    });
   }
 
   /**
@@ -82,20 +117,17 @@ export class Compte implements OnInit {
       next: (response) => {
         const list = Array.isArray(response) ? response : (response.data || response.accounts || []);
 
-        // 1. Mise à jour de la liste
         this.accounts.set(list);
 
-        // RE-SYNCHRONISATION DU COMPTE SELECTIONNE
         if (list.length > 0) {
           const currentId = this.selectedAccount()?.id;
+          const updatedAccount = list.find((acc: any) => acc.id === currentId) || list[0];
 
-          // Cherche le compte actif dans la nouvelle liste
-          const updatedAccount = list.find((acc: any) => acc.id === currentId);
-
-          // Si le compte existe toujours, on le met à jour avec les nouvelles données, sinon on prend le premier
-          this.selectedAccount.set(updatedAccount || list[0]);
+          // Sélectionne le compte et charge ses transactions
+          this.selectAccount(updatedAccount);
         } else {
           this.selectedAccount.set(null);
+          this.accountTransactions.set([]);
         }
 
         this.isLoadingAccounts.set(false);
@@ -109,26 +141,15 @@ export class Compte implements OnInit {
     });
   }
 
-  /**
-   * Ouvre la modal et réinitialise les champs du formulaire
-   */
   openCreateAccountModal(): void {
-    this.createAccountForm.reset({
-      type: '',
-    });
+    this.createAccountForm.reset({ type: '' });
     this.showCreateAccountModal.set(true);
   }
 
-  /**
-   * Ferme la modal
-   */
   closeCreateAccountModal(): void {
     this.showCreateAccountModal.set(false);
   }
 
-  /**
-   * Validation et soumission du formulaire de création de compte
-   */
   onSubmitCreateAccount(): void {
     if (this.createAccountForm.invalid) {
       this.createAccountForm.markAllAsTouched();
@@ -141,10 +162,7 @@ export class Compte implements OnInit {
       next: (response) => {
         this.isSubmitting.set(false);
         this.closeCreateAccountModal();
-
         this.showToast(response.message || 'Compte créé avec succès !', 'success');
-
-        // Rechargement automatique de la liste pour afficher le nouveau compte réactivement
         this.loadAccounts();
       },
       error: (error) => {
