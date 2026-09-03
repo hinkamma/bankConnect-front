@@ -147,6 +147,8 @@ export class ProfilService {
     const formData = new FormData();
     formData.append('profile_photo', file);
 
+
+
     return this.http.post<{ message: string; avatar_url?: string }>(
       `${this.apiUrl}/profil/photo`,
       formData,
@@ -167,7 +169,7 @@ export class ProfilService {
   );
 }
 
-  updateProfilePerso(data: { first_name: string; last_name: string; email: string; phone?: string; adress?: string }): Observable<any> {
+  updateProfilePerso(data: { first_name: string; last_name: string; profile_photo:string; email: string; phone?: string; adress?: string }): Observable<any> {
     const token = localStorage.getItem('token');
 
     const headers = new HttpHeaders({
@@ -179,7 +181,10 @@ export class ProfilService {
     const userDisplay = {
       first_name: data.first_name,
       last_name:data.last_name,
+      profile_photo : localStorage.getItem('user_display') ? JSON.parse(localStorage.getItem('user_display')!).profile_photo :data.profile_photo
     };
+
+
     localStorage.setItem('user_display', JSON.stringify(userDisplay));
 
     return this.http.put(`${this.apiUrl}/profilUpdate`, data, { headers });

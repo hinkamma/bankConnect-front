@@ -201,7 +201,7 @@ export class Profil implements OnInit {
 
           this.showEditModal.set(false);
           this.showToast(response.message ?? 'Informations mises à jour avec succès.', 'error');
-       
+
         },
         error: (error) => {
           let message = 'Impossible de mettre à jour vos informations.';
@@ -339,6 +339,15 @@ export class Profil implements OnInit {
       .subscribe({
         next: (response: any) => {
           this.showToast('Photo de profil mise à jour.', 'success');
+
+          // stockage dans le localstorage
+          const userDisplay = {
+            first_name: localStorage.getItem('user_display') ? JSON.parse(localStorage.getItem('user_display')!).first_name : '',
+            last_name:localStorage.getItem('user_display') ? JSON.parse(localStorage.getItem('user_display')!).last_name : '',
+            profile_photo : response.photo_url
+          };
+          localStorage.setItem('user_display', JSON.stringify(userDisplay));
+
         },
         error: (error) => {
           const message = error.error?.message ?? 'Impossible de mettre à jour la photo.';
@@ -371,40 +380,40 @@ export class Profil implements OnInit {
     this.showEditModal.set(false);
   }
 
-  onSubmitEdit(): void {
-    if (this.editForm.invalid) {
-      this.editForm.markAllAsTouched();
-      return;
-    }
+onSubmitEdit(): void {
+  if (this.editForm.invalid) {
+    this.editForm.markAllAsTouched();
+    return;
+  }
 
-    this.isSaving.set(true);
+  this.isSaving.set(true);
 
-    this.profil.updateProfilePerso(this.editForm.value)
-      .pipe(
-        finalize(() => {
-          this.isSaving.set(false);
-        })
-      )
-      .subscribe({
-        next: (response: any) => {
-          this.showEditModal.set(false);
-          this.showToast(response.message ?? 'Informations mises à jour avec succès.', 'success');
+  this.profil.updateProfilePerso(this.editForm.value)
+    .pipe(
+      finalize(() => {
+        this.isSaving.set(false);
+      })
+    )
+    .subscribe({
+      next: (response: any) => {
+        this.showEditModal.set(false);
+        this.showToast(response.message ?? 'Informations mises à jour avec succès.', 'success');
 
-          // Recharge les données affichées dans la page
-          this.loadAccountInfo();
-        },
-        error: (error) => {
-          // Extraction précise de l'erreur
-          let message = 'Impossible de mettre à jour vos informations.';
-          if (error.error?.errors) {
-            const firstKey = Object.keys(error.error.errors)[0];
-            message = error.error.errors[firstKey][0];
-          } else if (error.error?.message) {
-            message = error.error.message;
-          }
-          // this.showToast(message, 'error');
+        // Recharge les données affichées dans la page
+        this.loadAccountInfo();
+      },
+      error: (error) => {
+        // Extraction précise de l'erreur
+        let message = 'Impossible de mettre à jour vos informations.';
+        if (error.error?.errors) {
+          const firstKey = Object.keys(error.error.errors)[0];
+          message = error.error.errors[firstKey][0];
+        } else if (error.error?.message) {
+          message = error.error.message;
         }
-      });
+        this.showToast(message, 'error');
+      }
+    });
   }
 
   // ===== Gestion de la modal du mot de passe =====

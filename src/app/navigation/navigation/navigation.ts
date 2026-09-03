@@ -42,7 +42,6 @@ export class Navigation implements OnInit {
     if (savedUser) {
       this.user.set(JSON.parse(savedUser));
     }
-    console.log("afficharge de la data: ",this.user())
   }
 
 
